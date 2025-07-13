@@ -1,0 +1,3 @@
+package eu.project.common.connectivity
+
+interface ConnectivityObserver
