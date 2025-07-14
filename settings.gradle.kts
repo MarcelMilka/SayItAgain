@@ -22,3 +22,5 @@ dependencyResolutionManagement {
 rootProject.name = "Say It Again"
 include(":app")
 include(":ui")
+include(":common")
+include(":connectivity")

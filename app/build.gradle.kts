@@ -69,5 +69,6 @@ dependencies {
     implementation(libs.hilt.android)
     ksp(libs.hilt.android.compiler)
 
-    implementation(project(":ui"))
+    implementation(project(":common"))
+    implementation(project(":connectivity"))
 }
