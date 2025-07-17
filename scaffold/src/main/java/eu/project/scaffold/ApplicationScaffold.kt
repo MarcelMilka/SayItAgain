@@ -29,10 +29,10 @@ fun applicationScaffold() {
             .fillMaxSize(),
         containerColor = Background,
         contentWindowInsets = WindowInsets.statusBars,
-        content = {
+        content = { paddingValues ->
 
             NavHost(
-                modifier = Modifier.padding(horizontal = Padding.dp),
+                modifier = Modifier.padding(paddingValues.calculateBottomPadding()),
                 navController = controller,
                 enterTransition = { EnterTransition.None },
                 exitTransition = { ExitTransition.None },
