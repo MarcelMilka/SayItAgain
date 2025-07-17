@@ -6,6 +6,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import dagger.hilt.android.AndroidEntryPoint
 import eu.project.common.connectivity.ConnectivityObserver
+import eu.project.scaffold.applicationScaffold
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -17,6 +18,9 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
-        setContent {}
+        setContent {
+
+            applicationScaffold()
+        }
     }
 }
