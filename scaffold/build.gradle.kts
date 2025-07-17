@@ -1,25 +1,18 @@
 plugins {
-    id("com.android.application")
-    id("org.jetbrains.kotlin.android")
-    id("org.jetbrains.kotlin.plugin.compose")
-
-    id("com.google.devtools.ksp")
-
-    id("com.google.dagger.hilt.android")
+    alias(libs.plugins.android.library)
+    alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.compose.compiler)
 }
 
 android {
-    namespace = "eu.project.sayitagain"
+    namespace = "eu.project.scaffold"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "eu.project.sayitagain"
         minSdk = 26
-        targetSdk = 34
-        versionCode = 1
-        versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles("consumer-rules.pro")
     }
 
     buildTypes {
@@ -65,11 +58,8 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
-//  Hilt
-    implementation(libs.hilt.android)
-    ksp(libs.hilt.android.compiler)
+    implementation(libs.androidx.appcompat)
+    implementation(libs.material)
 
-    implementation(project(":common"))
-    implementation(project(":connectivity"))
-    implementation(project(":scaffold"))
+    implementation(project(":ui"))
 }
