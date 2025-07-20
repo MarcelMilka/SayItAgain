@@ -7,70 +7,57 @@ import android.net.NetworkCapabilities
 import android.net.NetworkRequest
 import eu.project.common.connectivity.ConnectivityObserver
 import eu.project.common.connectivity.ConnectivityStatus
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.callbackFlow
 import javax.inject.Inject
 
 internal class ConnectivityObserverImpl @Inject constructor(
     private val applicationContext: Context
-): ConnectivityObserver {
+) : ConnectivityObserver {
 
-    private var _connectivityStatus = MutableStateFlow<ConnectivityStatus>(ConnectivityStatus.Disconnected)
-    override val connectivityStatus: StateFlow<ConnectivityStatus> = _connectivityStatus
+    override val connectivityStatus: Flow<ConnectivityStatus> = callbackFlow {
+        val connectivityManager = applicationContext
+            .getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
 
-    //  NetworkRequest - describes app's connection requirements:
-    private val networkRequest = NetworkRequest.Builder()
-        .addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
-        .addTransportType(NetworkCapabilities.TRANSPORT_WIFI)
-        .addTransportType(NetworkCapabilities.TRANSPORT_CELLULAR)
-        .build()
+        val networkCallback = object : ConnectivityManager.NetworkCallback() {
 
-    //  NetworkCallback - receives notifications about changes in the connection status and network capabilities:
-    private val networkCallback = object : ConnectivityManager.NetworkCallback() {
+            override fun onAvailable(network: Network) {
+                super.onAvailable(network)
+                trySend(ConnectivityStatus.Connected)
+            }
 
-        override fun onCapabilitiesChanged(network: Network, networkCapabilities: NetworkCapabilities) {
-            super.onCapabilitiesChanged(network, networkCapabilities)
+            override fun onLost(network: Network) {
+                super.onLost(network)
+                trySend(ConnectivityStatus.Disconnected)
+            }
 
-            val reachableByInternet = networkCapabilities.hasCapability(
-                NetworkCapabilities.NET_CAPABILITY_INTERNET
-            )
+            override fun onUnavailable() {
+                super.onUnavailable()
+                trySend(ConnectivityStatus.Disconnected)
+            }
 
-            when(reachableByInternet) {
-                true -> updateConnectivityStatus(ConnectivityStatus.Connected)
-                false -> updateConnectivityStatus(ConnectivityStatus.Disconnected)
+            override fun onCapabilitiesChanged(network: Network, capabilities: NetworkCapabilities) {
+                super.onCapabilitiesChanged(network, capabilities)
+                val reachable = capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
+
+                when(reachable) {
+                    true -> trySend(ConnectivityStatus.Connected)
+                    false -> trySend(ConnectivityStatus.Disconnected)
+                }
             }
         }
 
-        override fun onAvailable(network: Network) {
-            super.onAvailable(network)
+        val request = NetworkRequest.Builder()
+            .addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
+            .addTransportType(NetworkCapabilities.TRANSPORT_WIFI)
+            .addTransportType(NetworkCapabilities.TRANSPORT_CELLULAR)
+            .build()
 
-            updateConnectivityStatus(ConnectivityStatus.Connected)
+        connectivityManager.registerNetworkCallback(request, networkCallback)
+
+        awaitClose {
+            connectivityManager.unregisterNetworkCallback(networkCallback)
         }
-
-        override fun onLost(network: Network) {
-            super.onLost(network)
-
-            updateConnectivityStatus(ConnectivityStatus.Disconnected)
-        }
-
-        override fun onUnavailable() {
-            super.onUnavailable()
-
-            updateConnectivityStatus(ConnectivityStatus.Disconnected)
-        }
-    }
-
-    private val connectivityManager =
-        applicationContext.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-
-    //  "Listen" to changes with registerNetworkCallback
-    init {
-
-        connectivityManager.registerNetworkCallback(networkRequest, networkCallback)
-    }
-
-    private fun updateConnectivityStatus(connectivityStatus: ConnectivityStatus) {
-
-        _connectivityStatus.value = connectivityStatus
     }
 }
