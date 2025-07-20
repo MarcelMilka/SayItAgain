@@ -1,8 +1,8 @@
 package eu.project.common.connectivity
 
-import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.Flow
 
 interface ConnectivityObserver {
 
-    val connectivityStatus: StateFlow<ConnectivityStatus>
+    val connectivityStatus: Flow<ConnectivityStatus>
 }
