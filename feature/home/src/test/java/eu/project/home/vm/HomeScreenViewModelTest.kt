@@ -32,16 +32,16 @@ class HomeScreenViewModelTest {
 
         viewModel.isNetworkAvailable.test {
 
-            // false by default
-            assertEquals(false, awaitItem())
-
-            // true when connected
-            statusFlow.emit(ConnectivityStatus.Connected)
+            // true by default
             assertEquals(true, awaitItem())
 
             // false when disconnected
             statusFlow.emit(ConnectivityStatus.Disconnected)
             assertEquals(false, awaitItem())
+
+            // true when connected
+            statusFlow.emit(ConnectivityStatus.Connected)
+            assertEquals(true, awaitItem())
         }
     }
 }

@@ -21,12 +21,13 @@ internal class HomeScreenTest {
 
     @Before
     fun setUp() {
-        // Reset navigation flags before each test
+
         isSelectAudioScreenNavigated = false
         isSavedWordsScreenNavigated = false
     }
 
     private fun setContent(isNetworkAvailable: Boolean) {
+
         composeTestRule.setContent {
             homeScreen(
                 isNetworkAvailable = isNetworkAvailable,
@@ -38,6 +39,7 @@ internal class HomeScreenTest {
 
     @Test
     fun noConnectionBanner_isVisible_whenNetworkIsUnavailable() {
+
         setContent(isNetworkAvailable = false)
 
         composeTestRule
@@ -47,6 +49,7 @@ internal class HomeScreenTest {
 
     @Test
     fun noConnectionBanner_isNotVisible_whenNetworkIsAvailable() {
+
         setContent(isNetworkAvailable = true)
 
         composeTestRule
@@ -56,6 +59,7 @@ internal class HomeScreenTest {
 
     @Test
     fun pickAndTranscribeSection_buttonClick_triggersCallback() {
+
         setContent(isNetworkAvailable = true)
 
         composeTestRule
@@ -67,6 +71,7 @@ internal class HomeScreenTest {
 
     @Test
     fun textButton_myVocabularyButtonClick_triggersCallback() {
+
         setContent(isNetworkAvailable = true)
 
         composeTestRule
