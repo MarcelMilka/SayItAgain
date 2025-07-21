@@ -1,3 +1,15 @@
 <resources>
     <string name="app_name" translatable="false">Say It Again</string>
+
+    <!--   HomeScreen   -->
+    <string name="you_are_offline">Your are offline.</string>
+    <string name="transcriptions_can_not_be_generated_while_offline">Transcriptions can’t be generated while offline.</string>
+
+    <string name="struggling_to_catch_every_word">Struggling to catch every word?</string>
+    <string name="pick_and_transcribe">Pick and transcribe</string>
+
+    <string name="my_vocabulary">My vocabulary</string>
+
+    <!--   Content descriptions   -->
+    <string name="warning_icon_description" translatable="true">Warning</string>
 </resources>

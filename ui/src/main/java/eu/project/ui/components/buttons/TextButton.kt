@@ -1,10 +1,13 @@
 package eu.project.ui.components.buttons
 
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.unit.dp
 import eu.project.ui.components.text.labelLarge
+import eu.project.ui.dimensions.ThumbReachPadding
 import eu.project.ui.theme.PrimaryWhite
 
 @Composable
@@ -16,7 +19,9 @@ fun textButton(
 
     TextButton(
 
-        modifier = Modifier.testTag(testTag),
+        modifier = Modifier
+            .padding(bottom = ThumbReachPadding.dp)
+            .testTag(testTag),
 
         onClick = { onClick() },
 

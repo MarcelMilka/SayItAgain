@@ -10,12 +10,10 @@ import androidx.compose.foundation.layout.statusBars
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import eu.project.common.navigation.Navigation
-import eu.project.ui.dimensions.Padding
+import eu.project.home.impl.homeScreenImpl
 import eu.project.ui.theme.Background
 
 @OptIn(ExperimentalLayoutApi::class)
@@ -32,14 +30,16 @@ fun applicationScaffold() {
         content = { paddingValues ->
 
             NavHost(
-                modifier = Modifier.padding(paddingValues.calculateBottomPadding()),
+                modifier = Modifier.padding(
+                    top = paddingValues.calculateTopPadding()
+                ),
                 navController = controller,
                 enterTransition = { EnterTransition.None },
                 exitTransition = { ExitTransition.None },
                 startDestination = Navigation.HomeScreen,
                 builder = {
 
-                    composable<Navigation.HomeScreen> {}
+                    this.homeScreenImpl()
                 }
             )
         }

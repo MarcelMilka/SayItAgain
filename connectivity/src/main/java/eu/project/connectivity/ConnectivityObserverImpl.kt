@@ -5,6 +5,7 @@ import android.net.ConnectivityManager
 import android.net.Network
 import android.net.NetworkCapabilities
 import android.net.NetworkRequest
+import android.util.Log
 import eu.project.common.connectivity.ConnectivityObserver
 import eu.project.common.connectivity.ConnectivityStatus
 import kotlinx.coroutines.channels.awaitClose
@@ -19,6 +20,15 @@ internal class ConnectivityObserverImpl @Inject constructor(
     override val connectivityStatus: Flow<ConnectivityStatus> = callbackFlow {
         val connectivityManager = applicationContext
             .getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+
+        val activeNetwork = connectivityManager.activeNetwork
+        val networkCapabilities = connectivityManager.getNetworkCapabilities(activeNetwork)
+        val isConnected = networkCapabilities?.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) == true
+
+        when(isConnected) {
+            true -> trySend(ConnectivityStatus.Connected)
+            false -> trySend(ConnectivityStatus.Disconnected)
+        }
 
         val networkCallback = object : ConnectivityManager.NetworkCallback() {
 
