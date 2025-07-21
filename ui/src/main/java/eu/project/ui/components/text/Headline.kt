@@ -7,7 +7,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import eu.project.ui.dimensions.Padding
+import eu.project.ui.dimensions.ScreenPadding
 import eu.project.ui.theme.PrimaryWhite
 import eu.project.ui.theme.SayItAgainTypography
 
@@ -18,7 +18,7 @@ fun headlineLarge(text: String) {
         text = text,
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = Padding.dp, vertical = 0.dp),
+            .padding(horizontal = ScreenPadding.dp, vertical = 0.dp),
         color = PrimaryWhite,
         textAlign = TextAlign.Center,
         style = SayItAgainTypography.headlineLarge
