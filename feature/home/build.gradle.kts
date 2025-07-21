@@ -90,6 +90,10 @@ dependencies {
     // hiltViewModel
     implementation(libs.androidx.hilt.navigation.compose)
 
+    // Testing Compose
+    androidTestImplementation(libs.ui.test.junit4)
+    debugImplementation(libs.ui.test.manifest)
+
     implementation(project(":ui"))
     implementation(project(":common"))
     implementation(project(":connectivity"))

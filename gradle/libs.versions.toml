@@ -22,6 +22,8 @@ mockkVersion = "1.13.7"
 mockkAndroidVersion = "1.13.7"
 serialization = "1.7.3"
 turbineVersion = "1.2.1"
+uiTestJunit4Version = "1.8.3"
+uiTestManifestVersion = "1.8.3"
 
 [libraries]
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "activityComposeVersion" }
@@ -51,6 +53,8 @@ mockk = { module = "io.mockk:mockk", version.ref = "mockkVersion" }
 navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "composeNavigation" }
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "serialization"}
 turbine = { module = "app.cash.turbine:turbine", version.ref = "turbineVersion" }
+ui-test-manifest = { module = "androidx.compose.ui:ui-test-manifest", version.ref = "uiTestManifestVersion" }
+ui-test-junit4 = { module = "androidx.compose.ui:ui-test-junit4", version.ref = "uiTestJunit4Version" }
 
 [plugins]
 android-library = { id = "com.android.library", version.ref = "agpVersion" }
