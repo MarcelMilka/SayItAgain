@@ -9,13 +9,18 @@ hiltAndroidVersion = "2.56.2"
 junit = "4.13.2"
 junitVersion = "1.2.1"
 espressoCore = "3.6.1"
+kotlinxCoroutinesTestVersion = "1.8.1"
 lifecycleRuntimeKtx = "2.9.1"
 agpVersion = "8.8.0-alpha05"
 kotlinVersion = "2.0.21"
 appcompatVersion = "1.7.1"
 materialVersion = "1.12.0"
 composeNavigation = "2.9.2"
+mockkAgentVersion = "1.13.7"
+mockkVersion = "1.13.7"
+mockkAndroidVersion = "1.13.7"
 serialization = "1.7.3"
+turbineVersion = "1.2.1"
 
 [libraries]
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "activityComposeVersion" }
@@ -36,9 +41,14 @@ hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hiltA
 hilt-android-compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hiltAndroidCompilerVersion" }
 junit = { module = "junit:junit", version.ref = "junit" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompatVersion" }
+kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinxCoroutinesTestVersion" }
 material = { group = "com.google.android.material", name = "material", version.ref = "materialVersion" }
+mockk-agent = { module = "io.mockk:mockk-agent", version.ref = "mockkAgentVersion" }
+mockk-android = { module = "io.mockk:mockk-android", version.ref = "mockkAndroidVersion" }
+mockk = { module = "io.mockk:mockk", version.ref = "mockkVersion" }
 navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "composeNavigation" }
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "serialization"}
+turbine = { module = "app.cash.turbine:turbine", version.ref = "turbineVersion" }
 
 [plugins]
 android-library = { id = "com.android.library", version.ref = "agpVersion" }
