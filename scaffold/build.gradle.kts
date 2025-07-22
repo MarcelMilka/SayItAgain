@@ -73,6 +73,12 @@ dependencies {
     // hiltViewModel
     implementation(libs.androidx.hilt.navigation.compose)
 
+    // Turbine
+    testImplementation(libs.turbine)
+
+    // Coroutines test
+    testImplementation(libs.kotlinx.coroutines.test)
+
     // Navigation
     implementation(libs.navigation.compose)
 
