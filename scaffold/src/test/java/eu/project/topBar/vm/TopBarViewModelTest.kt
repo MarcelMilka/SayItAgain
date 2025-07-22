@@ -27,7 +27,6 @@ class TopBarViewModelTest {
                 TopBarViewState(
                     displayTopBar = true,
                     showBackIcon = false,
-                    showScreenName = false,
                     screenName = R.string.home,
                     showInfoIcon = true
                 ),
@@ -40,7 +39,6 @@ class TopBarViewModelTest {
                 TopBarViewState(
                     displayTopBar = true,
                     showBackIcon = false,
-                    showScreenName = true,
                     screenName = R.string.something_went_wrong_while_navigating,
                     showInfoIcon = false
                 ),
@@ -53,7 +51,6 @@ class TopBarViewModelTest {
                 TopBarViewState(
                     displayTopBar = true,
                     showBackIcon = true,
-                    showScreenName = true,
                     screenName = R.string.saved_words,
                     showInfoIcon = false
                 ),
@@ -66,7 +63,6 @@ class TopBarViewModelTest {
                 TopBarViewState(
                     displayTopBar = true,
                     showBackIcon = true,
-                    showScreenName = true,
                     screenName = R.string.export_words,
                     showInfoIcon = false
                 ),
@@ -79,7 +75,6 @@ class TopBarViewModelTest {
                 TopBarViewState(
                     displayTopBar = true,
                     showBackIcon = true,
-                    showScreenName = true,
                     screenName = R.string.select_audio,
                     showInfoIcon = false
                 ),
@@ -92,7 +87,6 @@ class TopBarViewModelTest {
                 TopBarViewState(
                     displayTopBar = true,
                     showBackIcon = true,
-                    showScreenName = true,
                     screenName = R.string.select_language,
                     showInfoIcon = false
                 ),
@@ -105,7 +99,6 @@ class TopBarViewModelTest {
                 TopBarViewState(
                     displayTopBar = true,
                     showBackIcon = true,
-                    showScreenName = true,
                     screenName = R.string.transcript,
                     showInfoIcon = false
                 ),
@@ -118,7 +111,6 @@ class TopBarViewModelTest {
                 TopBarViewState(
                     displayTopBar = false,
                     showBackIcon = false,
-                    showScreenName = false,
                     screenName = R.string.generating_transcript,
                     showInfoIcon = false
                 ),
@@ -131,7 +123,6 @@ class TopBarViewModelTest {
                 TopBarViewState(
                     displayTopBar = true,
                     showBackIcon = false,
-                    showScreenName = true,
                     screenName = R.string.something_went_wrong_while_navigating,
                     showInfoIcon = false
                 ),

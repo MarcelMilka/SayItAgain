@@ -4,11 +4,7 @@ import eu.project.ui.R
 
 data class TopBarViewState(
     val displayTopBar: Boolean = true,
-
     val showBackIcon: Boolean = false,
-
-    val showScreenName: Boolean = false,
     val screenName: Int = R.string.home,
-
     val showInfoIcon: Boolean = true,
 )
