@@ -10,6 +10,23 @@
 
     <string name="my_vocabulary">My vocabulary</string>
 
+
+
     <!--   Content descriptions   -->
     <string name="warning_icon_description" translatable="true">Warning</string>
+
+
+
+    <!--   Screen names   -->
+    <string name="home">Home</string>
+
+    <string name="saved_words">Saved words</string>
+    <string name="export_words">Export words</string>
+
+    <string name="select_audio">Select audio</string>
+    <string name="select_language">Choose language</string>
+    <string name="generating_transcript">Generating transcript</string>
+    <string name="transcript">Transcript</string>
+
+    <string name="something_went_wrong_while_navigating">Something went wrong while navigating.</string>
 </resources>

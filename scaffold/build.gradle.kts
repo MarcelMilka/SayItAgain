@@ -3,6 +3,10 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.kotlin.serialization)
+
+    id("com.google.devtools.ksp")
+
+    id("com.google.dagger.hilt.android")
 }
 
 android {
@@ -61,6 +65,13 @@ dependencies {
 
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
+
+    // Hilt
+    implementation(libs.hilt.android)
+    ksp(libs.hilt.android.compiler)
+
+    // hiltViewModel
+    implementation(libs.androidx.hilt.navigation.compose)
 
     // Navigation
     implementation(libs.navigation.compose)
