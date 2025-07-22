@@ -32,6 +32,8 @@ import eu.project.ui.theme.Divider
 @Composable
 internal fun topBar(
     topBarViewState: TopBarViewState,
+    onNavigateBack: () -> Unit,
+    onDisplayInfo: () -> Unit,
 ) {
     Column(
         modifier = Modifier
@@ -53,7 +55,7 @@ internal fun topBar(
                     if (topBarViewState.showBackIcon) {
 
                         iconButton(
-                            onClick = {},
+                            onClick = { onNavigateBack() },
                             painter = painterResource(R.drawable.back),
                             contentDescription = stringResource(R.string.back_icon_description),
                             testTag = TestTags.TOP_BAR_ICON_BUTTON_BACK_ICON
@@ -69,7 +71,7 @@ internal fun topBar(
                     if (topBarViewState.showInfoIcon) {
 
                         iconButton(
-                            onClick = {},
+                            onClick = { onDisplayInfo() },
                             painter = painterResource(R.drawable.info),
                             contentDescription = stringResource(R.string.info_icon_description),
                             testTag = TestTags.TOP_BAR_ICON_BUTTON_INFO_ICON

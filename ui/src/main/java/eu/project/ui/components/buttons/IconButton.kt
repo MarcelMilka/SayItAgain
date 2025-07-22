@@ -21,13 +21,14 @@ fun iconButton(
 
     IconButton(
         onClick = { onClick() },
-        modifier = Modifier.size(MinTouchTarget.dp),
+        modifier = Modifier
+            .size(MinTouchTarget.dp)
+            .testTag(testTag),
         content = {
             Icon(
                 painter = painter,
                 contentDescription = contentDescription,
-                tint = PrimaryWhite,
-                modifier = Modifier.testTag(testTag)
+                tint = PrimaryWhite
             )
         }
     )

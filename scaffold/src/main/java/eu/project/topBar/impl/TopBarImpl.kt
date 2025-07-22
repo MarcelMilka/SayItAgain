@@ -24,5 +24,9 @@ internal fun topBarImpl(controller: NavHostController) {
         viewModel.onRouteChanged(route = currentRoute)
     }
 
-    topBar(topBarViewState)
+    topBar(
+        topBarViewState = topBarViewState,
+        onNavigateBack = {},
+        onDisplayInfo = {}
+    )
 }
