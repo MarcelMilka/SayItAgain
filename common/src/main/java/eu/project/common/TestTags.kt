@@ -11,4 +11,11 @@ object TestTags {
     const val HOME_SCREEN_PRIMARY_BUTTON_PRICK_AND_TRANSCRIBE = "HomeScreen - PrimaryButton - 'Pick and transcribe'"
 
     const val HOME_SCREEN_TEXT_BUTTON_MY_VOCABULARY = "HomeScreen - TextButton - 'My vocabulary'"
+
+
+
+    // TopBar
+    const val TOP_BAR = "TopBar"
+    const val TOP_BAR_ICON_BUTTON_BACK_ICON = "TopBar - IconButtonBack - Back icon"
+    const val TOP_BAR_ICON_BUTTON_INFO_ICON = "TopBar - IconButtonBack - Info icon"
 }

@@ -14,6 +14,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import eu.project.common.navigation.Navigation
 import eu.project.home.impl.homeScreenImpl
+import eu.project.topBar.impl.topBarImpl
 import eu.project.ui.theme.Background
 
 @OptIn(ExperimentalLayoutApi::class)
@@ -27,6 +28,10 @@ fun applicationScaffold() {
             .fillMaxSize(),
         containerColor = Background,
         contentWindowInsets = WindowInsets.statusBars,
+        topBar = {
+
+            topBarImpl(controller)
+        },
         content = { paddingValues ->
 
             NavHost(
