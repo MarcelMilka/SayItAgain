@@ -13,7 +13,9 @@
 
 
     <!--   Content descriptions   -->
-    <string name="warning_icon_description" translatable="true">Warning</string>
+    <string name="warning_icon_description" >Warning</string>
+    <string name="back_icon_description" >Back</string>
+    <string name="info_icon_description" >Info</string>
 
 
 
