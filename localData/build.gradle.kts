@@ -52,5 +52,11 @@ dependencies {
     implementation(libs.androidx.room.ktx)
     testImplementation(libs.androidx.room.testing)
 
+    // MockK
+    testImplementation(libs.mockk)
+    testImplementation(libs.mockk.android)
+    testImplementation(libs.mockk.agent)
+
     implementation(project(":common"))
+    testImplementation(kotlin("test"))
 }

@@ -4,6 +4,7 @@ import eu.project.common.localData.LocalVocabularyDataSource
 import eu.project.common.model.SavedWord
 import eu.project.localdata.dao.SavedWordDAO
 import eu.project.localdata.entity.convertToEntity
+import eu.project.localdata.entity.convertToModel
 import javax.inject.Inject
 
 internal class LocalVocabularyDataSourceImpl @Inject constructor(val savedWordDAO: SavedWordDAO): LocalVocabularyDataSource {
@@ -40,7 +41,12 @@ internal class LocalVocabularyDataSourceImpl @Inject constructor(val savedWordDA
 
         return try {
 
-            Result.success(savedWordDAO.selectAllWords())
+            val retrievedWords =
+                savedWordDAO
+                .selectAllWords()
+                .map { it.convertToModel() }
+
+            Result.success(retrievedWords)
         }
 
         catch (e: Exception) {
