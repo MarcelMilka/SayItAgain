@@ -14,6 +14,6 @@ internal class SavedWordDaoModule {
 
     @Provides
     @Singleton
-    fun provideDatabase(database: ApplicationDatabase): SavedWordDAO =
+    fun provideSavedWordDAO(database: ApplicationDatabase): SavedWordDAO =
         database.savedWordDAO()
 }
