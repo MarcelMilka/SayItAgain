@@ -7,10 +7,11 @@ import androidx.navigation.compose.composable
 import eu.project.common.navigation.Navigation
 import eu.project.home.vm.HomeScreenViewModel
 import androidx.compose.runtime.getValue
+import androidx.navigation.NavHostController
 import eu.project.home.screen.homeScreen
 
 
-fun NavGraphBuilder.homeScreenImpl() {
+fun NavGraphBuilder.homeScreenImpl(controller: NavHostController) {
 
     composable<Navigation.HomeScreen> {
 
@@ -19,8 +20,14 @@ fun NavGraphBuilder.homeScreenImpl() {
 
         homeScreen(
             isNetworkAvailable = isNetworkAvailable,
-            onNavigateSelectAudioScreen = {  },
-            onNavigateSavedWordsScreen = {  }
+            onNavigateSelectAudioScreen = {
+
+                controller.navigate(route = Navigation.Transcribe.RouteTranscribe)
+            },
+            onNavigateSavedWordsScreen = {
+
+                controller.navigate(route = Navigation.Saved.RouteSaved)
+            }
         )
     }
 }

@@ -88,4 +88,6 @@ dependencies {
     implementation(project(":ui"))
     implementation(project(":common"))
     implementation(project(":feature:home"))
+    implementation(project(":feature:saved"))
+    implementation(project(":feature:transcribe"))
 }
