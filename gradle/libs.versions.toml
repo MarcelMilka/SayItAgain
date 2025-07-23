@@ -20,6 +20,10 @@ composeNavigation = "2.9.2"
 mockkAgentVersion = "1.13.7"
 mockkVersion = "1.13.7"
 mockkAndroidVersion = "1.13.7"
+roomCompilerVersion = "2.7.2"
+roomKtxVersion = "2.7.2"
+roomRuntimeVersion = "2.7.2"
+roomTestingVersion = "2.7.2"
 serialization = "1.7.3"
 turbineVersion = "1.2.1"
 uiTestJunit4Version = "1.8.3"
@@ -34,6 +38,10 @@ androidx-junit = { module = "androidx.test.ext:junit", version.ref = "junitVersi
 androidx-lifecycle-runtime-ktx = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "lifecycleRuntimeKtx" }
 androidx-core-ktx = { module = "androidx.core:core-ktx", version.ref = "coreKtx" }
 androidx-material3 = { module = "androidx.compose.material3:material3" }
+androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "roomKtxVersion" }
+androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "roomCompilerVersion" }
+androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "roomRuntimeVersion" }
+androidx-room-testing = { module = "androidx.room:room-testing", version.ref = "roomTestingVersion" }
 androidx-ui-graphics = { module = "androidx.compose.ui:ui-graphics" }
 androidx-ui = { module = "androidx.compose.ui:ui" }
 androidx-ui-test-manifest = { module = "androidx.compose.ui:ui-test-manifest" }

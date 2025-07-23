@@ -1,0 +1,3 @@
+package eu.project.common.localData
+
+interface LocalVocabularyDataSource
