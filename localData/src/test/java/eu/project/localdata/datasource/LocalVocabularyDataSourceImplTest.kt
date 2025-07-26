@@ -15,7 +15,7 @@ import kotlin.test.assertEquals
 
 class LocalVocabularyDataSourceImplTest {
 
-    private lateinit var localVocabularyDataSourceImpl: LocalVocabularyDataSourceImpl
+    private lateinit var savedWordsDataSourceLocalImpl: SavedWordsDataSourceLocalImpl
     private lateinit var savedWordDAO: SavedWordDAO
 
     private val firstEntityInstance = SavedWordEntity(
@@ -40,7 +40,7 @@ class LocalVocabularyDataSourceImplTest {
     fun setUp() {
 
         savedWordDAO = mockk(relaxed = true)
-        localVocabularyDataSourceImpl = LocalVocabularyDataSourceImpl(savedWordDAO)
+        savedWordsDataSourceLocalImpl = SavedWordsDataSourceLocalImpl(savedWordDAO)
     }
 
 
@@ -48,7 +48,7 @@ class LocalVocabularyDataSourceImplTest {
     fun `saveWord should return success`() = runBlocking {
 
         // run
-        val result = localVocabularyDataSourceImpl.saveWord(firstEntityInstance.convertToModel())
+        val result = savedWordsDataSourceLocalImpl.saveWord(firstEntityInstance.convertToModel())
 
         // test
         coVerify { savedWordDAO.insertWord(firstEntityInstance) }
@@ -62,7 +62,7 @@ class LocalVocabularyDataSourceImplTest {
         coEvery { savedWordDAO.insertWord(any()) } throws RuntimeException("DB error")
 
         // run
-        val result = localVocabularyDataSourceImpl.saveWord(firstEntityInstance.convertToModel())
+        val result = savedWordsDataSourceLocalImpl.saveWord(firstEntityInstance.convertToModel())
 
         // test
         assertTrue(result.isFailure)
@@ -74,7 +74,7 @@ class LocalVocabularyDataSourceImplTest {
     fun `deleteWord should return success`() = runBlocking {
 
         // run
-        val result = localVocabularyDataSourceImpl.deleteWord(secondEntityInstance.convertToModel())
+        val result = savedWordsDataSourceLocalImpl.deleteWord(secondEntityInstance.convertToModel())
 
         // test
         coVerify { savedWordDAO.deleteWord(secondEntityInstance) }
@@ -88,7 +88,7 @@ class LocalVocabularyDataSourceImplTest {
         coEvery { savedWordDAO.deleteWord(any()) } throws RuntimeException("DB delete error")
 
         // run
-        val result = localVocabularyDataSourceImpl.deleteWord(secondEntityInstance.convertToModel())
+        val result = savedWordsDataSourceLocalImpl.deleteWord(secondEntityInstance.convertToModel())
 
         // test
         assertTrue(result.isFailure)
@@ -104,7 +104,7 @@ class LocalVocabularyDataSourceImplTest {
         coEvery { savedWordDAO.selectAllWords() } returns entityList
 
         // run
-        val result = localVocabularyDataSourceImpl.getAllWords()
+        val result = savedWordsDataSourceLocalImpl.getAllWords()
 
         // test
         assertTrue(result.isSuccess)
@@ -125,7 +125,7 @@ class LocalVocabularyDataSourceImplTest {
         coEvery { savedWordDAO.selectAllWords() } throws RuntimeException("Query error")
 
         // run
-        val result = localVocabularyDataSourceImpl.getAllWords()
+        val result = savedWordsDataSourceLocalImpl.getAllWords()
 
         // test
         assertTrue(result.isFailure)

@@ -6,8 +6,10 @@ import eu.project.common.connectivity.ConnectivityStatus
 import io.mockk.every
 import io.mockk.mockk
 import junit.framework.TestCase.assertEquals
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Test
@@ -22,6 +24,7 @@ class HomeScreenViewModelTest {
         connectivityObserver = mockk<ConnectivityObserver>()
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun `isNetworkAvailable emits true when status is Connected, false when Disconnected`() = runTest(StandardTestDispatcher()) {
 
@@ -29,6 +32,7 @@ class HomeScreenViewModelTest {
         every { connectivityObserver.connectivityStatus } returns statusFlow
 
         viewModel = HomeScreenViewModel(connectivityObserver)
+        advanceUntilIdle() // this will probably allow the workflow to test the class successfully
 
         viewModel.isNetworkAvailable.test {
 
