@@ -27,7 +27,7 @@ internal class HomeScreenViewModel @Inject constructor(connectivityObserver: Con
         }
         .stateIn(
             scope = this.viewModelScope,
-            started = SharingStarted.WhileSubscribed(1000L),
+            started = SharingStarted.WhileSubscribed(),
             initialValue = true
         )
 }
