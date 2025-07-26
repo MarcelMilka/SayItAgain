@@ -9,6 +9,8 @@ on:
 
 jobs:
   build:
+    if: >
+      !(startsWith(github.head_ref, 'docs') || startsWith(github.head_ref, 'github'))
     runs-on: ubuntu-latest
 
     steps:
