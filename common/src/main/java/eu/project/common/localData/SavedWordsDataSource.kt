@@ -2,7 +2,7 @@ package eu.project.common.localData
 
 import eu.project.common.model.SavedWord
 
-interface LocalVocabularyDataSource {
+interface SavedWordsDataSource {
 
     suspend fun saveWord(savedWord: SavedWord): Result<Unit>
 

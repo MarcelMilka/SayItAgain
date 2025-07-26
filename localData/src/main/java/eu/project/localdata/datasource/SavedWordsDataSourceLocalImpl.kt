@@ -1,13 +1,13 @@
 package eu.project.localdata.datasource
 
-import eu.project.common.localData.LocalVocabularyDataSource
+import eu.project.common.localData.SavedWordsDataSource
 import eu.project.common.model.SavedWord
 import eu.project.localdata.dao.SavedWordDAO
 import eu.project.localdata.entity.convertToEntity
 import eu.project.localdata.entity.convertToModel
 import javax.inject.Inject
 
-internal class LocalVocabularyDataSourceImpl @Inject constructor(val savedWordDAO: SavedWordDAO): LocalVocabularyDataSource {
+internal class SavedWordsDataSourceLocalImpl @Inject constructor(val savedWordDAO: SavedWordDAO): SavedWordsDataSource {
 
     override suspend fun saveWord(word: SavedWord): Result<Unit> {
 

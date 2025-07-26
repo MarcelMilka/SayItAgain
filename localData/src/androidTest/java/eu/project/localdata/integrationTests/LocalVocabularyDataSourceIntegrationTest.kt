@@ -3,10 +3,10 @@ package eu.project.localdata.integrationTests
 import android.content.Context
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
-import eu.project.common.localData.LocalVocabularyDataSource
+import eu.project.common.localData.SavedWordsDataSource
 import eu.project.localdata.dao.SavedWordDAO
 import eu.project.localdata.database.ApplicationDatabase
-import eu.project.localdata.datasource.LocalVocabularyDataSourceImpl
+import eu.project.localdata.datasource.SavedWordsDataSourceLocalImpl
 import eu.project.localdata.entity.SavedWordEntity
 import eu.project.localdata.entity.convertToModel
 import junit.framework.TestCase.assertEquals
@@ -22,7 +22,7 @@ class LocalVocabularyDataSourceIntegrationTest {
 
     private lateinit var applicationDatabase: ApplicationDatabase
     private lateinit var savedWordDAO: SavedWordDAO
-    private lateinit var dataSource: LocalVocabularyDataSource
+    private lateinit var dataSource: SavedWordsDataSource
 
     private val firstEntityInstance = SavedWordEntity(
         uuid = UUID.fromString("a81bc81b-dead-4e5d-abff-90865d1e13b1"),
@@ -52,7 +52,7 @@ class LocalVocabularyDataSourceIntegrationTest {
 
         savedWordDAO = applicationDatabase.savedWordDAO()
 
-        dataSource = LocalVocabularyDataSourceImpl(savedWordDAO)
+        dataSource = SavedWordsDataSourceLocalImpl(savedWordDAO)
     }
 
     @After
