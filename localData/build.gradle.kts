@@ -57,6 +57,12 @@ dependencies {
     testImplementation(libs.mockk.android)
     testImplementation(libs.mockk.agent)
 
+    // Turbine
+    testImplementation(libs.turbine)
+
+    // Coroutines test
+    testImplementation(libs.kotlinx.coroutines.test)
+
     implementation(project(":common"))
     testImplementation(kotlin("test"))
 }
