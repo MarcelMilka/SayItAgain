@@ -11,5 +11,5 @@ interface SavedWordsRepository {
 
     suspend fun deleteWord(wordToDelete: SavedWord)
 
-    suspend fun getAllWords()
+    suspend fun loadAllWords()
 }

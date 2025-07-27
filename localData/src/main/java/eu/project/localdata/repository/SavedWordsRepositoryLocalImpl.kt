@@ -21,34 +21,74 @@ internal class SavedWordsRepositoryLocalImpl(
 
         ioCoroutineScope.launch {
 
-            getAllWords()
+            loadAllWords()
         }
     }
 
+
+    private val doOnSuccess: (List<SavedWord>) -> Unit = { retrievedData ->
+
+        when(retrievedData.isNotEmpty()) {
+            true -> {
+
+                _dataState.value = SavedWordsRepositoryDataState
+                    .Loaded
+                    .Data(retrievedData = retrievedData)
+            }
+            false -> {
+
+                _dataState.value = SavedWordsRepositoryDataState
+                    .Loaded
+                    .NoData
+            }
+        }
+    }
+
+    private val doOnFailure: (Throwable) -> Unit = { error ->
+
+        _dataState.value = SavedWordsRepositoryDataState
+            .FailedToLoad(cause = error.message)
+    }
+
+
     override suspend fun saveWord(wordToSave: SavedWord) {
 
-        val doOnSuccess: (Unit) -> Unit = {}
-        val doOnFailure: (Throwable) -> Unit = {}
-
         savedWordsDataSource.saveWord(wordToSave)
-            .onSuccess(doOnSuccess)
-            .onFailure(doOnFailure)
+            .onSuccess {
+
+                updateDataState()
+            }
+            .onFailure {
+
+                // TODO: trigger snackbar class to inform a user about failure
+                _dataState.value = SavedWordsRepositoryDataState.FailedToLoad("SaveWord onFailure")
+            }
     }
 
     override suspend fun deleteWord(wordToDelete: SavedWord) {
 
-        val doOnSuccess: (Unit) -> Unit = {}
-        val doOnFailure: (Throwable) -> Unit = {}
-
         savedWordsDataSource.deleteWord(wordToDelete)
+            .onSuccess {
+
+                updateDataState()
+            }
+            .onFailure {
+
+                // TODO: trigger snackbar class to inform a user about failure
+                _dataState.value = SavedWordsRepositoryDataState.FailedToLoad("DeleteWord onFailure")
+            }
+    }
+
+    override suspend fun loadAllWords() {
+
+        _dataState.value = SavedWordsRepositoryDataState.Loading
+
+        savedWordsDataSource.getAllWords()
             .onSuccess(doOnSuccess)
             .onFailure(doOnFailure)
     }
 
-    override suspend fun getAllWords() {
-
-        val doOnSuccess: (List<SavedWord>) -> Unit = {}
-        val doOnFailure: (Throwable) -> Unit = {}
+    private suspend fun updateDataState() {
 
         savedWordsDataSource.getAllWords()
             .onSuccess(doOnSuccess)
