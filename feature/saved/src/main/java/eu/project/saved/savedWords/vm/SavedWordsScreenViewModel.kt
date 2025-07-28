@@ -6,6 +6,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import eu.project.common.localData.SavedWordsRepository
 import eu.project.common.localData.SavedWordsRepositoryDataState
 import eu.project.common.model.SavedWord
+import eu.project.saved.savedWords.model.DialogViewState
 import eu.project.saved.savedWords.model.SavedWordsScreenViewState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -17,6 +18,9 @@ internal class SavedWordsScreenViewModel @Inject constructor(private val savedWo
 
     private val _viewState = MutableStateFlow<SavedWordsScreenViewState>(SavedWordsScreenViewState.Loading)
     val viewState = _viewState.asStateFlow()
+
+    private val _dialogViewState = MutableStateFlow<DialogViewState>(DialogViewState.Hidden)
+    val dialogViewState = _dialogViewState.asStateFlow()
 
     init {
 
@@ -44,11 +48,28 @@ internal class SavedWordsScreenViewModel @Inject constructor(private val savedWo
         }
     }
 
+    fun requestWordDeletion(wordToDelete: SavedWord) {
+
+        viewModelScope.launch {
+
+            _dialogViewState.value = DialogViewState.Visible(wordToDelete)
+        }
+    }
+
+    fun cancelWordDeletion() {
+
+        viewModelScope.launch {
+
+            _dialogViewState.value = DialogViewState.Hidden
+        }
+    }
+
     fun deleteWord(wordToDelete: SavedWord) {
 
         viewModelScope.launch {
 
             savedWordsRepository.deleteWord(wordToDelete = wordToDelete)
+            _dialogViewState.value = DialogViewState.Hidden
         }
     }
 }

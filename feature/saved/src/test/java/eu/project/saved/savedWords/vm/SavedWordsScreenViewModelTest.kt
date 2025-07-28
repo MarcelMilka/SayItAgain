@@ -4,6 +4,7 @@ import app.cash.turbine.test
 import eu.project.common.localData.SavedWordsRepository
 import eu.project.common.localData.SavedWordsRepositoryDataState
 import eu.project.common.model.SavedWord
+import eu.project.saved.savedWords.model.DialogViewState
 import eu.project.saved.savedWords.model.SavedWordsScreenViewState
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -145,7 +146,57 @@ class SavedWordsScreenViewModelTest {
 
 
     @Test
-    fun `deleteWord calls repository deleteWord`() = runTest(testDispatcher) {
+    fun `requestWordDeletion properly changes state of _dialogViewState`() = runTest(testDispatcher) {
+
+        // stub
+        every { savedWordsRepository.dataState } returns dataStateFlow
+
+        // run
+        savedWordsScreenViewModel = SavedWordsScreenViewModel(savedWordsRepository)
+
+        // test
+        savedWordsScreenViewModel.dialogViewState.test {
+
+            // hidden by default
+            assertEquals(DialogViewState.Hidden, this.awaitItem())
+
+            // request word deletion
+            savedWordsScreenViewModel.requestWordDeletion(firstEntityInstance)
+            assertEquals(DialogViewState.Visible(firstEntityInstance), this.awaitItem())
+        }
+    }
+
+
+
+    @Test
+    fun `cancelWordDeletion properly changes state of _dialogViewState`() = runTest(testDispatcher) {
+
+        // stub
+        every { savedWordsRepository.dataState } returns dataStateFlow
+
+        // run
+        savedWordsScreenViewModel = SavedWordsScreenViewModel(savedWordsRepository)
+
+        // test
+        savedWordsScreenViewModel.dialogViewState.test {
+
+            // hidden by default
+            assertEquals(DialogViewState.Hidden, this.awaitItem())
+
+            // request word deletion
+            savedWordsScreenViewModel.requestWordDeletion(firstEntityInstance)
+            assertEquals(DialogViewState.Visible(firstEntityInstance), this.awaitItem())
+
+            // cancel word deletion
+            savedWordsScreenViewModel.cancelWordDeletion()
+            assertEquals(DialogViewState.Hidden, this.awaitItem())
+        }
+    }
+
+
+
+    @Test
+    fun `deleteWord calls repository deleteWord and changes _dialogViewState to invisible`() = runTest(testDispatcher) {
 
         // stub
         val retrievedData = listOf(firstEntityInstance, secondEntityInstance, thirdEntityInstance)
@@ -158,7 +209,19 @@ class SavedWordsScreenViewModelTest {
         savedWordsScreenViewModel = SavedWordsScreenViewModel(savedWordsRepository)
 
         // test
-        savedWordsScreenViewModel.deleteWord(firstEntityInstance)
+        savedWordsScreenViewModel.dialogViewState.test {
+
+            // hidden by default
+            assertEquals(DialogViewState.Hidden, this.awaitItem())
+
+            // request word deletion
+            savedWordsScreenViewModel.requestWordDeletion(firstEntityInstance)
+            assertEquals(DialogViewState.Visible(firstEntityInstance), this.awaitItem())
+
+            // delete the word
+            savedWordsScreenViewModel.deleteWord(firstEntityInstance)
+            assertEquals(DialogViewState.Hidden, this.awaitItem())
+        }
 
         // verify
         coVerify(exactly = 1) { savedWordsRepository.deleteWord(firstEntityInstance) }
