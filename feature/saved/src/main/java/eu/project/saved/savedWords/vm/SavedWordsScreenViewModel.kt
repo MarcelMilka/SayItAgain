@@ -15,8 +15,8 @@ import javax.inject.Inject
 @HiltViewModel
 internal class SavedWordsScreenViewModel @Inject constructor(private val savedWordsRepository: SavedWordsRepository): ViewModel() {
 
-    private val _uiState = MutableStateFlow<SavedWordsScreenViewState>(SavedWordsScreenViewState.Loading)
-    val uiState = _uiState.asStateFlow()
+    private val _viewState = MutableStateFlow<SavedWordsScreenViewState>(SavedWordsScreenViewState.Loading)
+    val viewState = _viewState.asStateFlow()
 
     init {
 
@@ -29,16 +29,16 @@ internal class SavedWordsScreenViewModel @Inject constructor(private val savedWo
                     when(it) {
 
                         SavedWordsRepositoryDataState.Loading ->
-                            _uiState.value = SavedWordsScreenViewState.Loading
+                            _viewState.value = SavedWordsScreenViewState.Loading
 
                         SavedWordsRepositoryDataState.Loaded.NoData ->
-                            _uiState.value = SavedWordsScreenViewState.Loaded.NoData
+                            _viewState.value = SavedWordsScreenViewState.Loaded.NoData
 
                         is SavedWordsRepositoryDataState.Loaded.Data ->
-                            _uiState.value = SavedWordsScreenViewState.Loaded.Data(retrievedData = it.retrievedData)
+                            _viewState.value = SavedWordsScreenViewState.Loaded.Data(retrievedData = it.retrievedData)
 
                         is SavedWordsRepositoryDataState.FailedToLoad ->
-                            _uiState.value = SavedWordsScreenViewState.FailedToLoad(cause = it.cause)
+                            _viewState.value = SavedWordsScreenViewState.FailedToLoad(cause = it.cause)
                     }
                 }
         }

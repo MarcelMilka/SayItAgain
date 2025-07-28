@@ -72,7 +72,7 @@ class SavedWordsScreenViewModelTest {
         savedWordsScreenViewModel = SavedWordsScreenViewModel(savedWordsRepository)
 
         // test
-        savedWordsScreenViewModel.uiState.test {
+        savedWordsScreenViewModel.viewState.test {
 
             assertEquals(SavedWordsScreenViewState.Loading, this.awaitItem())
         }
@@ -88,7 +88,7 @@ class SavedWordsScreenViewModelTest {
         savedWordsScreenViewModel = SavedWordsScreenViewModel(savedWordsRepository)
 
         // test
-        savedWordsScreenViewModel.uiState.test {
+        savedWordsScreenViewModel.viewState.test {
 
             // Loading by default
             assertEquals(SavedWordsScreenViewState.Loading, this.awaitItem())
@@ -109,7 +109,7 @@ class SavedWordsScreenViewModelTest {
         savedWordsScreenViewModel = SavedWordsScreenViewModel(savedWordsRepository)
 
         // test
-        savedWordsScreenViewModel.uiState.test {
+        savedWordsScreenViewModel.viewState.test {
 
             // Loading by default
             assertEquals(SavedWordsScreenViewState.Loading, this.awaitItem())
@@ -131,7 +131,7 @@ class SavedWordsScreenViewModelTest {
         savedWordsScreenViewModel = SavedWordsScreenViewModel(savedWordsRepository)
 
         // test
-        savedWordsScreenViewModel.uiState.test {
+        savedWordsScreenViewModel.viewState.test {
 
             // Loading by default
             assertEquals(SavedWordsScreenViewState.Loading, this.awaitItem())

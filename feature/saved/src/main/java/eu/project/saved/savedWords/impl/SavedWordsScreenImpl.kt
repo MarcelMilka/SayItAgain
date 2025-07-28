@@ -1,25 +1,25 @@
 package eu.project.saved.savedWords.impl
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.Text
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
+import androidx.compose.runtime.getValue
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import eu.project.common.navigation.Navigation
-import eu.project.ui.theme.Background
-import eu.project.ui.theme.PrimaryWhite
+import eu.project.saved.savedWords.screen.savedWordsScreen
+import eu.project.saved.savedWords.vm.SavedWordsScreenViewModel
 
 fun NavGraphBuilder.savedWordsScreenImpl() {
 
     composable<Navigation.Saved.SavedWordsScreen> {
 
-        Box(
-            modifier = Modifier.fillMaxSize().background(Background),
-            contentAlignment = Alignment.Center,
-            content = { Text(text = "SavedWordsScreen", color = PrimaryWhite) }
+        val viewModel = hiltViewModel<SavedWordsScreenViewModel>()
+        val viewState by viewModel.viewState.collectAsStateWithLifecycle()
+
+        savedWordsScreen(
+            viewState = viewState,
+            onDelete = {},
+            onNavigateSelectAudioScreen = {}
         )
     }
 }

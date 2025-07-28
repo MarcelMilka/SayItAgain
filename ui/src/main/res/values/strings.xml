@@ -6,16 +6,29 @@
     <string name="transcriptions_can_not_be_generated_while_offline">Transcriptions can’t be generated while offline.</string>
 
     <string name="struggling_to_catch_every_word">Struggling to catch every word?</string>
-    <string name="pick_and_transcribe">Pick and transcribe</string>
 
     <string name="my_vocabulary">My vocabulary</string>
 
 
 
+    <!--   SavedWordsScreen   -->
+    <string name="kinda_empty">Kinda empty…</string>
+    <string name="once_you_save_your_first_word">Once you save your first word, it’ll show up here.</string>
+
+
+
+    <!--   Common   -->
+    <string name="pick_and_transcribe">Pick and transcribe</string>
+    <string name="something_is_off">Something’s off…</string>
+
+
+
     <!--   Content descriptions   -->
-    <string name="warning_icon_description" >Warning</string>
-    <string name="back_icon_description" >Back</string>
-    <string name="info_icon_description" >Info</string>
+    <string name="warning_icon_description">Warning</string>
+    <string name="back_icon_description">Back</string>
+    <string name="info_icon_description">Info</string>
+    <string name="illustration_error_description">Error</string>
+    <string name="illustration_empty_description">Empty</string>
 
 
 
