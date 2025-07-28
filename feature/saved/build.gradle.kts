@@ -76,6 +76,18 @@ dependencies {
     // hiltViewModel
     implementation(libs.androidx.hilt.navigation.compose)
 
+    // MockK
+    testImplementation(libs.mockk)
+    testImplementation(libs.mockk.android)
+    testImplementation(libs.mockk.agent)
+
+    // Turbine
+    testImplementation(libs.turbine)
+
+    // Coroutines test
+    testImplementation(libs.kotlinx.coroutines.test)
+
     implementation(project(":ui"))
     implementation(project(":common"))
+    implementation(project(":localData"))
 }
