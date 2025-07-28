@@ -72,4 +72,5 @@ dependencies {
     implementation(project(":common"))
     implementation(project(":connectivity"))
     implementation(project(":scaffold"))
+    implementation(project(":localData"))
 }
