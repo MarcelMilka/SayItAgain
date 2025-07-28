@@ -8,6 +8,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import eu.project.common.TestTags
+import eu.project.common.model.SavedWord
 import eu.project.saved.savedWords.model.SavedWordsScreenViewState
 import eu.project.saved.savedWords.ui.failedToLoadComponent
 import eu.project.saved.savedWords.ui.loadedDataComponent
@@ -18,7 +19,7 @@ import eu.project.ui.dimensions.ScreenPadding
 @Composable
 internal fun savedWordsScreen(
     viewState: SavedWordsScreenViewState,
-    onDelete: () -> Unit,
+    onRequestDelete: (SavedWord) -> Unit,
     onNavigateSelectAudioScreen: () -> Unit
 ) {
 
@@ -40,7 +41,7 @@ internal fun savedWordsScreen(
                 is SavedWordsScreenViewState.Loaded.Data ->
                     loadedDataComponent(
                         retrievedData = viewState.retrievedData,
-                        onDelete = { onDelete() }
+                        onDelete = { onRequestDelete(it) }
                     )
 
                 is SavedWordsScreenViewState.FailedToLoad ->
