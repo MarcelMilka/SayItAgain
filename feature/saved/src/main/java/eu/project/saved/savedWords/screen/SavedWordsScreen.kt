@@ -9,7 +9,9 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import eu.project.common.TestTags
 import eu.project.common.model.SavedWord
+import eu.project.saved.savedWords.model.DialogViewState
 import eu.project.saved.savedWords.model.SavedWordsScreenViewState
+import eu.project.saved.savedWords.ui.discardWordDialog
 import eu.project.saved.savedWords.ui.failedToLoadComponent
 import eu.project.saved.savedWords.ui.loadedDataComponent
 import eu.project.saved.savedWords.ui.loadingComponent
@@ -19,7 +21,11 @@ import eu.project.ui.dimensions.ScreenPadding
 @Composable
 internal fun savedWordsScreen(
     viewState: SavedWordsScreenViewState,
+    dialogViewState: DialogViewState,
+
     onRequestDelete: (SavedWord) -> Unit,
+    onDelete: (SavedWord) -> Unit,
+    onCancel: () -> Unit,
     onNavigateSelectAudioScreen: () -> Unit
 ) {
 
@@ -51,4 +57,13 @@ internal fun savedWordsScreen(
             }
         }
     )
+
+    if (dialogViewState is DialogViewState.Visible) {
+
+        discardWordDialog(
+            wordToDelete = dialogViewState.wordToDelete,
+            onDelete = { onDelete(dialogViewState.wordToDelete) },
+            onCancel = { onCancel() }
+        )
+    }
 }

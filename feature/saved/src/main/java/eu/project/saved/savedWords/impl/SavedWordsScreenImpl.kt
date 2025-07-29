@@ -6,9 +6,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import eu.project.common.navigation.Navigation
-import eu.project.saved.savedWords.model.DialogViewState
 import eu.project.saved.savedWords.screen.savedWordsScreen
-import eu.project.saved.savedWords.ui.discardWordDialog
 import eu.project.saved.savedWords.vm.SavedWordsScreenViewModel
 
 fun NavGraphBuilder.savedWordsScreenImpl() {
@@ -21,17 +19,12 @@ fun NavGraphBuilder.savedWordsScreenImpl() {
 
         savedWordsScreen(
             viewState = viewState,
+            dialogViewState = dialogViewState,
+
             onRequestDelete = { viewModel.requestWordDeletion(it) },
+            onDelete = { viewModel.deleteWord(it) },
+            onCancel = { viewModel.cancelWordDeletion() },
             onNavigateSelectAudioScreen = {}
         )
-
-        if (dialogViewState is DialogViewState.Visible) {
-
-            discardWordDialog(
-                wordToDelete = (dialogViewState as DialogViewState.Visible).wordToDelete,
-                onDelete = { viewModel.deleteWord(it) },
-                onCancel = { viewModel.cancelWordDeletion() }
-            )
-        }
     }
 }
