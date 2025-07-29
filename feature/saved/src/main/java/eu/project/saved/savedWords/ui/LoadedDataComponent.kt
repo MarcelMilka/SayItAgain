@@ -16,7 +16,7 @@ import eu.project.ui.dimensions.WidgetPadding
 @Composable
 internal fun BoxScope.loadedDataComponent(
     retrievedData: List<SavedWord>,
-    onDelete: (SavedWord) -> Unit
+    onRequestDelete: (SavedWord) -> Unit
 ) {
 
     LazyColumn(
@@ -29,7 +29,7 @@ internal fun BoxScope.loadedDataComponent(
 
             this.items(retrievedData) { savedWord ->
 
-                savedWord.savedWordCard { onDelete(savedWord) }
+                savedWord.savedWordCard { onRequestDelete(savedWord) }
             }
         }
     )

@@ -41,7 +41,7 @@ internal fun savedWordsScreen(
                 is SavedWordsScreenViewState.Loaded.Data ->
                     loadedDataComponent(
                         retrievedData = viewState.retrievedData,
-                        onDelete = { onRequestDelete(it) }
+                        onRequestDelete = { onRequestDelete(it) }
                     )
 
                 is SavedWordsScreenViewState.FailedToLoad ->

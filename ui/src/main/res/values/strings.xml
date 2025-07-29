@@ -12,8 +12,9 @@
 
 
     <!--   SavedWordsScreen   -->
+    <string name="loading">Loading…</string>
     <string name="kinda_empty">Kinda empty…</string>
-    <string name="once_you_save_your_first_word">Once you save your first word, it’ll show up here.</string>
+    <string name="once_you_save_your_first_word_it_will_show_up_here">Once you save your first word, it’ll show up here.</string>
     <string name="discard_the_word">Discard the word?</string>
     <string name="the_word">The word</string>
     <string name="will_be_deleted_forever">will be deleted forever.</string>

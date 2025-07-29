@@ -61,7 +61,7 @@ internal fun SavedWord.savedWordCard(onDelete: () -> Unit) {
             secondaryIconButton(
                 onClick = { onDelete() },
                 painter = painterResource(R.drawable.delete),
-                contentDescription = stringResource(R.string.back_icon_description),
+                contentDescription = "${stringResource(R.string.delete)} - ${this@savedWordCard}",
                 testTag = TestTags.SAVED_WORDS_SCREEN_SAVED_WORD_CARD_DELETE_ICON
             )
         }

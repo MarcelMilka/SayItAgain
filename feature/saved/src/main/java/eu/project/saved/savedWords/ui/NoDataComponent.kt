@@ -32,7 +32,7 @@ internal fun BoxScope.noDataComponent(onNavigateSelectAudioScreen: () -> Unit) {
 
             Image(
                 painter = painterResource(id = R.drawable.empty),
-                contentDescription = stringResource(R.string.illustration_error_description)
+                contentDescription = stringResource(R.string.illustration_empty_description)
             )
 
             spacerV8()
@@ -42,7 +42,7 @@ internal fun BoxScope.noDataComponent(onNavigateSelectAudioScreen: () -> Unit) {
             spacerV8()
 
             bodyLarge(
-                text = stringResource(R.string.once_you_save_your_first_word),
+                text = stringResource(R.string.once_you_save_your_first_word_it_will_show_up_here),
                 color = SecondaryWhite,
                 textAlign = TextAlign.Center
             )
