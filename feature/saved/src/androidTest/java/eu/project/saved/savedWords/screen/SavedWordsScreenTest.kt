@@ -14,6 +14,7 @@ import androidx.compose.ui.test.performClick
 import androidx.test.platform.app.InstrumentationRegistry
 import eu.project.common.TestTags
 import eu.project.common.model.SavedWord
+import eu.project.saved.savedWords.model.DialogViewState
 import eu.project.saved.savedWords.model.SavedWordsScreenViewState
 import eu.project.ui.R
 import eu.project.ui.theme.Background
@@ -33,9 +34,12 @@ internal class SavedWordsScreenTest {
     private val context = InstrumentationRegistry.getInstrumentation().targetContext
 
     private var onRequestDelete: SavedWord? = null
+    private var onDelete: SavedWord? = null
+    private var onCancel = false
     private var onNavigateSelectAudioScreen = false
 
     private lateinit var viewState: MutableStateFlow<SavedWordsScreenViewState>
+    private lateinit var dialogViewState: MutableStateFlow<DialogViewState>
 
     private val firstInstance = SavedWord(
         uuid = UUID.fromString("a81bc81b-dead-4e5d-abff-90865d1e13b1"),
@@ -57,9 +61,12 @@ internal class SavedWordsScreenTest {
     fun setUp() {
 
         onRequestDelete = null
+        onDelete = null
+        onCancel = false
         onNavigateSelectAudioScreen = false
 
-        viewState = MutableStateFlow<SavedWordsScreenViewState>(SavedWordsScreenViewState.Loading)
+        viewState = MutableStateFlow(SavedWordsScreenViewState.Loading)
+        dialogViewState = MutableStateFlow(DialogViewState.Hidden)
 
         composeTestRule.setContent {
 
@@ -67,7 +74,11 @@ internal class SavedWordsScreenTest {
 
                 savedWordsScreen(
                     viewState = viewState.collectAsState().value,
+                    dialogViewState = dialogViewState.collectAsState().value,
+
                     onRequestDelete = { onRequestDelete = it },
+                    onDelete = { onDelete = it },
+                    onCancel = { onCancel = true },
                     onNavigateSelectAudioScreen = { onNavigateSelectAudioScreen = true }
                 )
             }
@@ -104,11 +115,6 @@ internal class SavedWordsScreenTest {
 
             // button "Pick and transcribe"
             composeTestRule.onNodeWithText(context.getString(R.string.pick_and_transcribe)).assertIsDisplayed()
-            composeTestRule.onNodeWithTag(TestTags.SAVED_WORDS_SCREEN_BUTTON_PICK_AND_TRANSCRIBE).assertIsDisplayed()
-            composeTestRule.onNodeWithTag(TestTags.SAVED_WORDS_SCREEN_BUTTON_PICK_AND_TRANSCRIBE).assertIsEnabled()
-
-            composeTestRule.onNodeWithTag(TestTags.SAVED_WORDS_SCREEN_BUTTON_PICK_AND_TRANSCRIBE).performClick()
-            assertTrue(onNavigateSelectAudioScreen)
     }
 
     @Test
@@ -130,16 +136,6 @@ internal class SavedWordsScreenTest {
             composeTestRule.onNodeWithContentDescription("${context.getString(R.string.delete)} - $firstInstance").assertIsEnabled()
             composeTestRule.onNodeWithContentDescription("${context.getString(R.string.delete)} - $secondInstance").assertIsEnabled()
             composeTestRule.onNodeWithContentDescription("${context.getString(R.string.delete)} - $thirdInstance").assertIsEnabled()
-
-            // every savedWordCard calls onDelete properly
-            composeTestRule.onNodeWithContentDescription("${context.getString(R.string.delete)} - $firstInstance").performClick()
-            assertEquals(firstInstance, onRequestDelete)
-
-            composeTestRule.onNodeWithContentDescription("${context.getString(R.string.delete)} - $secondInstance").performClick()
-            assertEquals(secondInstance, onRequestDelete)
-
-            composeTestRule.onNodeWithContentDescription("${context.getString(R.string.delete)} - $thirdInstance").performClick()
-            assertEquals(thirdInstance, onRequestDelete)
     }
 
     @Test
@@ -271,5 +267,100 @@ internal class SavedWordsScreenTest {
             composeTestRule.onNodeWithText(context.getString(R.string.something_is_off)).assertIsDisplayed()
             composeTestRule.onNodeWithText("Exemplary error cause").assertIsDisplayed()
 
+    }
+
+
+
+    @Test
+    fun savedWordsScreen_calls_onRequestDelete() {
+
+        // stub
+        val retrievedData = listOf(firstInstance, secondInstance, thirdInstance)
+        viewState.value = SavedWordsScreenViewState.Loaded.Data(retrievedData)
+
+        // test
+        composeTestRule.onNodeWithContentDescription("${context.getString(R.string.delete)} - $secondInstance").performClick()
+        assertEquals(secondInstance, onRequestDelete)
+    }
+
+    @Test
+    fun savedWordsScreen_doesNotDisplayDiscardWordDialog_whenDialogViewStateHidden() {
+
+        // stub
+        val retrievedData = listOf(firstInstance, secondInstance, thirdInstance)
+        viewState.value = SavedWordsScreenViewState.Loaded.Data(retrievedData)
+        dialogViewState.value = DialogViewState.Hidden
+
+        // test
+        composeTestRule.onNodeWithTag(TestTags.DISCARD_WORD_DIALOG).assertDoesNotExist()
+
+        composeTestRule.onNodeWithText(context.getString(R.string.discard_the_word)).assertDoesNotExist()
+        composeTestRule.onNodeWithText(context.getString(R.string.the_word)).assertDoesNotExist()
+        composeTestRule.onNodeWithText(context.getString(R.string.will_be_deleted_forever)).assertDoesNotExist()
+        composeTestRule.onNodeWithText(context.getString(R.string.will_be_deleted_forever)).assertDoesNotExist()
+
+        composeTestRule.onNodeWithTag(TestTags.SAVED_WORDS_SCREEN_SECONDARY_BUTTON).assertDoesNotExist()
+        composeTestRule.onNodeWithTag(TestTags.SAVED_WORDS_SCREEN_PRIMARY_BUTTON).assertDoesNotExist()
+    }
+
+    @Test
+    fun savedWordsScreen_displaysDiscardWordDialog_whenDialogViewStateIsVisible() {
+
+        // stub
+        val retrievedData = listOf(firstInstance, secondInstance, thirdInstance)
+        viewState.value = SavedWordsScreenViewState.Loaded.Data(retrievedData)
+        dialogViewState.value = DialogViewState.Visible(firstInstance)
+
+        // test
+
+        composeTestRule.onNodeWithTag(TestTags.DISCARD_WORD_DIALOG).assertIsDisplayed()
+
+        composeTestRule.onNodeWithText(context.getString(R.string.discard_the_word)).assertIsDisplayed()
+
+        val theWord = context.getString(R.string.the_word)
+        val willBe = context.getString(R.string.will_be_deleted_forever)
+        composeTestRule.onNodeWithText("$theWord '${firstInstance.word}' $willBe").assertIsDisplayed()
+
+        composeTestRule.onNodeWithTag(TestTags.SAVED_WORDS_SCREEN_SECONDARY_BUTTON).assertIsDisplayed()
+        composeTestRule.onNodeWithTag(TestTags.SAVED_WORDS_SCREEN_PRIMARY_BUTTON).assertIsDisplayed()
+    }
+
+    @Test
+    fun discardWordDialog_calls_onDelete() {
+
+        // stub
+        val retrievedData = listOf(firstInstance, secondInstance, thirdInstance)
+        viewState.value = SavedWordsScreenViewState.Loaded.Data(retrievedData)
+        dialogViewState.value = DialogViewState.Visible(firstInstance)
+
+        // test
+        composeTestRule.onNodeWithTag(TestTags.SAVED_WORDS_SCREEN_SECONDARY_BUTTON).performClick()
+
+        assertEquals(firstInstance, onDelete)
+    }
+
+    @Test
+    fun discardWordDialog_calls_onCancel() {
+
+        // stub
+        val retrievedData = listOf(firstInstance, secondInstance, thirdInstance)
+        viewState.value = SavedWordsScreenViewState.Loaded.Data(retrievedData)
+        dialogViewState.value = DialogViewState.Visible(firstInstance)
+
+        // test
+        composeTestRule.onNodeWithTag(TestTags.SAVED_WORDS_SCREEN_PRIMARY_BUTTON).performClick()
+
+        assertTrue(onCancel)
+    }
+
+    @Test
+    fun savedWordsScreen_calls_onNavigateSelectAudioScreen() {
+
+        // stub
+        viewState.value = SavedWordsScreenViewState.Loaded.NoData
+
+        // test
+        composeTestRule.onNodeWithTag(TestTags.SAVED_WORDS_SCREEN_BUTTON_PICK_AND_TRANSCRIBE).performClick()
+        assertTrue(onNavigateSelectAudioScreen)
     }
 }
