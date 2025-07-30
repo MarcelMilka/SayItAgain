@@ -17,3 +17,9 @@ fun spacerV8() {
 
     Spacer(modifier = Modifier.height(8.dp))
 }
+
+@Composable
+fun spacerV4() {
+
+    Spacer(modifier = Modifier.height(4.dp))
+}

@@ -66,15 +66,21 @@ flowchart TD
     SavedWordDaoModule["<big>SavedWordDaoModule</big>"]
     SavedWordsDatasourceLocalModule["<big>SavedWordsDatasourceLocalModule</big>"]
     SavedWordsRepositoryLocalModule["<big>SavedWordsRepositoryLocalModule</big>"]
-
+    ApplicationClass["<big>ApplicationClass</big><div><small>SavedWordsRepository</small>"]
     subgraph :localData
 
         ApplicationDatabaseModule -- ApplicationDatabase --> SavedWordDaoModule
         SavedWordDaoModule -- SavedWordDao --> SavedWordsDatasourceLocalModule
         SavedWordsDatasourceLocalModule -- SavedWordDatasourceLocalImpl --> SavedWordsRepositoryLocalModule
-        SavedWordsRepositoryLocalModule -- SavedWordsRepositoryLocalImpl --> SavedWordsRepository
 
     end
+    
+    subgraph :app
+
+        ApplicationClass
+    end
+
+    SavedWordsRepositoryLocalModule -- SavedWordsRepositoryLocalImpl --> ApplicationClass
 ```
 
 
@@ -84,6 +90,7 @@ Displays which modules depend on `:localData` and which modules `:localData` its
 flowchart TD
     COMMON[:common]
     LOCAL_DATA[:localData]
+    APP[:app]
 
-    COMMON --> LOCAL_DATA   
+    COMMON --> LOCAL_DATA --> APP
 ```
