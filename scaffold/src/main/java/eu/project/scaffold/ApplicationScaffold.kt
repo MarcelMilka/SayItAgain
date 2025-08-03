@@ -15,6 +15,7 @@ import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
 import eu.project.common.navigation.Navigation
 import eu.project.home.impl.homeScreenImpl
+import eu.project.saved.exportWords.impl.exportWordsScreenImpl
 import eu.project.saved.savedWords.impl.savedWordsScreenImpl
 import eu.project.topBar.impl.topBarImpl
 import eu.project.transcribe.selectAudio.impl.selectAudioScreenImpl
@@ -49,9 +50,11 @@ fun applicationScaffold() {
 
                     this.homeScreenImpl(controller)
 
-                    this.navigation<Navigation.Saved.RouteSaved>(startDestination = Navigation.Saved.SavedWordsScreen) {
+                    this.navigation<Navigation.Saved.RouteSaved>(startDestination = Navigation.Saved.ExportWordsScreen) {
 
                         this.savedWordsScreenImpl()
+
+                        this.exportWordsScreenImpl()
                     }
 
                     this.navigation<Navigation.Transcribe.RouteTranscribe>(startDestination = Navigation.Transcribe.SelectAudioScreen) {
