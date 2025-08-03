@@ -7,9 +7,9 @@ import androidx.lifecycle.ViewModel
 import androidx.navigation.NavHostController
 
 @Composable
-inline fun <reified T : ViewModel> NavHostController.savedWordsSharedViewModel(): T {
+internal inline fun <reified T : ViewModel> NavHostController.savedWordsSharedViewModel(): T {
     val navGraphRoute = this.currentDestination?.parent?.route ?: return hiltViewModel()
-    val parentEntry = remember(this) {
+    val parentEntry = remember(navGraphRoute) {
         this.getBackStackEntry(navGraphRoute)
     }
 
