@@ -2,6 +2,7 @@ package eu.project.saved.savedWords.screen
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.test.assertIsDisplayed
@@ -74,6 +75,7 @@ internal class SavedWordsScreenTest {
 
                 savedWordsScreen(
                     viewState = viewState.collectAsState().value,
+                    listState = LazyListState(),
                     dialogViewState = dialogViewState.collectAsState().value,
 
                     onRequestDelete = { onRequestDelete = it },

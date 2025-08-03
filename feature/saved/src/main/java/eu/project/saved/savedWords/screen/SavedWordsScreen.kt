@@ -3,6 +3,7 @@ package eu.project.saved.savedWords.screen
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
@@ -21,6 +22,7 @@ import eu.project.ui.dimensions.ScreenPadding
 @Composable
 internal fun savedWordsScreen(
     viewState: SavedWordsScreenViewState,
+    listState: LazyListState,
     dialogViewState: DialogViewState,
 
     onRequestDelete: (SavedWord) -> Unit,
@@ -46,6 +48,7 @@ internal fun savedWordsScreen(
 
                 is SavedWordsScreenViewState.Loaded.Data ->
                     loadedDataComponent(
+                        listState = listState,
                         retrievedData = viewState.retrievedData,
                         onRequestDelete = { onRequestDelete(it) }
                     )

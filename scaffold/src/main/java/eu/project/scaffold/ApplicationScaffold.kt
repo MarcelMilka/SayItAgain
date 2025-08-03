@@ -15,6 +15,7 @@ import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
 import eu.project.common.navigation.Navigation
 import eu.project.home.impl.homeScreenImpl
+import eu.project.saved.exportWords.impl.exportWordsScreenImpl
 import eu.project.saved.savedWords.impl.savedWordsScreenImpl
 import eu.project.topBar.impl.topBarImpl
 import eu.project.transcribe.selectAudio.impl.selectAudioScreenImpl
@@ -42,8 +43,6 @@ fun applicationScaffold() {
                     top = paddingValues.calculateTopPadding()
                 ),
                 navController = controller,
-                enterTransition = { EnterTransition.None },
-                exitTransition = { ExitTransition.None },
                 startDestination = Navigation.HomeScreen,
                 builder = {
 
@@ -51,7 +50,9 @@ fun applicationScaffold() {
 
                     this.navigation<Navigation.Saved.RouteSaved>(startDestination = Navigation.Saved.SavedWordsScreen) {
 
-                        this.savedWordsScreenImpl()
+                        this.savedWordsScreenImpl(controller)
+
+                        this.exportWordsScreenImpl(controller)
                     }
 
                     this.navigation<Navigation.Transcribe.RouteTranscribe>(startDestination = Navigation.Transcribe.SelectAudioScreen) {

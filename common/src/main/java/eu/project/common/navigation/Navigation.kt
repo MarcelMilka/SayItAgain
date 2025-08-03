@@ -14,6 +14,9 @@ sealed class Navigation {
 
             @Serializable
             data object SavedWordsScreen: Saved()
+
+            @Serializable
+            data object ExportWordsScreen: Saved()
     }
 
     sealed class Transcribe: Navigation() {
