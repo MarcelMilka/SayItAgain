@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -15,11 +16,13 @@ import eu.project.ui.dimensions.WidgetPadding
 
 @Composable
 internal fun BoxScope.loadedDataComponent(
+    listState: LazyListState,
     retrievedData: List<SavedWord>,
     onRequestDelete: (SavedWord) -> Unit
 ) {
 
     LazyColumn(
+        state = listState,
         modifier = Modifier
             .fillMaxSize()
             .padding(bottom = WidgetPadding.dp)

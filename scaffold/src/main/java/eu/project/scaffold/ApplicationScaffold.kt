@@ -43,18 +43,16 @@ fun applicationScaffold() {
                     top = paddingValues.calculateTopPadding()
                 ),
                 navController = controller,
-                enterTransition = { EnterTransition.None },
-                exitTransition = { ExitTransition.None },
                 startDestination = Navigation.HomeScreen,
                 builder = {
 
                     this.homeScreenImpl(controller)
 
-                    this.navigation<Navigation.Saved.RouteSaved>(startDestination = Navigation.Saved.ExportWordsScreen) {
+                    this.navigation<Navigation.Saved.RouteSaved>(startDestination = Navigation.Saved.SavedWordsScreen) {
 
-                        this.savedWordsScreenImpl()
+                        this.savedWordsScreenImpl(controller)
 
-                        this.exportWordsScreenImpl()
+                        this.exportWordsScreenImpl(controller)
                     }
 
                     this.navigation<Navigation.Transcribe.RouteTranscribe>(startDestination = Navigation.Transcribe.SelectAudioScreen) {
