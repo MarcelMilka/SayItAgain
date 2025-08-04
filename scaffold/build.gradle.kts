@@ -85,6 +85,11 @@ dependencies {
     // Serialization
     implementation(libs.kotlinx.serialization.json)
 
+    // MockK
+    testImplementation(libs.mockk)
+    testImplementation(libs.mockk.android)
+    testImplementation(libs.mockk.agent)
+
     implementation(project(":ui"))
     implementation(project(":common"))
     implementation(project(":feature:home"))
