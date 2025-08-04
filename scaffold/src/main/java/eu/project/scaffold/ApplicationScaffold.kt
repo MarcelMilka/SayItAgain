@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBars
+import androidx.compose.material3.FabPosition
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -31,6 +32,7 @@ fun applicationScaffold() {
             .fillMaxSize(),
         containerColor = Background,
         contentWindowInsets = WindowInsets.statusBars,
+        floatingActionButtonPosition = FabPosition.Center,
         topBar = {
 
             topBarImpl(controller)
