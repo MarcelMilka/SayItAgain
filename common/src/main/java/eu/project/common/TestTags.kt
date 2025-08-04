@@ -28,4 +28,7 @@ object TestTags {
     const val TOP_BAR = "TopBar"
     const val TOP_BAR_ICON_BUTTON_BACK_ICON = "TopBar - IconButtonBack - Back icon"
     const val TOP_BAR_ICON_BUTTON_INFO_ICON = "TopBar - IconButtonBack - Info icon"
+
+    // FloatingActionButton
+    const val FLOATING_ACTION_BUTTON = "FloatingActionButton"
 }
