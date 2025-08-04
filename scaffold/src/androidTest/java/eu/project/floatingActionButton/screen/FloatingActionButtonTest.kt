@@ -3,6 +3,7 @@ package eu.project.floatingActionButton.screen
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.FabPosition
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.collectAsState
@@ -67,10 +68,13 @@ class FloatingActionButtonTest {
                 },
                 floatingActionButtonPosition = FabPosition.Center,
                 containerColor = Background,
-                content = {
+                content = { paddingValues ->
 
                     Box(
-                        modifier = Modifier.fillMaxSize().background(Background),
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(paddingValues.calculateTopPadding())
+                            .background(Background),
                         content = {}
                     )
                 }
