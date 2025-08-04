@@ -1,7 +1,5 @@
 package eu.project.scaffold
 
-import androidx.compose.animation.EnterTransition
-import androidx.compose.animation.ExitTransition
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
@@ -14,6 +12,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
 import eu.project.common.navigation.Navigation
+import eu.project.floatingActionButton.impl.floatingActionButtonImpl
 import eu.project.home.impl.homeScreenImpl
 import eu.project.saved.exportWords.impl.exportWordsScreenImpl
 import eu.project.saved.savedWords.impl.savedWordsScreenImpl
@@ -35,6 +34,10 @@ fun applicationScaffold() {
         topBar = {
 
             topBarImpl(controller)
+        },
+        floatingActionButton = {
+
+            floatingActionButtonImpl(controller)
         },
         content = { paddingValues ->
 
