@@ -35,6 +35,10 @@
     <string name="illustration_empty_description">Empty</string>
 
 
+    <!--   Content descriptions   -->
+    <string name="select_words">Select words</string>
+    <string name="export_settings">Export settings</string>
+
 
     <!--   Screen names   -->
     <string name="home">Home</string>
