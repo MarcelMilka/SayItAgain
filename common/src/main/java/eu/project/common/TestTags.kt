@@ -24,6 +24,10 @@ object TestTags {
     const val SAVED_WORDS_SCREEN_PRIMARY_BUTTON = "SavedWordsScreen - PrimaryButton - Cancel"
 
 
+    // ExportWordsScreen
+    const val EXPORT_WORDS_SCREEN = "ExportWordsScreen"
+
+
     // TopBar
     const val TOP_BAR = "TopBar"
     const val TOP_BAR_ICON_BUTTON_BACK_ICON = "TopBar - IconButtonBack - Back icon"

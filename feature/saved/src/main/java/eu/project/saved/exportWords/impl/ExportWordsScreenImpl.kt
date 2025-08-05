@@ -22,6 +22,6 @@ fun NavGraphBuilder.exportWordsImpl(controller: NavHostController) {
         val viewModel = hiltViewModel<ExportWordsViewModel>()
         val screenState by viewModel.screenState.collectAsStateWithLifecycle()
 
-        exportWordsScreen()
+        exportWordsScreen(screenState)
     }
 }
