@@ -22,7 +22,9 @@ internal fun exportWordsScreen(
     listState: LazyListState,
     screenState: ExportWordsScreenState,
     uiState: ExportWordsUiState,
-    onChangeWordSelection: (ExportableSavedWord) -> Unit
+    onChangeWordSelection: (ExportableSavedWord) -> Unit,
+    onClickLeft: () -> Unit,
+    onClickRight: () -> Unit
 ) {
 
     Box(
@@ -39,7 +41,9 @@ internal fun exportWordsScreen(
                 ExportWordsScreenState.ReadyToExport -> showReadyToExport(
                     listState = listState,
                     uiState = uiState,
-                    onChangeWordSelection = { onChangeWordSelection(it) }
+                    onChangeWordSelection = { onChangeWordSelection(it) },
+                    onClickLeft = { onClickLeft() },
+                    onClickRight = { onClickRight() }
                 )
             }
         }

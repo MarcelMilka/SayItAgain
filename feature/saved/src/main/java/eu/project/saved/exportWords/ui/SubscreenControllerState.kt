@@ -51,7 +51,7 @@ internal object SubscreenControllerButtonVariants {
     )
 
     val rightInactive = SubscreenControllerButtonState(
-        text = R.string.select_words,
+        text = R.string.export_settings,
         enabled = true,
         containerColor = Transparent,
         contentColor = SecondaryWhite,

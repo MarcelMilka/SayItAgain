@@ -2,6 +2,7 @@ package eu.project.saved.exportWords.ui
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.BoxScope
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -21,23 +22,38 @@ import eu.project.ui.dimensions.WidgetPadding
 internal fun BoxScope.showReadyToExport(
     listState: LazyListState,
     uiState: ExportWordsUiState,
-    onChangeWordSelection: (ExportableSavedWord) -> Unit
+    onChangeWordSelection: (ExportableSavedWord) -> Unit,
+    onClickLeft: () -> Unit,
+    onClickRight: () -> Unit
 ) {
 
-    LazyColumn(
-        state = listState,
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(bottom = WidgetPadding.dp)
-            .align(Alignment.TopStart)
-            .testTag(TestTags.EXPORT_WORDS_SCREEN_LAZY_COLUMN),
+    Column(
+        modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Top,
+        horizontalAlignment = Alignment.CenterHorizontally,
         content = {
 
-            this.items(uiState.exportableWords) { exportableWord ->
+            subscreenController(
+                subscreenControllerState = uiState.subscreenControllerState,
+                onClickLeft = { onClickLeft() },
+                onClickRight = { onClickRight() }
+            )
 
-                exportableWord.exportableSavedWordCard { onChangeWordSelection(exportableWord) }
-            }
+            LazyColumn(
+                state = listState,
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(bottom = WidgetPadding.dp)
+                    .testTag(TestTags.EXPORT_WORDS_SCREEN_LAZY_COLUMN),
+                verticalArrangement = Arrangement.Top,
+                content = {
+
+                    this.items(uiState.exportableWords) { exportableWord ->
+
+                        exportableWord.exportableSavedWordCard { onChangeWordSelection(exportableWord) }
+                    }
+                }
+            )
         }
     )
 }
