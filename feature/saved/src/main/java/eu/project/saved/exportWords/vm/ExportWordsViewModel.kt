@@ -8,11 +8,15 @@ import eu.project.common.connectivity.ConnectivityStatus
 import eu.project.common.localData.SavedWordsRepository
 import eu.project.common.localData.SavedWordsRepositoryDataState
 import eu.project.saved.exportWords.model.ExportWordsScreenState
+import eu.project.saved.exportWords.model.ExportWordsUiState
+import eu.project.saved.exportWords.model.convertToExportable
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -26,6 +30,9 @@ internal class ExportWordsViewModel @Inject constructor(
     private var _screenState = MutableStateFlow<ExportWordsScreenState>(ExportWordsScreenState.Initial)
     val screenState = _screenState.asStateFlow()
 
+    private var _uiState = MutableStateFlow<ExportWordsUiState>(ExportWordsUiState())
+    val uiState = _uiState.asStateFlow()
+
     init {
 
         viewModelScope.launch {
@@ -36,7 +43,6 @@ internal class ExportWordsViewModel @Inject constructor(
 
 
 
-    // screen state
     private suspend fun observeExternalFactors() {
 
         savedWordsRepository.dataState
@@ -44,24 +50,18 @@ internal class ExportWordsViewModel @Inject constructor(
 
                 CombinedFlows(dataState, connectivityStatus)
             }
-            .map { combinedFlows ->
+            .distinctUntilChanged()
+            .onEach { combinedFlows ->
 
                 evaluateScreenState(combinedFlows)
+                evaluateUiStateIfNeeded(combinedFlows)
             }
-            .distinctUntilChanged()
-            .collect { screenState ->
-
-                _screenState.value = screenState
-            }
+            .collect()
     }
 
-    private fun evaluateScreenState(combinedFlows: CombinedFlows): ExportWordsScreenState {
+    private fun evaluateScreenState(combinedFlows: CombinedFlows) {
 
-        return when(combinedFlows.dataState) {
-
-            is SavedWordsRepositoryDataState.FailedToLoad -> { ExportWordsScreenState.Error }
-            SavedWordsRepositoryDataState.Loaded.NoData -> { ExportWordsScreenState.Error }
-            SavedWordsRepositoryDataState.Loading -> { ExportWordsScreenState.Error }
+        val newScreenState = when(combinedFlows.dataState) {
 
             is SavedWordsRepositoryDataState.Loaded.Data -> {
 
@@ -71,6 +71,28 @@ internal class ExportWordsViewModel @Inject constructor(
                     ConnectivityStatus.Disconnected -> ExportWordsScreenState.Disconnected
                 }
             }
+
+            else -> ExportWordsScreenState.Error
+        }
+
+        _screenState.update { newScreenState }
+    }
+
+    private fun evaluateUiStateIfNeeded(combinedFlows: CombinedFlows) {
+
+        val currentList = _uiState.value.exportableWords
+
+        val newList = when (val dataState = combinedFlows.dataState) {
+
+            is SavedWordsRepositoryDataState.Loaded.Data -> {
+
+                dataState.retrievedData.map { it.convertToExportable() }
+            }
+            else -> null
+        }
+
+        if (newList != null && newList != currentList) {
+            _uiState.update { it.copy(exportableWords = newList) }
         }
     }
 
