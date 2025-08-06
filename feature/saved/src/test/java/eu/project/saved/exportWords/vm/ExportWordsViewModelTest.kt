@@ -6,6 +6,7 @@ import eu.project.common.connectivity.ConnectivityStatus
 import eu.project.common.localData.SavedWordsRepository
 import eu.project.common.localData.SavedWordsRepositoryDataState
 import eu.project.common.model.SavedWord
+import eu.project.saved.exportWords.intent.ExportWordsIntent
 import eu.project.saved.exportWords.model.ExportWordsScreenState
 import eu.project.saved.exportWords.model.ExportableSavedWord
 import eu.project.saved.exportWords.model.convertToExportable
@@ -56,16 +57,20 @@ class ExportWordsViewModelTest {
     private var connectivityFlow = MutableStateFlow(ConnectivityStatus.Disconnected)
 
     // data
-    private val firstInstance = SavedWord(
-        UUID.fromString("a81bc81b-dead-4e5d-abff-90865d1e13b1"), "Cat", "English"
-    )
-    private val secondInstance = SavedWord(
-        UUID.fromString("550e8400-e29b-41d4-a716-446655440000"), "Monitor lizard", "English"
-    )
-    private val thirdInstance = SavedWord(
-        UUID.fromString("123e4567-e89b-12d3-a456-426614174000"), "Hagetreboa", "Norwegian"
-    )
+    private val firstInstance = SavedWord(UUID.fromString("a81bc81b-dead-4e5d-abff-90865d1e13b1"), "Cat", "English")
+    private val firstExportableInstance = ExportableSavedWord(UUID.fromString("a81bc81b-dead-4e5d-abff-90865d1e13b1"), "Cat", "English", false)
+
+    private val secondInstance = SavedWord(UUID.fromString("550e8400-e29b-41d4-a716-446655440000"), "Monitor lizard", "English")
+    private val secondExportableInstance = ExportableSavedWord(UUID.fromString("550e8400-e29b-41d4-a716-446655440000"), "Monitor lizard", "English", false)
+
+    private val thirdInstance = SavedWord(UUID.fromString("123e4567-e89b-12d3-a456-426614174000"), "Hagetreboa", "Norwegian")
+    private val thirdExportableInstance = ExportableSavedWord(UUID.fromString("123e4567-e89b-12d3-a456-426614174000"), "Hagetreboa", "Norwegian", false)
+
     private val savedWords = listOf(firstInstance, secondInstance, thirdInstance)
+    private val exportableSavedWords = listOf(firstExportableInstance, secondExportableInstance, thirdExportableInstance)
+    private val exportableSavedWordsFirstTrue = listOf(firstExportableInstance.copy(toExport = true), secondExportableInstance, thirdExportableInstance)
+
+
     private val exportableWords = listOf(firstInstance.convertToExportable(), secondInstance.convertToExportable(), thirdInstance.convertToExportable())
 
     // tested class
@@ -253,6 +258,105 @@ class ExportWordsViewModelTest {
 
             expectNoEvents()
 
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+
+
+    // ChangeWordSelection tests
+    @Test
+    fun `ChangeWordSelection toggles toExport for the first word`() = runTest {
+
+        viewModel.uiState.test {
+
+            assertEquals(emptyList<ExportableSavedWord>(), awaitItem().exportableWords)
+
+            dataStateFlow.update { SavedWordsRepositoryDataState.Loaded.Data(savedWords) }
+            assertEquals(exportableWords, awaitItem().exportableWords)
+
+            viewModel.onIntent(ExportWordsIntent.ChangeWordSelection(firstExportableInstance))
+            assertEquals(exportableSavedWordsFirstTrue, awaitItem().exportableWords)
+
+            expectNoEvents()
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `ChangeWordSelection toggles toExport back to false`() = runTest {
+
+        viewModel.uiState.test {
+
+            assertEquals(emptyList<ExportableSavedWord>(), awaitItem().exportableWords)
+
+            dataStateFlow.update { SavedWordsRepositoryDataState.Loaded.Data(savedWords) }
+            assertEquals(exportableSavedWords, awaitItem().exportableWords)
+
+            viewModel.onIntent(ExportWordsIntent.ChangeWordSelection(firstExportableInstance))
+            assertEquals(exportableSavedWordsFirstTrue, awaitItem().exportableWords)
+
+            viewModel.onIntent(ExportWordsIntent.ChangeWordSelection(firstExportableInstance))
+            assertEquals(exportableSavedWords, awaitItem().exportableWords)
+
+            expectNoEvents()
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `ChangeWordSelection toggles toExport for all words individually`() = runTest {
+
+        viewModel.uiState.test {
+
+            // Step 1: Initial state
+            assertEquals(emptyList<ExportableSavedWord>(), awaitItem().exportableWords)
+
+            // Step 2: Load words
+            dataStateFlow.update { SavedWordsRepositoryDataState.Loaded.Data(savedWords) }
+
+            val loadedWords = awaitItem().exportableWords
+            assertEquals(exportableSavedWords, loadedWords)
+
+            // Step 3: Toggle each word
+            viewModel.onIntent(ExportWordsIntent.ChangeWordSelection(firstExportableInstance))
+            val afterFirstToggle = awaitItem().exportableWords
+
+            viewModel.onIntent(ExportWordsIntent.ChangeWordSelection(secondExportableInstance))
+            val afterSecondToggle = awaitItem().exportableWords
+
+            viewModel.onIntent(ExportWordsIntent.ChangeWordSelection(thirdExportableInstance))
+            val afterThirdToggle = awaitItem().exportableWords
+
+            // Step 4: Expected
+            val expected = listOf(
+                firstExportableInstance.copy(toExport = true),
+                secondExportableInstance.copy(toExport = true),
+                thirdExportableInstance.copy(toExport = true)
+            )
+
+            assertEquals(expected, afterThirdToggle)
+
+            expectNoEvents()
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `ChangeWordSelection does nothing if word not in list`() = runTest {
+
+        viewModel.uiState.test {
+
+            assertEquals(emptyList<ExportableSavedWord>(), awaitItem().exportableWords)
+
+            dataStateFlow.update { SavedWordsRepositoryDataState.Loaded.Data(savedWords) }
+            assertEquals(exportableSavedWords, awaitItem().exportableWords)
+
+            val notExistingWord = ExportableSavedWord(UUID.randomUUID(), "Ghost", "Unknown")
+
+            viewModel.onIntent(ExportWordsIntent.ChangeWordSelection(notExistingWord))
+
+            expectNoEvents()
             cancelAndIgnoreRemainingEvents()
         }
     }

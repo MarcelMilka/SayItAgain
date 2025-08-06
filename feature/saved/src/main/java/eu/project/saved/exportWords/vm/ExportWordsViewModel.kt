@@ -7,8 +7,10 @@ import eu.project.common.connectivity.ConnectivityObserver
 import eu.project.common.connectivity.ConnectivityStatus
 import eu.project.common.localData.SavedWordsRepository
 import eu.project.common.localData.SavedWordsRepositoryDataState
+import eu.project.saved.exportWords.intent.ExportWordsIntent
 import eu.project.saved.exportWords.model.ExportWordsScreenState
 import eu.project.saved.exportWords.model.ExportWordsUiState
+import eu.project.saved.exportWords.model.ExportableSavedWord
 import eu.project.saved.exportWords.model.convertToExportable
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -100,4 +102,30 @@ internal class ExportWordsViewModel @Inject constructor(
         val dataState: SavedWordsRepositoryDataState,
         val connectivityStatus: ConnectivityStatus
     )
+
+
+
+    fun onIntent(intent: ExportWordsIntent) {
+
+        when (intent) {
+            is ExportWordsIntent.ChangeWordSelection -> { changeWordSelection(intent.wordToUpdate) }
+        }
+    }
+
+    private fun changeWordSelection(wordToUpdate: ExportableSavedWord) {
+
+        _uiState.update { currentState ->
+
+            val updatedList = currentState.exportableWords.map { word ->
+
+                if (word.uuid == wordToUpdate.uuid) {
+
+                    word.copy(toExport = !word.toExport)
+                }
+                else { word }
+            }
+
+            currentState.copy(exportableWords = updatedList)
+        }
+    }
 }
