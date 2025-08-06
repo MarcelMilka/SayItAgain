@@ -9,6 +9,7 @@ import androidx.navigation.compose.composable
 import eu.project.common.navigation.Navigation
 import eu.project.saved.common.SavedWordsSharedViewModel
 import eu.project.saved.common.sharedViewModel
+import eu.project.saved.exportWords.intent.ExportWordsIntent
 import eu.project.saved.exportWords.screen.exportWordsScreen
 import eu.project.saved.exportWords.vm.ExportWordsViewModel
 
@@ -21,7 +22,16 @@ fun NavGraphBuilder.exportWordsImpl(controller: NavHostController) {
 
         val viewModel = hiltViewModel<ExportWordsViewModel>()
         val screenState by viewModel.screenState.collectAsStateWithLifecycle()
+        val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-        exportWordsScreen(screenState)
+        exportWordsScreen(
+            listState = listState,
+            screenState = screenState,
+            uiState = uiState,
+            onChangeWordSelection = {
+
+                viewModel.onIntent(ExportWordsIntent.ChangeWordSelection(it))
+            }
+        )
     }
 }
