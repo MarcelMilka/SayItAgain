@@ -9,10 +9,12 @@ import eu.project.common.localData.SavedWordsRepository
 import eu.project.common.localData.SavedWordsRepositoryDataState
 import eu.project.saved.exportWords.intent.ExportWordsIntent
 import eu.project.saved.exportWords.model.ExportWordsScreenState
+import eu.project.saved.exportWords.model.ExportWordsSubscreen
 import eu.project.saved.exportWords.model.ExportWordsUiState
 import eu.project.saved.exportWords.model.ExportableSavedWord
 import eu.project.saved.exportWords.model.convertToExportable
 import eu.project.saved.exportWords.model.convertToModel
+import eu.project.saved.exportWords.ui.SubscreenControllerButtonVariants
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collect
@@ -108,7 +110,9 @@ internal class ExportWordsViewModel @Inject constructor(
     fun onIntent(intent: ExportWordsIntent) {
 
         when (intent) {
-            is ExportWordsIntent.ChangeWordSelection -> { changeWordSelection(intent.wordToUpdate) }
+            is ExportWordsIntent.ChangeWordSelection -> changeWordSelection(intent.wordToUpdate)
+            ExportWordsIntent.SwitchToExportSettings -> tryToSwitchToExportSettings()
+            ExportWordsIntent.SwitchToSelectWords -> switchToSelectWords()
         }
     }
 
@@ -126,6 +130,43 @@ internal class ExportWordsViewModel @Inject constructor(
             }
 
             currentState.copy(exportableWords = updatedList)
+        }
+    }
+
+    private fun tryToSwitchToExportSettings() {
+
+        val atLeastOneSelectedWord = _uiState.value.exportableWords.any { it.toExport }
+
+        if (atLeastOneSelectedWord) {
+
+            _uiState.update { uiState ->
+
+                uiState.copy(
+                    subscreenControllerState = uiState.subscreenControllerState.copy(
+                        exportWordsSubscreen = ExportWordsSubscreen.ExportSettings,
+                        leftButton = SubscreenControllerButtonVariants.leftInactive,
+                        rightButton = SubscreenControllerButtonVariants.rightActive
+                    )
+                )
+            }
+        }
+
+        else {
+            // TODO: show the banner
+        }
+    }
+
+    private fun switchToSelectWords() {
+
+        _uiState.update { uiState ->
+
+            uiState.copy(
+                subscreenControllerState = uiState.subscreenControllerState.copy(
+                    exportWordsSubscreen = ExportWordsSubscreen.SelectWords,
+                    leftButton = SubscreenControllerButtonVariants.leftActive,
+                    rightButton = SubscreenControllerButtonVariants.rightInactive
+                )
+            )
         }
     }
 }
