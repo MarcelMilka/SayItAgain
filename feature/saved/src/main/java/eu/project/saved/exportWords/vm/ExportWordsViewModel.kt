@@ -12,6 +12,7 @@ import eu.project.saved.exportWords.model.ExportWordsScreenState
 import eu.project.saved.exportWords.model.ExportWordsUiState
 import eu.project.saved.exportWords.model.ExportableSavedWord
 import eu.project.saved.exportWords.model.convertToExportable
+import eu.project.saved.exportWords.model.convertToModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collect
@@ -82,19 +83,18 @@ internal class ExportWordsViewModel @Inject constructor(
 
     private fun evaluateUiStateIfNeeded(combinedFlows: CombinedFlows) {
 
-        val currentList = _uiState.value.exportableWords
+        val currentModelList = _uiState.value.exportableWords.map { it.convertToModel() }
 
-        val newList = when (val dataState = combinedFlows.dataState) {
+        val newModelList = when (val dataState = combinedFlows.dataState) {
 
-            is SavedWordsRepositoryDataState.Loaded.Data -> {
-
-                dataState.retrievedData.map { it.convertToExportable() }
-            }
+            is SavedWordsRepositoryDataState.Loaded.Data -> dataState.retrievedData
             else -> null
         }
 
-        if (newList != null && newList != currentList) {
-            _uiState.update { it.copy(exportableWords = newList) }
+        if (newModelList != null && newModelList != currentModelList) {
+
+            val newExportableList = newModelList.map { it.convertToExportable() }
+            _uiState.update { it.copy(exportableWords = newExportableList) }
         }
     }
 
