@@ -27,6 +27,7 @@ object TestTags {
     // ExportWordsScreen
     const val EXPORT_WORDS_SCREEN = "ExportWordsScreen"
     const val EXPORT_WORDS_SCREEN_LAZY_COLUMN = "ExportWordsScreen - LazyColumn"
+    const val EXPORT_WORDS_SCREEN_WARNING_BANNER = "ExportWordsScreen - WarningBanner"
 
 
     // TopBar

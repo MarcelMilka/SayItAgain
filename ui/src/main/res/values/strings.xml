@@ -21,6 +21,11 @@
     <string name="delete">Delete</string>
     <string name="cancel">Cancel</string>
 
+
+    <!--   ExportWordsScreen   -->
+    <string name="no_words_selected">No words selected.</string>
+    <string name="please_select_at_least_one_word_before_continuing">Please select at least one word before continuing.</string>
+
     <!--   Common   -->
     <string name="pick_and_transcribe">Pick and transcribe</string>
     <string name="something_is_off">Something’s off…</string>

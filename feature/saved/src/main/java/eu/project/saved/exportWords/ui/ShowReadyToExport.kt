@@ -12,10 +12,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import eu.project.common.TestTags
 import eu.project.saved.exportWords.model.ExportWordsUiState
 import eu.project.saved.exportWords.model.ExportableSavedWord
+import eu.project.ui.R
+import eu.project.ui.components.banners.warningBanner
 import eu.project.ui.dimensions.WidgetPadding
 
 @Composable
@@ -38,6 +41,15 @@ internal fun BoxScope.showReadyToExport(
                 onClickLeft = { onClickLeft() },
                 onClickRight = { onClickRight() }
             )
+
+            if (uiState.showNoWordsSelectedBanner) {
+
+                warningBanner(
+                    headline = stringResource(R.string.no_words_selected),
+                    body = stringResource(R.string.please_select_at_least_one_word_before_continuing),
+                    testTag = TestTags.EXPORT_WORDS_SCREEN_WARNING_BANNER
+                )
+            }
 
             LazyColumn(
                 state = listState,
