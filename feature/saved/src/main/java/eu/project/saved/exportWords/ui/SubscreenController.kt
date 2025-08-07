@@ -1,12 +1,8 @@
 package eu.project.saved.exportWords.ui
 
 import androidx.compose.animation.animateColorAsState
-import androidx.compose.ui.graphics.Color.Companion.Transparent
-import eu.project.ui.theme.SecondaryWhite
-
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
@@ -14,16 +10,14 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import eu.project.ui.R
+import eu.project.common.TestTags
 import eu.project.ui.components.text.labelLarge
 import eu.project.ui.dimensions.BetweenWidgetsPadding
 
@@ -35,13 +29,15 @@ internal fun subscreenController(
 ) {
 
     Row(
-        modifier = Modifier.padding(bottom = BetweenWidgetsPadding.dp),
+        modifier = Modifier
+            .padding(bottom = BetweenWidgetsPadding.dp)
+            .testTag(TestTags.EXPORT_WORDS_SCREEN_SUBSCREEN_CONTROLLER),
         horizontalArrangement = Arrangement.SpaceBetween,
         content = {
 
             subscreenControllerButton(
                 buttonState = subscreenControllerState.leftButton,
-                testTag = "selectWords",
+                testTag = TestTags.EXPORT_WORDS_SCREEN_SUBSCREEN_CONTROLLER_LEFT_BUTTON,
                 onClick = { onClickLeft() }
             )
 
@@ -49,7 +45,7 @@ internal fun subscreenController(
 
             subscreenControllerButton(
                 buttonState = subscreenControllerState.rightButton,
-                testTag = "exportSettings",
+                testTag = TestTags.EXPORT_WORDS_SCREEN_SUBSCREEN_CONTROLLER_RIGHT_BUTTON,
                 onClick = { onClickRight() }
             )
         }
@@ -57,7 +53,7 @@ internal fun subscreenController(
 }
 
 @Composable
-internal fun RowScope.subscreenControllerButton(
+private fun RowScope.subscreenControllerButton(
     buttonState: SubscreenControllerButtonState,
     testTag: String,
     onClick: () -> Unit
