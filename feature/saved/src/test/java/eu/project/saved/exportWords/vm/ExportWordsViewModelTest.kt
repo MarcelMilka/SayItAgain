@@ -15,6 +15,8 @@ import eu.project.saved.exportWords.ui.SubscreenControllerButtonVariants
 import io.mockk.every
 import io.mockk.mockk
 import junit.framework.TestCase.assertEquals
+import junit.framework.TestCase.assertFalse
+import junit.framework.TestCase.assertTrue
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -264,6 +266,16 @@ class ExportWordsViewModelTest {
         }
     }
 
+    @Test
+    fun `showNoWordsSelectedBanner is set to false by default`() = runTest {
+
+        viewModel.uiState.test {
+
+            // default
+            assertFalse(awaitItem().showNoWordsSelectedBanner)
+        }
+    }
+
 
 
     // ChangeWordSelection tests
@@ -363,11 +375,41 @@ class ExportWordsViewModelTest {
         }
     }
 
+    @Test
+    fun `ChangeWordSelection sets showNoWordsSelectedBanner to false when showNoWordsSelectedBanner is true and at least one word is selected`() = runTest {
+
+        viewModel.uiState.test {
+
+            assertEquals(emptyList<ExportableSavedWord>(), awaitItem().exportableWords)
+
+            dataStateFlow.update { SavedWordsRepositoryDataState.Loaded.Data(savedWords) }
+            assertEquals(exportableWords, awaitItem().exportableWords)
+
+            viewModel.onIntent(ExportWordsIntent.TryToSwitchToExportSettings)
+            assertTrue(awaitItem().showNoWordsSelectedBanner)
+
+            viewModel.onIntent(ExportWordsIntent.ChangeWordSelection(firstExportableInstance))
+            assertEquals(exportableSavedWordsFirstTrue, awaitItem().exportableWords)
+
+            viewModel.onIntent(ExportWordsIntent.TryToSwitchToExportSettings)
+            assertFalse(awaitItem().showNoWordsSelectedBanner)
+
+            val state = awaitItem().subscreenControllerState
+
+            assertEquals(ExportWordsSubscreen.ExportSettings, state.exportWordsSubscreen)
+            assertEquals(SubscreenControllerButtonVariants.leftInactive, state.leftButton)
+            assertEquals(SubscreenControllerButtonVariants.rightActive, state.rightButton)
+
+            expectNoEvents()
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
 
 
     // TryToSwitchToExportSettings tests
     @Test
-    fun `TryToSwitchToExportSettings sets correct UI state when at least one word is selected`() = runTest {
+    fun `TryToSwitchToExportSettings updates subscreenControllerState when at least one word is selected`() = runTest {
 
         viewModel.uiState.test {
 
@@ -383,7 +425,7 @@ class ExportWordsViewModelTest {
             assertEquals(exportableSavedWordsFirstTrue, awaitItem().exportableWords)
 
             // switch to select words
-            viewModel.onIntent(ExportWordsIntent.SwitchToExportSettings)
+            viewModel.onIntent(ExportWordsIntent.TryToSwitchToExportSettings)
             val state = awaitItem().subscreenControllerState
 
             assertEquals(ExportWordsSubscreen.ExportSettings, state.exportWordsSubscreen)
@@ -396,7 +438,7 @@ class ExportWordsViewModelTest {
     }
 
     @Test
-    fun `TryToSwitchToExportSettings does not change UI state when any of the words is selected`() = runTest {
+    fun `TryToSwitchToExportSettings does not update subscreenControllerState when none of the words is selected`() = runTest {
 
         viewModel.uiState.test {
 
@@ -408,14 +450,68 @@ class ExportWordsViewModelTest {
             assertEquals(exportableWords, awaitItem().exportableWords)
 
             // switch to select words
-            viewModel.onIntent(ExportWordsIntent.SwitchToExportSettings)
+            viewModel.onIntent(ExportWordsIntent.TryToSwitchToExportSettings)
+            val state = awaitItem().subscreenControllerState
+
+            assertEquals(ExportWordsSubscreen.SelectWords, state.exportWordsSubscreen)
+            assertEquals(SubscreenControllerButtonVariants.leftActive, state.leftButton)
+            assertEquals(SubscreenControllerButtonVariants.rightInactive, state.rightButton)
+
 
             expectNoEvents()
             cancelAndIgnoreRemainingEvents()
         }
     }
 
-    // SwitchToExportSettings tests
+    @Test
+    fun `TryToSwitchToExportSettings sets showNoWordsSelectedBanner to true when none of the words is selected`() = runTest {
+
+        viewModel.uiState.test {
+
+            // default
+            assertEquals(emptyList<ExportableSavedWord>(), awaitItem().exportableWords)
+
+            // set LoadedData
+            dataStateFlow.update { SavedWordsRepositoryDataState.Loaded.Data(savedWords) }
+            assertEquals(exportableWords, awaitItem().exportableWords)
+
+            // switch to select words
+            viewModel.onIntent(ExportWordsIntent.TryToSwitchToExportSettings)
+
+            // make sure true is set
+            assertTrue(awaitItem().showNoWordsSelectedBanner)
+
+            expectNoEvents()
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `TryToSwitchToExportSettings does not set showNoWordsSelectedBanner to true when when at least one word is selected`() = runTest {
+
+        viewModel.uiState.test {
+
+            // default
+            assertEquals(emptyList<ExportableSavedWord>(), awaitItem().exportableWords)
+
+            // set LoadedData
+            dataStateFlow.update { SavedWordsRepositoryDataState.Loaded.Data(savedWords) }
+            assertEquals(exportableWords, awaitItem().exportableWords)
+
+            // select word
+            viewModel.onIntent(ExportWordsIntent.ChangeWordSelection(firstExportableInstance))
+            assertEquals(exportableSavedWordsFirstTrue, awaitItem().exportableWords)
+
+            // switch to select words
+            viewModel.onIntent(ExportWordsIntent.TryToSwitchToExportSettings)
+            assertFalse(awaitItem().showNoWordsSelectedBanner)
+
+            expectNoEvents()
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    // SwitchToSelectWords tests
     @Test
     fun `SwitchToSelectWords sets correct UI state`() = runTest {
 

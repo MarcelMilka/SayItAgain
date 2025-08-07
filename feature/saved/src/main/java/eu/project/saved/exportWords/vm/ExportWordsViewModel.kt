@@ -111,7 +111,7 @@ internal class ExportWordsViewModel @Inject constructor(
 
         when (intent) {
             is ExportWordsIntent.ChangeWordSelection -> changeWordSelection(intent.wordToUpdate)
-            ExportWordsIntent.SwitchToExportSettings -> tryToSwitchToExportSettings()
+            ExportWordsIntent.TryToSwitchToExportSettings -> tryToSwitchToExportSettings()
             ExportWordsIntent.SwitchToSelectWords -> switchToSelectWords()
         }
     }
@@ -130,6 +130,11 @@ internal class ExportWordsViewModel @Inject constructor(
             }
 
             currentState.copy(exportableWords = updatedList)
+        }
+
+        if (_uiState.value.showNoWordsSelectedBanner && _uiState.value.exportableWords.any { it.toExport == true }) {
+
+            setShowNoWordsSelectedBanner(visible = false)
         }
     }
 
@@ -152,7 +157,11 @@ internal class ExportWordsViewModel @Inject constructor(
         }
 
         else {
-            // TODO: show the banner
+
+            if (!_uiState.value.showNoWordsSelectedBanner) {
+
+                setShowNoWordsSelectedBanner(visible = true)
+            }
         }
     }
 
@@ -167,6 +176,17 @@ internal class ExportWordsViewModel @Inject constructor(
                     rightButton = SubscreenControllerButtonVariants.rightInactive
                 )
             )
+        }
+    }
+
+
+
+    // intent helpers
+    private fun setShowNoWordsSelectedBanner(visible: Boolean) {
+
+        _uiState.update { uiState ->
+
+            uiState.copy(showNoWordsSelectedBanner = visible)
         }
     }
 }

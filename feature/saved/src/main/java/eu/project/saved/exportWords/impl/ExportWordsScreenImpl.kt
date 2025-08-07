@@ -30,7 +30,7 @@ fun NavGraphBuilder.exportWordsImpl(controller: NavHostController) {
             uiState = uiState,
             onChangeWordSelection = { viewModel.onIntent(ExportWordsIntent.ChangeWordSelection(it)) },
             onClickLeft = { viewModel.onIntent(ExportWordsIntent.SwitchToSelectWords) },
-            onClickRight = { viewModel.onIntent(ExportWordsIntent.SwitchToExportSettings) }
+            onClickRight = { viewModel.onIntent(ExportWordsIntent.TryToSwitchToExportSettings) }
         )
     }
 }
