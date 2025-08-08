@@ -24,7 +24,9 @@ internal fun exportWordsScreen(
     uiState: ExportWordsUiState,
     onChangeWordSelection: (ExportableSavedWord) -> Unit,
     onClickLeft: () -> Unit,
-    onClickRight: () -> Unit
+    onClickRight: () -> Unit,
+    onClickSendMethod: () -> Unit,
+    onClickDownloadMethod: () -> Unit,
 ) {
 
     Box(
@@ -43,7 +45,9 @@ internal fun exportWordsScreen(
                     uiState = uiState,
                     onChangeWordSelection = { onChangeWordSelection(it) },
                     onClickLeft = { onClickLeft() },
-                    onClickRight = { onClickRight() }
+                    onClickRight = { onClickRight() },
+                    onClickSendMethod = { onClickSendMethod() },
+                    onClickDownloadMethod = { onClickDownloadMethod() }
                 )
             }
         }

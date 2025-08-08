@@ -42,6 +42,8 @@ internal class ExportWordsScreenTest {
     private var onChangeWordSelection: ExportableSavedWord? = null
     private var onClickLeft = false
     private var onClickRight = false
+    private var onClickSendMethod = false
+    private var onClickDownloadMethod = false
 
     private val firstInstance = ExportableSavedWord(UUID.fromString("a81bc81b-dead-4e5d-abff-90865d1e13b1"), "Cat", "English", false)
     private val secondInstance = ExportableSavedWord(UUID.fromString("550e8400-e29b-41d4-a716-446655440000"), "Monitor lizard", "English", false)
@@ -56,6 +58,8 @@ internal class ExportWordsScreenTest {
 
         onClickLeft = false
         onClickRight = false
+        onClickSendMethod = false
+        onClickDownloadMethod = false
 
         composeTestRule.setContent {
 
@@ -68,6 +72,8 @@ internal class ExportWordsScreenTest {
                     onChangeWordSelection = { onChangeWordSelection = it },
                     onClickLeft = { onClickLeft = true },
                     onClickRight = { onClickRight = true },
+                    onClickSendMethod = { onClickSendMethod = true },
+                    onClickDownloadMethod = { onClickDownloadMethod = true },
                 )
             }
         }
@@ -119,7 +125,7 @@ internal class ExportWordsScreenTest {
             .assertIsDisplayed()
     }
 
-    // readyToExport -> subscreenController:
+//- readyToExport -> subscreenController -------------------------------------------------------------------------------
     @Test
     fun subscreenController_isVisibleTrue_subscreenControllerIsVisible() {
 
@@ -250,7 +256,7 @@ internal class ExportWordsScreenTest {
         assertTrue(onClickRight)
     }
 
-    // readyToExport -> warningBanner:
+//- readyToExport -> warningBanner -------------------------------------------------------------------------------------
     @Test
     fun showNoWordsSelectedBannerIsTrue_warningBannerIsDisplayed() {
 
@@ -272,4 +278,7 @@ internal class ExportWordsScreenTest {
         // test
         composeTestRule.onNodeWithTag(TestTags.EXPORT_WORDS_SCREEN_WARNING_BANNER).assertIsNotDisplayed()
     }
+
+//- readyToExport -> exportMethodSelector ------------------------------------------------------------------------------
+
 }

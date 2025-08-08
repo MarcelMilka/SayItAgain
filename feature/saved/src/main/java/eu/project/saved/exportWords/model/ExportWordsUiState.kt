@@ -1,6 +1,5 @@
 package eu.project.saved.exportWords.model
 
-import eu.project.saved.exportWords.screen.subscreen.ExportMethodPickerState
 import eu.project.saved.exportWords.ui.SubscreenControllerState
 
 internal data class ExportWordsUiState(

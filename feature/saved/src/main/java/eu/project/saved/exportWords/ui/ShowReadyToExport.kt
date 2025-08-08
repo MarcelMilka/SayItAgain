@@ -22,7 +22,9 @@ internal fun BoxScope.showReadyToExport(
     uiState: ExportWordsUiState,
     onChangeWordSelection: (ExportableSavedWord) -> Unit,
     onClickLeft: () -> Unit,
-    onClickRight: () -> Unit
+    onClickRight: () -> Unit,
+    onClickSendMethod: () -> Unit,
+    onClickDownloadMethod: () -> Unit,
 ) {
 
     Column(
@@ -47,7 +49,11 @@ internal fun BoxScope.showReadyToExport(
                     onChangeWordSelection = onChangeWordSelection
                 )
 
-                ExportWordsSubscreen.ExportSettings -> exportSettingsSubscreen()
+                ExportWordsSubscreen.ExportSettings -> exportSettingsSubscreen(
+                    uiState,
+                    onClickSendMethod = { onClickSendMethod() },
+                    onClickDownloadMethod = { onClickDownloadMethod() }
+                )
             }
         }
     )

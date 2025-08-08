@@ -7,12 +7,12 @@ import eu.project.common.localData.SavedWordsRepository
 import eu.project.common.localData.SavedWordsRepositoryDataState
 import eu.project.common.model.SavedWord
 import eu.project.saved.exportWords.intent.ExportWordsIntent
+import eu.project.saved.exportWords.model.ExportMethod
+import eu.project.saved.exportWords.model.ExportMethodVariants
 import eu.project.saved.exportWords.model.ExportWordsScreenState
 import eu.project.saved.exportWords.model.ExportWordsSubscreen
 import eu.project.saved.exportWords.model.ExportableSavedWord
 import eu.project.saved.exportWords.model.convertToExportable
-import eu.project.saved.exportWords.screen.subscreen.ExportMethod
-import eu.project.saved.exportWords.screen.subscreen.ExportMethodVariants
 import eu.project.saved.exportWords.ui.SubscreenControllerButtonVariants
 import io.mockk.every
 import io.mockk.mockk
