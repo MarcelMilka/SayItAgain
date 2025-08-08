@@ -14,6 +14,8 @@ import eu.project.saved.exportWords.model.ExportWordsUiState
 import eu.project.saved.exportWords.model.ExportableSavedWord
 import eu.project.saved.exportWords.model.convertToExportable
 import eu.project.saved.exportWords.model.convertToModel
+import eu.project.saved.exportWords.screen.subscreen.ExportMethod
+import eu.project.saved.exportWords.screen.subscreen.ExportMethodVariants
 import eu.project.saved.exportWords.ui.SubscreenControllerButtonVariants
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -113,6 +115,8 @@ internal class ExportWordsViewModel @Inject constructor(
             is ExportWordsIntent.ChangeWordSelection -> changeWordSelection(intent.wordToUpdate)
             ExportWordsIntent.TryToSwitchToExportSettings -> tryToSwitchToExportSettings()
             ExportWordsIntent.SwitchToSelectWords -> switchToSelectWords()
+            ExportWordsIntent.SelectExportMethodSend -> selectExportMethodSend()
+            ExportWordsIntent.SelectExportMethodDownload -> selectExportMethodDownload()
         }
     }
 
@@ -179,6 +183,43 @@ internal class ExportWordsViewModel @Inject constructor(
         }
     }
 
+    private fun selectExportMethodSend() {
+
+        _uiState.update { uiState ->
+
+            uiState.copy(
+                exportMethodPickerState = uiState.exportMethodPickerState.copy(
+                    exportMethod = ExportMethod.SendToEmail,
+                    sendMethodState = ExportMethodVariants.sendSelected,
+                    downloadMethodState = ExportMethodVariants.downloadNotSelected
+                )
+            )
+        }
+
+        if (!_uiState.value.showEmailTextField) {
+
+            setShowEmailTextField(true)
+        }
+    }
+
+    private fun selectExportMethodDownload() {
+
+        _uiState.update { uiState ->
+
+            uiState.copy(
+                exportMethodPickerState = uiState.exportMethodPickerState.copy(
+                    exportMethod = ExportMethod.DownloadToDevice,
+                    sendMethodState = ExportMethodVariants.sendNotSelected,
+                    downloadMethodState = ExportMethodVariants.downloadSelected
+                )
+            )
+        }
+
+        if (_uiState.value.showEmailTextField) {
+
+            setShowEmailTextField(false)
+        }
+    }
 
 
     // intent helpers
@@ -187,6 +228,14 @@ internal class ExportWordsViewModel @Inject constructor(
         _uiState.update { uiState ->
 
             uiState.copy(showNoWordsSelectedBanner = visible)
+        }
+    }
+
+    private fun setShowEmailTextField(visible: Boolean) {
+
+        _uiState.update { uiState ->
+
+            uiState.copy(showEmailTextField = visible)
         }
     }
 }

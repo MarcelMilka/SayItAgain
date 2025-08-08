@@ -11,6 +11,8 @@ import eu.project.saved.exportWords.model.ExportWordsScreenState
 import eu.project.saved.exportWords.model.ExportWordsSubscreen
 import eu.project.saved.exportWords.model.ExportableSavedWord
 import eu.project.saved.exportWords.model.convertToExportable
+import eu.project.saved.exportWords.screen.subscreen.ExportMethod
+import eu.project.saved.exportWords.screen.subscreen.ExportMethodVariants
 import eu.project.saved.exportWords.ui.SubscreenControllerButtonVariants
 import io.mockk.every
 import io.mockk.mockk
@@ -62,20 +64,31 @@ class ExportWordsViewModelTest {
 
     // data
     private val firstInstance = SavedWord(UUID.fromString("a81bc81b-dead-4e5d-abff-90865d1e13b1"), "Cat", "English")
-    private val firstExportableInstance = ExportableSavedWord(UUID.fromString("a81bc81b-dead-4e5d-abff-90865d1e13b1"), "Cat", "English", false)
+    private val firstExportableInstance =
+        ExportableSavedWord(UUID.fromString("a81bc81b-dead-4e5d-abff-90865d1e13b1"), "Cat", "English", false)
 
-    private val secondInstance = SavedWord(UUID.fromString("550e8400-e29b-41d4-a716-446655440000"), "Monitor lizard", "English")
-    private val secondExportableInstance = ExportableSavedWord(UUID.fromString("550e8400-e29b-41d4-a716-446655440000"), "Monitor lizard", "English", false)
+    private val secondInstance =
+        SavedWord(UUID.fromString("550e8400-e29b-41d4-a716-446655440000"), "Monitor lizard", "English")
+    private val secondExportableInstance =
+        ExportableSavedWord(UUID.fromString("550e8400-e29b-41d4-a716-446655440000"), "Monitor lizard", "English", false)
 
-    private val thirdInstance = SavedWord(UUID.fromString("123e4567-e89b-12d3-a456-426614174000"), "Hagetreboa", "Norwegian")
-    private val thirdExportableInstance = ExportableSavedWord(UUID.fromString("123e4567-e89b-12d3-a456-426614174000"), "Hagetreboa", "Norwegian", false)
+    private val thirdInstance =
+        SavedWord(UUID.fromString("123e4567-e89b-12d3-a456-426614174000"), "Hagetreboa", "Norwegian")
+    private val thirdExportableInstance =
+        ExportableSavedWord(UUID.fromString("123e4567-e89b-12d3-a456-426614174000"), "Hagetreboa", "Norwegian", false)
 
     private val savedWords = listOf(firstInstance, secondInstance, thirdInstance)
-    private val exportableSavedWords = listOf(firstExportableInstance, secondExportableInstance, thirdExportableInstance)
-    private val exportableSavedWordsFirstTrue = listOf(firstExportableInstance.copy(toExport = true), secondExportableInstance, thirdExportableInstance)
+    private val exportableSavedWords =
+        listOf(firstExportableInstance, secondExportableInstance, thirdExportableInstance)
+    private val exportableSavedWordsFirstTrue =
+        listOf(firstExportableInstance.copy(toExport = true), secondExportableInstance, thirdExportableInstance)
 
 
-    private val exportableWords = listOf(firstInstance.convertToExportable(), secondInstance.convertToExportable(), thirdInstance.convertToExportable())
+    private val exportableWords = listOf(
+        firstInstance.convertToExportable(),
+        secondInstance.convertToExportable(),
+        thirdInstance.convertToExportable()
+    )
 
     // tested class
     private lateinit var viewModel: ExportWordsViewModel
@@ -273,6 +286,22 @@ class ExportWordsViewModelTest {
 
             // default
             assertFalse(awaitItem().showNoWordsSelectedBanner)
+        }
+    }
+
+    @Test
+    fun `exportMethodPickerState is default by default`() = runTest {
+
+        viewModel.uiState.test {
+
+            val state = awaitItem()
+            assertEquals(ExportMethod.NotSpecified, state.exportMethodPickerState.exportMethod)
+            assertEquals(ExportMethodVariants.sendNotSelected, state.exportMethodPickerState.sendMethodState)
+            assertEquals(ExportMethodVariants.downloadNotSelected, state.exportMethodPickerState.downloadMethodState)
+            assertFalse(state.showEmailTextField)
+
+            expectNoEvents()
+            cancelAndIgnoreRemainingEvents()
         }
     }
 
@@ -521,5 +550,95 @@ class ExportWordsViewModelTest {
         assertEquals(ExportWordsSubscreen.SelectWords, state.exportWordsSubscreen)
         assertEquals(SubscreenControllerButtonVariants.leftActive, state.leftButton)
         assertEquals(SubscreenControllerButtonVariants.rightInactive, state.rightButton)
+    }
+
+
+    // selectExportMethodDownload & selectExportMethodSend tests
+    @Test
+    fun `selectExportMethodSend sets showEmail to true when false`() = runTest {
+
+        viewModel.uiState.test {
+
+            skipItems(1)
+
+            viewModel.onIntent(ExportWordsIntent.SelectExportMethodSend)
+
+            val state = awaitItem()
+            assertEquals(ExportMethod.SendToEmail, state.exportMethodPickerState.exportMethod)
+            assertEquals(ExportMethodVariants.sendSelected, state.exportMethodPickerState.sendMethodState)
+            assertEquals(ExportMethodVariants.downloadNotSelected, state.exportMethodPickerState.downloadMethodState)
+            assertFalse(state.showEmailTextField)
+
+            assertTrue(awaitItem().showEmailTextField)
+
+            expectNoEvents()
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `selectExportMethodDownload keeps showEmail false`() = runTest {
+
+        viewModel.uiState.test {
+
+            skipItems(1)
+
+            viewModel.onIntent(ExportWordsIntent.SelectExportMethodDownload)
+
+            val state = awaitItem()
+            assertEquals(ExportMethod.DownloadToDevice, state.exportMethodPickerState.exportMethod)
+            assertEquals(ExportMethodVariants.sendNotSelected, state.exportMethodPickerState.sendMethodState)
+            assertEquals(ExportMethodVariants.downloadSelected, state.exportMethodPickerState.downloadMethodState)
+            assertFalse(state.showEmailTextField)
+
+            expectNoEvents()
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `selectExportMethodDownload sets showEmail to false when true`() = runTest {
+
+        viewModel.uiState.test {
+
+            viewModel.onIntent(ExportWordsIntent.SelectExportMethodSend)
+
+            skipItems(3)
+
+            viewModel.onIntent(ExportWordsIntent.SelectExportMethodDownload)
+
+            val state = awaitItem()
+            assertEquals(ExportMethod.DownloadToDevice, state.exportMethodPickerState.exportMethod)
+            assertEquals(ExportMethodVariants.sendNotSelected, state.exportMethodPickerState.sendMethodState)
+            assertEquals(ExportMethodVariants.downloadSelected, state.exportMethodPickerState.downloadMethodState)
+            assertTrue(state.showEmailTextField)
+
+            assertFalse(awaitItem().showEmailTextField)
+
+            expectNoEvents()
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `selectExportMethodSend keeps showEmail true after being called twice in a row`() = runTest {
+
+        viewModel.uiState.test {
+
+            viewModel.onIntent(ExportWordsIntent.SelectExportMethodSend)
+
+            skipItems(2)
+
+            viewModel.onIntent(ExportWordsIntent.SelectExportMethodSend)
+
+            val state = awaitItem()
+            assertEquals(ExportMethod.SendToEmail, state.exportMethodPickerState.exportMethod)
+            assertEquals(ExportMethodVariants.sendSelected, state.exportMethodPickerState.sendMethodState)
+            assertEquals(ExportMethodVariants.downloadNotSelected, state.exportMethodPickerState.downloadMethodState)
+            assertTrue(state.showEmailTextField)
+
+            expectNoEvents()
+            cancelAndIgnoreRemainingEvents()
+        }
     }
 }

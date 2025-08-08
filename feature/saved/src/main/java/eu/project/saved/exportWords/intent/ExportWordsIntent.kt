@@ -7,4 +7,6 @@ internal sealed interface ExportWordsIntent {
     data class ChangeWordSelection(val wordToUpdate: ExportableSavedWord): ExportWordsIntent
     object SwitchToSelectWords: ExportWordsIntent
     object TryToSwitchToExportSettings: ExportWordsIntent
+    object SelectExportMethodSend: ExportWordsIntent
+    object SelectExportMethodDownload: ExportWordsIntent
 }

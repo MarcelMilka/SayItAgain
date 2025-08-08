@@ -25,6 +25,13 @@
     <!--   ExportWordsScreen   -->
     <string name="no_words_selected">No words selected.</string>
     <string name="please_select_at_least_one_word_before_continuing">Please select at least one word before continuing.</string>
+    <string name="how_would_you_like_to_export_your_words">How would you like to export your words?</string>
+    <string name="enter_the_email_to_receive_the_file">Enter the email to receive the file.</string>
+    <string name="email">E-mail</string>
+    <string name="download_to_device">Download to device</string>
+    <string name="download_to_device_explanation">Download to device</string>
+    <string name="send_to_email">Send to email</string>
+    <string name="send_to_email_explanation">The exported file will be sent to the email address you provide.</string>
 
     <!--   Common   -->
     <string name="pick_and_transcribe">Pick and transcribe</string>
