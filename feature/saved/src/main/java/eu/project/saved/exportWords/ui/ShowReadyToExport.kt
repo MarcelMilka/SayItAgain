@@ -32,7 +32,7 @@ internal fun BoxScope.showReadyToExport(
             .fillMaxSize()
             .testTag(TestTags.EXPORT_WORDS_SCREEN_SHOW_READY_TO_EXPORT),
         verticalArrangement = Arrangement.Top,
-        horizontalAlignment = Alignment.CenterHorizontally,
+        horizontalAlignment = Alignment.Start,
         content = {
 
             subscreenController(

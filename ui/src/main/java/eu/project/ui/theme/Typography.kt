@@ -56,5 +56,12 @@ val SayItAgainTypography = Typography(
         fontWeight = FontWeight.SemiBold,
         fontSize = 16.sp,
         lineHeight = 24.sp
+    ),
+
+    labelMedium = TextStyle(
+        fontFamily = inter,
+        fontWeight = FontWeight.SemiBold,
+        fontSize = 12.sp,
+        lineHeight = 16.sp
     )
 )
