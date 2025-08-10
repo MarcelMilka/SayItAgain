@@ -29,9 +29,10 @@
     <string name="enter_the_email_to_receive_the_file">Enter the email to receive the file.</string>
     <string name="email">E-mail</string>
     <string name="download_to_device">Download to device</string>
-    <string name="download_to_device_explanation">Download to device</string>
+    <string name="download_to_device_explanation">The file will be saved directly to your device.</string>
     <string name="send_to_email">Send to email</string>
     <string name="send_to_email_explanation">The exported file will be sent to the email address you provide.</string>
+    <string name="or">Or</string>
 
     <!--   Common   -->
     <string name="pick_and_transcribe">Pick and transcribe</string>
