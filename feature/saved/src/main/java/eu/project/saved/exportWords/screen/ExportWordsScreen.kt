@@ -3,7 +3,6 @@ package eu.project.saved.exportWords.screen
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
@@ -19,14 +18,13 @@ import eu.project.ui.dimensions.ScreenPadding
 
 @Composable
 internal fun exportWordsScreen(
-    listState: LazyListState,
     screenState: ExportWordsScreenState,
     uiState: ExportWordsUiState,
     onChangeWordSelection: (ExportableSavedWord) -> Unit,
     onClickLeft: () -> Unit,
     onClickRight: () -> Unit,
     onClickSendMethod: () -> Unit,
-    onClickDownloadMethod: () -> Unit,
+    onClickDownloadMethod: () -> Unit
 ) {
 
     Box(
@@ -41,13 +39,12 @@ internal fun exportWordsScreen(
                 ExportWordsScreenState.Loading -> exportWordsErrorContent()
                 ExportWordsScreenState.Disconnected -> exportWordsDisconnectedContent()
                 ExportWordsScreenState.Loaded -> exportWordsLoadedContent(
-                    listState = listState,
                     uiState = uiState,
-                    onChangeWordSelection = { onChangeWordSelection(it) },
-                    onClickLeft = { onClickLeft() },
-                    onClickRight = { onClickRight() },
-                    onClickSendMethod = { onClickSendMethod() },
-                    onClickDownloadMethod = { onClickDownloadMethod() }
+                    onChangeWordSelection = onChangeWordSelection,
+                    onClickLeft = onClickLeft,
+                    onClickRight = onClickRight,
+                    onClickSendMethod = onClickSendMethod,
+                    onClickDownloadMethod = onClickDownloadMethod
                 )
             }
         }

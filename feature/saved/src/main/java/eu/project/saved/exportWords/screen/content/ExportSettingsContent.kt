@@ -44,8 +44,8 @@ internal fun ColumnScope.exportSettingsContent(
     spacerV8()
 
     exportMethod(
-        uiState.exportMethodControllerState.sendMethodState,
-        onClick = { onClickSendMethod() }
+        state = uiState.exportMethodControllerState.sendMethodState,
+        onClick = onClickSendMethod
     )
 
     spacerV8()
@@ -70,7 +70,7 @@ internal fun ColumnScope.exportSettingsContent(
     }
 
     exportMethod(
-        uiState.exportMethodControllerState.downloadMethodState,
-        onClick = { onClickDownloadMethod() }
+        state = uiState.exportMethodControllerState.downloadMethodState,
+        onClick = onClickDownloadMethod
     )
 }

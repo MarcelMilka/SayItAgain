@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -22,7 +21,6 @@ import eu.project.ui.dimensions.WidgetPadding
 
 @Composable
 internal fun ColumnScope.selectWordsContent(
-    listState: LazyListState,
     uiState: ExportWordsUiState,
     onChangeWordSelection: (ExportableSavedWord) -> Unit
 ) {
@@ -37,7 +35,6 @@ internal fun ColumnScope.selectWordsContent(
     }
 
     LazyColumn(
-        state = listState,
         modifier = Modifier
             .fillMaxSize()
             .padding(bottom = WidgetPadding.dp)

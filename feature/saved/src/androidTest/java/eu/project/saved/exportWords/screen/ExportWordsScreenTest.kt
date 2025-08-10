@@ -66,7 +66,6 @@ internal class ExportWordsScreenTest {
             Box(Modifier.background(Background)) {
 
                 exportWordsScreen(
-                    listState = LazyListState(),
                     screenState = screenState.collectAsState().value,
                     uiState = uiState.collectAsState().value,
                     onChangeWordSelection = { onChangeWordSelection = it },
