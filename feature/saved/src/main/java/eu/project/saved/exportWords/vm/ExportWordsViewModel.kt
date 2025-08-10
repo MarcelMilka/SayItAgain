@@ -186,7 +186,10 @@ internal class ExportWordsViewModel @Inject constructor(
     private fun selectExportMethodSend() {
 
         _uiState.update { uiState ->
+            
+            uiState.copy(exportMethod = ExportMethod.SendToEmail)
 
+            // TODO: update exportSettingsUiState
             uiState.copy(
                 exportMethodControllerState = uiState.exportMethodControllerState.copy(
                     exportMethod = ExportMethod.SendToEmail,
@@ -206,6 +209,9 @@ internal class ExportWordsViewModel @Inject constructor(
 
         _uiState.update { uiState ->
 
+            uiState.copy(exportMethod = ExportMethod.DownloadToDevice)
+
+            // TODO: update exportSettingsUiState
             uiState.copy(
                 exportMethodControllerState = uiState.exportMethodControllerState.copy(
                     exportMethod = ExportMethod.DownloadToDevice,
