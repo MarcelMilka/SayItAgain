@@ -46,9 +46,9 @@ internal fun BoxScope.exportWordsLoadedContent(
                 )
 
                 ExportWordsSubscreen.ExportSettings -> exportSettingsContent(
-                    uiState,
+                    exportSettingsUiState = uiState.exportSettingsUiState,
                     onClickSendMethod = onClickSendMethod,
-                    onClickDownloadMethod = onClickDownloadMethod
+                    onClickDownloadMethod = onClickDownloadMethod,
                 )
             }
         }

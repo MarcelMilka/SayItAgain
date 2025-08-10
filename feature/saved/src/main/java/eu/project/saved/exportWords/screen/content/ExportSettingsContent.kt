@@ -13,7 +13,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.res.stringResource
-import eu.project.saved.exportWords.state.ExportWordsUiState
+import eu.project.saved.exportWords.state.ExportSettingsUiState
 import eu.project.saved.exportWords.ui.emailTextField
 import eu.project.saved.exportWords.ui.exportMethod
 import eu.project.ui.R
@@ -25,7 +25,7 @@ import eu.project.ui.theme.PrimaryWhite
 
 @Composable
 internal fun ColumnScope.exportSettingsContent(
-    uiState: ExportWordsUiState,
+    exportSettingsUiState: ExportSettingsUiState,
     onClickSendMethod: () -> Unit,
     onClickDownloadMethod: () -> Unit
 ) {
@@ -35,28 +35,28 @@ internal fun ColumnScope.exportSettingsContent(
     var email by remember { mutableStateOf("") }
     var focused by remember { mutableStateOf(false) }
 
-    LaunchedEffect(uiState.showEmailTextField) {
+    LaunchedEffect(key1 = exportSettingsUiState.emailTextFieldUiState.isVisible) {
 
-        when(uiState.showEmailTextField) {
-            true -> focusRequester.requestFocus()
-            false -> {}
+        if (exportSettingsUiState.emailTextFieldUiState.isVisible) {
+
+            focusRequester.requestFocus()
         }
     }
 
 
-    // UI
+
     headlineSmall(stringResource(R.string.how_would_you_like_to_export_your_words))
 
     spacerV8()
 
     exportMethod(
-        state = uiState.exportMethodControllerState.sendMethodState,
+        state = exportSettingsUiState.sendMethodState,
         onClick = onClickSendMethod
     )
 
     spacerV8()
 
-    if (uiState.showEmailTextField) {
+    if (exportSettingsUiState.emailTextFieldUiState.isVisible) {
 
         spacerV8()
 
@@ -92,7 +92,7 @@ internal fun ColumnScope.exportSettingsContent(
     }
 
     exportMethod(
-        state = uiState.exportMethodControllerState.downloadMethodState,
+        state = exportSettingsUiState.downloadMethodState,
         onClick = onClickDownloadMethod
     )
 }

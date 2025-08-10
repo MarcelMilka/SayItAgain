@@ -187,21 +187,18 @@ internal class ExportWordsViewModel @Inject constructor(
 
         _uiState.update { uiState ->
             
-            uiState.copy(exportMethod = ExportMethod.SendToEmail)
-
-            // TODO: update exportSettingsUiState
             uiState.copy(
-                exportMethodControllerState = uiState.exportMethodControllerState.copy(
-                    exportMethod = ExportMethod.SendToEmail,
+                exportMethod = ExportMethod.SendToEmail,
+
+                exportSettingsUiState = uiState.exportSettingsUiState.copy(
                     sendMethodState = ExportMethodVariants.sendSelected,
-                    downloadMethodState = ExportMethodVariants.downloadNotSelected
+                    downloadMethodState = ExportMethodVariants.downloadNotSelected,
+
+                    emailTextFieldUiState = uiState.exportSettingsUiState.emailTextFieldUiState.copy(
+                        isVisible = true
+                    )
                 )
             )
-        }
-
-        if (!_uiState.value.showEmailTextField) {
-
-            setShowEmailTextField(true)
         }
     }
 
@@ -209,21 +206,18 @@ internal class ExportWordsViewModel @Inject constructor(
 
         _uiState.update { uiState ->
 
-            uiState.copy(exportMethod = ExportMethod.DownloadToDevice)
-
-            // TODO: update exportSettingsUiState
             uiState.copy(
-                exportMethodControllerState = uiState.exportMethodControllerState.copy(
-                    exportMethod = ExportMethod.DownloadToDevice,
+                exportMethod = ExportMethod.DownloadToDevice,
+
+                exportSettingsUiState = uiState.exportSettingsUiState.copy(
                     sendMethodState = ExportMethodVariants.sendNotSelected,
-                    downloadMethodState = ExportMethodVariants.downloadSelected
+                    downloadMethodState = ExportMethodVariants.downloadSelected,
+
+                    emailTextFieldUiState = uiState.exportSettingsUiState.emailTextFieldUiState.copy(
+                        isVisible = false
+                    )
                 )
             )
-        }
-
-        if (_uiState.value.showEmailTextField) {
-
-            setShowEmailTextField(false)
         }
     }
 
@@ -234,14 +228,6 @@ internal class ExportWordsViewModel @Inject constructor(
         _uiState.update { uiState ->
 
             uiState.copy(showNoWordsSelectedBanner = visible)
-        }
-    }
-
-    private fun setShowEmailTextField(visible: Boolean) {
-
-        _uiState.update { uiState ->
-
-            uiState.copy(showEmailTextField = visible)
         }
     }
 }

@@ -553,23 +553,25 @@ class ExportWordsViewModelTest {
     }
 
 
-    // selectExportMethodDownload & selectExportMethodSend tests
+
+//- selectExportMethodSend & selectExportMethodDownload tests ----------------------------------------------------------
     @Test
-    fun `selectExportMethodSend sets showEmail to true when false`() = runTest {
+    fun `selectExportMethodSend updates uiState correctly`() = runTest {
 
         viewModel.uiState.test {
 
             skipItems(1)
 
+            // call SelectExportMethodSend
             viewModel.onIntent(ExportWordsIntent.SelectExportMethodSend)
 
             val state = awaitItem()
-            assertEquals(ExportMethod.SendToEmail, state.exportMethodControllerState.exportMethod)
-            assertEquals(ExportMethodVariants.sendSelected, state.exportMethodControllerState.sendMethodState)
-            assertEquals(ExportMethodVariants.downloadNotSelected, state.exportMethodControllerState.downloadMethodState)
-            assertFalse(state.showEmailTextField)
+            assertEquals(ExportMethod.SendToEmail, state.exportMethod)
 
-            assertTrue(awaitItem().showEmailTextField)
+            assertEquals(ExportMethodVariants.sendSelected, state.exportSettingsUiState.sendMethodState)
+            assertEquals(ExportMethodVariants.downloadNotSelected, state.exportSettingsUiState.downloadMethodState)
+
+            assertTrue(state.exportSettingsUiState.emailTextFieldUiState.isVisible)
 
             expectNoEvents()
             cancelAndIgnoreRemainingEvents()
@@ -577,43 +579,81 @@ class ExportWordsViewModelTest {
     }
 
     @Test
-    fun `selectExportMethodDownload keeps showEmail false`() = runTest {
+    fun `selectExportMethodSend called multiple times maintains stable state`() = runTest {
+
+        viewModel.uiState.test {
+            skipItems(1)
+
+            viewModel.onIntent(ExportWordsIntent.SelectExportMethodSend)
+            awaitItem()
+
+            viewModel.onIntent(ExportWordsIntent.SelectExportMethodSend)
+
+            expectNoEvents()
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `selectExportMethodDownload updates uiState correctly`() = runTest {
+
+        viewModel.uiState.test {
+
+            skipItems(1)
+
+            // call SelectExportMethodDownload
+            viewModel.onIntent(ExportWordsIntent.SelectExportMethodDownload)
+
+            val state = awaitItem()
+            assertEquals(ExportMethod.DownloadToDevice, state.exportMethod)
+
+            assertEquals(ExportMethodVariants.sendNotSelected, state.exportSettingsUiState.sendMethodState)
+            assertEquals(ExportMethodVariants.downloadSelected, state.exportSettingsUiState.downloadMethodState)
+
+            assertFalse(state.exportSettingsUiState.emailTextFieldUiState.isVisible)
+
+            expectNoEvents()
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `selectExportMethodDownload called multiple times maintains stable state`() = runTest {
 
         viewModel.uiState.test {
 
             skipItems(1)
 
             viewModel.onIntent(ExportWordsIntent.SelectExportMethodDownload)
-
-            val state = awaitItem()
-            assertEquals(ExportMethod.DownloadToDevice, state.exportMethodControllerState.exportMethod)
-            assertEquals(ExportMethodVariants.sendNotSelected, state.exportMethodControllerState.sendMethodState)
-            assertEquals(ExportMethodVariants.downloadSelected, state.exportMethodControllerState.downloadMethodState)
-            assertFalse(state.showEmailTextField)
-
-            expectNoEvents()
-            cancelAndIgnoreRemainingEvents()
-        }
-    }
-
-    @Test
-    fun `selectExportMethodDownload sets showEmail to false when true`() = runTest {
-
-        viewModel.uiState.test {
-
-            viewModel.onIntent(ExportWordsIntent.SelectExportMethodSend)
-
-            skipItems(3)
+            awaitItem()
 
             viewModel.onIntent(ExportWordsIntent.SelectExportMethodDownload)
 
-            val state = awaitItem()
-            assertEquals(ExportMethod.DownloadToDevice, state.exportMethodControllerState.exportMethod)
-            assertEquals(ExportMethodVariants.sendNotSelected, state.exportMethodControllerState.sendMethodState)
-            assertEquals(ExportMethodVariants.downloadSelected, state.exportMethodControllerState.downloadMethodState)
-            assertTrue(state.showEmailTextField)
+            expectNoEvents()
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
 
-            assertFalse(awaitItem().showEmailTextField)
+    @Test
+    fun `switching from Send to Download updates uiState correctly`() = runTest {
+
+        viewModel.uiState.test {
+
+            skipItems(1)
+
+            viewModel.onIntent(ExportWordsIntent.SelectExportMethodSend)
+            val state1 = awaitItem()
+            assertEquals(ExportMethod.SendToEmail, state1.exportMethod)
+            assertEquals(ExportMethodVariants.sendSelected, state1.exportSettingsUiState.sendMethodState)
+            assertEquals(ExportMethodVariants.downloadNotSelected, state1.exportSettingsUiState.downloadMethodState)
+            assertTrue(state1.exportSettingsUiState.emailTextFieldUiState.isVisible)
+
+            viewModel.onIntent(ExportWordsIntent.SelectExportMethodDownload)
+            val state2 = awaitItem()
+            assertEquals(ExportMethod.DownloadToDevice, state2.exportMethod)
+            assertEquals(ExportMethodVariants.sendNotSelected, state2.exportSettingsUiState.sendMethodState)
+            assertEquals(ExportMethodVariants.downloadSelected, state2.exportSettingsUiState.downloadMethodState)
+            assertFalse(state2.exportSettingsUiState.emailTextFieldUiState.isVisible)
 
             expectNoEvents()
             cancelAndIgnoreRemainingEvents()
@@ -621,24 +661,32 @@ class ExportWordsViewModelTest {
     }
 
     @Test
-    fun `selectExportMethodSend keeps showEmail true after being called twice in a row`() = runTest {
+    fun `switching from Download to Send updates uiState correctly`() = runTest {
 
         viewModel.uiState.test {
 
+            skipItems(1)
+
+            viewModel.onIntent(ExportWordsIntent.SelectExportMethodDownload)
+            val state1 = awaitItem()
+            assertEquals(ExportMethod.DownloadToDevice, state1.exportMethod)
+            assertEquals(ExportMethodVariants.sendNotSelected, state1.exportSettingsUiState.sendMethodState)
+            assertEquals(ExportMethodVariants.downloadSelected, state1.exportSettingsUiState.downloadMethodState)
+            assertFalse(state1.exportSettingsUiState.emailTextFieldUiState.isVisible)
+
             viewModel.onIntent(ExportWordsIntent.SelectExportMethodSend)
-
-            skipItems(2)
-
-            viewModel.onIntent(ExportWordsIntent.SelectExportMethodSend)
-
-            val state = awaitItem()
-            assertEquals(ExportMethod.SendToEmail, state.exportMethodControllerState.exportMethod)
-            assertEquals(ExportMethodVariants.sendSelected, state.exportMethodControllerState.sendMethodState)
-            assertEquals(ExportMethodVariants.downloadNotSelected, state.exportMethodControllerState.downloadMethodState)
-            assertTrue(state.showEmailTextField)
+            val state2 = awaitItem()
+            assertEquals(ExportMethod.SendToEmail, state2.exportMethod)
+            assertEquals(ExportMethodVariants.sendSelected, state2.exportSettingsUiState.sendMethodState)
+            assertEquals(ExportMethodVariants.downloadNotSelected, state2.exportSettingsUiState.downloadMethodState)
+            assertTrue(state2.exportSettingsUiState.emailTextFieldUiState.isVisible)
 
             expectNoEvents()
             cancelAndIgnoreRemainingEvents()
         }
     }
 }
+
+
+
+//----------------------------------------------------------------------------------------------------------------------
