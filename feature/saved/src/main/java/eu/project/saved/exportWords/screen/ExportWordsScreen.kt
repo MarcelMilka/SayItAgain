@@ -9,12 +9,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import eu.project.common.TestTags
-import eu.project.saved.exportWords.model.ExportWordsScreenState
-import eu.project.saved.exportWords.model.ExportWordsUiState
+import eu.project.saved.exportWords.state.ExportWordsScreenState
+import eu.project.saved.exportWords.state.ExportWordsUiState
 import eu.project.saved.exportWords.model.ExportableSavedWord
-import eu.project.saved.exportWords.ui.exportWordsLoadedContent
-import eu.project.saved.exportWords.ui.exportWordsDisconnectedContent
-import eu.project.saved.exportWords.ui.exportWordsErrorContent
+import eu.project.saved.exportWords.screen.content.exportWordsLoadedContent
+import eu.project.saved.exportWords.screen.content.exportWordsDisconnectedContent
+import eu.project.saved.exportWords.screen.content.exportWordsErrorContent
 import eu.project.ui.dimensions.ScreenPadding
 
 @Composable

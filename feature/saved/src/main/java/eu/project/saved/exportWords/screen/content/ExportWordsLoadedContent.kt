@@ -1,4 +1,4 @@
-package eu.project.saved.exportWords.ui
+package eu.project.saved.exportWords.screen.content
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.BoxScope
@@ -10,11 +10,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import eu.project.common.TestTags
-import eu.project.saved.exportWords.model.ExportWordsSubscreen
-import eu.project.saved.exportWords.model.ExportWordsUiState
+import eu.project.saved.exportWords.state.ExportWordsUiState
 import eu.project.saved.exportWords.model.ExportableSavedWord
-import eu.project.saved.exportWords.screen.subscreen.exportSettingsContent
-import eu.project.saved.exportWords.screen.subscreen.selectWordsContent
+import eu.project.saved.exportWords.state.ExportWordsSubscreen
+import eu.project.saved.exportWords.ui.subscreenController
 
 @Composable
 internal fun BoxScope.exportWordsLoadedContent(

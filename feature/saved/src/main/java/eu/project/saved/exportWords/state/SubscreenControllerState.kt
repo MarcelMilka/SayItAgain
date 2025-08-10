@@ -1,7 +1,6 @@
-package eu.project.saved.exportWords.ui
+package eu.project.saved.exportWords.state
 
 import androidx.compose.ui.graphics.Color
-import eu.project.saved.exportWords.model.ExportWordsSubscreen
 
 import androidx.compose.ui.graphics.Color.Companion.Transparent
 import eu.project.ui.R
@@ -15,6 +14,11 @@ internal data class SubscreenControllerState(
     val leftButton: SubscreenControllerButtonState = SubscreenControllerButtonVariants.leftActive,
     val rightButton: SubscreenControllerButtonState = SubscreenControllerButtonVariants.rightInactive
 )
+
+internal enum class ExportWordsSubscreen {
+    SelectWords,
+    ExportSettings
+}
 
 internal data class SubscreenControllerButtonState(
     val text: Int,

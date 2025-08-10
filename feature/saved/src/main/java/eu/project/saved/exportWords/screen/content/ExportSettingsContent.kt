@@ -1,4 +1,4 @@
-package eu.project.saved.exportWords.screen.subscreen
+package eu.project.saved.exportWords.screen.content
 
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.runtime.Composable
@@ -9,7 +9,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.res.stringResource
-import eu.project.saved.exportWords.model.ExportWordsUiState
+import eu.project.saved.exportWords.state.ExportWordsUiState
 import eu.project.saved.exportWords.ui.emailTextField
 import eu.project.saved.exportWords.ui.exportMethod
 import eu.project.ui.R
@@ -44,7 +44,7 @@ internal fun ColumnScope.exportSettingsContent(
     spacerV8()
 
     exportMethod(
-        uiState.exportMethodPickerState.sendMethodState,
+        uiState.exportMethodControllerState.sendMethodState,
         onClick = { onClickSendMethod() }
     )
 
@@ -70,7 +70,7 @@ internal fun ColumnScope.exportSettingsContent(
     }
 
     exportMethod(
-        uiState.exportMethodPickerState.downloadMethodState,
+        uiState.exportMethodControllerState.downloadMethodState,
         onClick = { onClickDownloadMethod() }
     )
 }

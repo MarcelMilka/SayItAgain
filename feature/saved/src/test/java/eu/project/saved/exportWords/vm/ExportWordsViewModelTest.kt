@@ -9,11 +9,11 @@ import eu.project.common.model.SavedWord
 import eu.project.saved.exportWords.intent.ExportWordsIntent
 import eu.project.saved.exportWords.model.ExportMethod
 import eu.project.saved.exportWords.model.ExportMethodVariants
-import eu.project.saved.exportWords.model.ExportWordsScreenState
-import eu.project.saved.exportWords.model.ExportWordsSubscreen
+import eu.project.saved.exportWords.state.ExportWordsScreenState
 import eu.project.saved.exportWords.model.ExportableSavedWord
 import eu.project.saved.exportWords.model.convertToExportable
-import eu.project.saved.exportWords.ui.SubscreenControllerButtonVariants
+import eu.project.saved.exportWords.state.ExportWordsSubscreen
+import eu.project.saved.exportWords.state.SubscreenControllerButtonVariants
 import io.mockk.every
 import io.mockk.mockk
 import junit.framework.TestCase.assertEquals
@@ -295,9 +295,9 @@ class ExportWordsViewModelTest {
         viewModel.uiState.test {
 
             val state = awaitItem()
-            assertEquals(ExportMethod.NotSpecified, state.exportMethodPickerState.exportMethod)
-            assertEquals(ExportMethodVariants.sendNotSelected, state.exportMethodPickerState.sendMethodState)
-            assertEquals(ExportMethodVariants.downloadNotSelected, state.exportMethodPickerState.downloadMethodState)
+            assertEquals(ExportMethod.NotSpecified, state.exportMethodControllerState.exportMethod)
+            assertEquals(ExportMethodVariants.sendNotSelected, state.exportMethodControllerState.sendMethodState)
+            assertEquals(ExportMethodVariants.downloadNotSelected, state.exportMethodControllerState.downloadMethodState)
             assertFalse(state.showEmailTextField)
 
             expectNoEvents()
@@ -564,9 +564,9 @@ class ExportWordsViewModelTest {
             viewModel.onIntent(ExportWordsIntent.SelectExportMethodSend)
 
             val state = awaitItem()
-            assertEquals(ExportMethod.SendToEmail, state.exportMethodPickerState.exportMethod)
-            assertEquals(ExportMethodVariants.sendSelected, state.exportMethodPickerState.sendMethodState)
-            assertEquals(ExportMethodVariants.downloadNotSelected, state.exportMethodPickerState.downloadMethodState)
+            assertEquals(ExportMethod.SendToEmail, state.exportMethodControllerState.exportMethod)
+            assertEquals(ExportMethodVariants.sendSelected, state.exportMethodControllerState.sendMethodState)
+            assertEquals(ExportMethodVariants.downloadNotSelected, state.exportMethodControllerState.downloadMethodState)
             assertFalse(state.showEmailTextField)
 
             assertTrue(awaitItem().showEmailTextField)
@@ -586,9 +586,9 @@ class ExportWordsViewModelTest {
             viewModel.onIntent(ExportWordsIntent.SelectExportMethodDownload)
 
             val state = awaitItem()
-            assertEquals(ExportMethod.DownloadToDevice, state.exportMethodPickerState.exportMethod)
-            assertEquals(ExportMethodVariants.sendNotSelected, state.exportMethodPickerState.sendMethodState)
-            assertEquals(ExportMethodVariants.downloadSelected, state.exportMethodPickerState.downloadMethodState)
+            assertEquals(ExportMethod.DownloadToDevice, state.exportMethodControllerState.exportMethod)
+            assertEquals(ExportMethodVariants.sendNotSelected, state.exportMethodControllerState.sendMethodState)
+            assertEquals(ExportMethodVariants.downloadSelected, state.exportMethodControllerState.downloadMethodState)
             assertFalse(state.showEmailTextField)
 
             expectNoEvents()
@@ -608,9 +608,9 @@ class ExportWordsViewModelTest {
             viewModel.onIntent(ExportWordsIntent.SelectExportMethodDownload)
 
             val state = awaitItem()
-            assertEquals(ExportMethod.DownloadToDevice, state.exportMethodPickerState.exportMethod)
-            assertEquals(ExportMethodVariants.sendNotSelected, state.exportMethodPickerState.sendMethodState)
-            assertEquals(ExportMethodVariants.downloadSelected, state.exportMethodPickerState.downloadMethodState)
+            assertEquals(ExportMethod.DownloadToDevice, state.exportMethodControllerState.exportMethod)
+            assertEquals(ExportMethodVariants.sendNotSelected, state.exportMethodControllerState.sendMethodState)
+            assertEquals(ExportMethodVariants.downloadSelected, state.exportMethodControllerState.downloadMethodState)
             assertTrue(state.showEmailTextField)
 
             assertFalse(awaitItem().showEmailTextField)
@@ -632,9 +632,9 @@ class ExportWordsViewModelTest {
             viewModel.onIntent(ExportWordsIntent.SelectExportMethodSend)
 
             val state = awaitItem()
-            assertEquals(ExportMethod.SendToEmail, state.exportMethodPickerState.exportMethod)
-            assertEquals(ExportMethodVariants.sendSelected, state.exportMethodPickerState.sendMethodState)
-            assertEquals(ExportMethodVariants.downloadNotSelected, state.exportMethodPickerState.downloadMethodState)
+            assertEquals(ExportMethod.SendToEmail, state.exportMethodControllerState.exportMethod)
+            assertEquals(ExportMethodVariants.sendSelected, state.exportMethodControllerState.sendMethodState)
+            assertEquals(ExportMethodVariants.downloadNotSelected, state.exportMethodControllerState.downloadMethodState)
             assertTrue(state.showEmailTextField)
 
             expectNoEvents()

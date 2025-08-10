@@ -1,4 +1,4 @@
-package eu.project.saved.exportWords.ui
+package eu.project.saved.exportWords.screen.content
 
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.material3.Text

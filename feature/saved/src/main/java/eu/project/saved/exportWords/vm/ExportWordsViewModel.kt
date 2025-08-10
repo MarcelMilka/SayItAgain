@@ -10,13 +10,13 @@ import eu.project.common.localData.SavedWordsRepositoryDataState
 import eu.project.saved.exportWords.intent.ExportWordsIntent
 import eu.project.saved.exportWords.model.ExportMethod
 import eu.project.saved.exportWords.model.ExportMethodVariants
-import eu.project.saved.exportWords.model.ExportWordsScreenState
-import eu.project.saved.exportWords.model.ExportWordsSubscreen
-import eu.project.saved.exportWords.model.ExportWordsUiState
+import eu.project.saved.exportWords.state.ExportWordsScreenState
+import eu.project.saved.exportWords.state.ExportWordsUiState
 import eu.project.saved.exportWords.model.ExportableSavedWord
 import eu.project.saved.exportWords.model.convertToExportable
 import eu.project.saved.exportWords.model.convertToModel
-import eu.project.saved.exportWords.ui.SubscreenControllerButtonVariants
+import eu.project.saved.exportWords.state.ExportWordsSubscreen
+import eu.project.saved.exportWords.state.SubscreenControllerButtonVariants
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collect
@@ -188,7 +188,7 @@ internal class ExportWordsViewModel @Inject constructor(
         _uiState.update { uiState ->
 
             uiState.copy(
-                exportMethodPickerState = uiState.exportMethodPickerState.copy(
+                exportMethodControllerState = uiState.exportMethodControllerState.copy(
                     exportMethod = ExportMethod.SendToEmail,
                     sendMethodState = ExportMethodVariants.sendSelected,
                     downloadMethodState = ExportMethodVariants.downloadNotSelected
@@ -207,7 +207,7 @@ internal class ExportWordsViewModel @Inject constructor(
         _uiState.update { uiState ->
 
             uiState.copy(
-                exportMethodPickerState = uiState.exportMethodPickerState.copy(
+                exportMethodControllerState = uiState.exportMethodControllerState.copy(
                     exportMethod = ExportMethod.DownloadToDevice,
                     sendMethodState = ExportMethodVariants.sendNotSelected,
                     downloadMethodState = ExportMethodVariants.downloadSelected

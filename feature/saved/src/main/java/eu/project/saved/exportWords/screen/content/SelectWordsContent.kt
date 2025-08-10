@@ -1,4 +1,4 @@
-package eu.project.saved.exportWords.screen.subscreen
+package eu.project.saved.exportWords.screen.content
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.ColumnScope
@@ -13,7 +13,7 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import eu.project.common.TestTags
-import eu.project.saved.exportWords.model.ExportWordsUiState
+import eu.project.saved.exportWords.state.ExportWordsUiState
 import eu.project.saved.exportWords.model.ExportableSavedWord
 import eu.project.saved.exportWords.ui.exportableSavedWordCard
 import eu.project.ui.R

@@ -15,10 +15,10 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.test.platform.app.InstrumentationRegistry
 import eu.project.common.TestTags
-import eu.project.saved.exportWords.model.ExportWordsScreenState
-import eu.project.saved.exportWords.model.ExportWordsUiState
+import eu.project.saved.exportWords.state.ExportWordsScreenState
+import eu.project.saved.exportWords.state.ExportWordsUiState
 import eu.project.saved.exportWords.model.ExportableSavedWord
-import eu.project.saved.exportWords.ui.SubscreenControllerButtonVariants
+import eu.project.saved.exportWords.state.SubscreenControllerButtonVariants
 import eu.project.ui.R
 import eu.project.ui.theme.Background
 import junit.framework.Assert.assertTrue

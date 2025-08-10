@@ -1,4 +1,4 @@
-package eu.project.saved.exportWords.model
+package eu.project.saved.exportWords.state
 
 import androidx.compose.ui.graphics.Color
 

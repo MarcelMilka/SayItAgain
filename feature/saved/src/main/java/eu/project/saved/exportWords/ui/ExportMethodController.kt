@@ -14,8 +14,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import eu.project.saved.exportWords.model.ExportMethodState
-import eu.project.saved.exportWords.model.ExportWordsUiState
+import eu.project.saved.exportWords.state.ExportMethodState
+import eu.project.saved.exportWords.state.ExportWordsUiState
 import eu.project.ui.R
 import eu.project.ui.components.spacers.spacerV8
 import eu.project.ui.components.text.bodySmall
@@ -25,7 +25,7 @@ import eu.project.ui.dimensions.WidgetCornerRadius
 import eu.project.ui.dimensions.WidgetPadding
 
 @Composable
-internal fun exportMethodSelector(
+internal fun exportMethodController(
     uiState: ExportWordsUiState,
     onClickSendMethod: () -> Unit,
     onClickDownloadMethod: () -> Unit
@@ -42,14 +42,14 @@ internal fun exportMethodSelector(
             spacerV8()
 
             exportMethod(
-                uiState.exportMethodPickerState.sendMethodState,
+                uiState.exportMethodControllerState.sendMethodState,
                 onClick = { onClickSendMethod() }
             )
 
             spacerV8()
 
             exportMethod(
-                uiState.exportMethodPickerState.downloadMethodState,
+                uiState.exportMethodControllerState.downloadMethodState,
                 onClick = { onClickDownloadMethod() }
             )
         }

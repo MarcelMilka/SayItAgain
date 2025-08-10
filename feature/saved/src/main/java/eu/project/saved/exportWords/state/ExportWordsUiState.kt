@@ -1,11 +1,11 @@
-package eu.project.saved.exportWords.model
+package eu.project.saved.exportWords.state
 
-import eu.project.saved.exportWords.ui.SubscreenControllerState
+import eu.project.saved.exportWords.model.ExportableSavedWord
 
 internal data class ExportWordsUiState(
     val exportableWords: List<ExportableSavedWord> = listOf(),
     val subscreenControllerState: SubscreenControllerState = SubscreenControllerState(),
     val showNoWordsSelectedBanner: Boolean = false,
-    val exportMethodPickerState: ExportMethodPickerState = ExportMethodPickerState(),
+    val exportMethodControllerState: ExportMethodControllerState = ExportMethodControllerState(),
     val showEmailTextField: Boolean = false,
 )
