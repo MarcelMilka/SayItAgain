@@ -87,7 +87,7 @@ internal class ExportWordsViewModel @Inject constructor(
 
     private fun evaluateUiStateIfNeeded(combinedFlows: CombinedFlows) {
 
-        val currentModelList = _uiState.value.exportableWords.map { it.convertToModel() }
+        val currentModelList = _uiState.value.wordsToExport.map { it.convertToModel() }
 
         val newModelList = when (val dataState = combinedFlows.dataState) {
 
@@ -98,7 +98,7 @@ internal class ExportWordsViewModel @Inject constructor(
         if (newModelList != null && newModelList != currentModelList) {
 
             val newExportableList = newModelList.map { it.convertToExportable() }
-            _uiState.update { it.copy(exportableWords = newExportableList) }
+            _uiState.update { it.copy(wordsToExport = newExportableList) }
         }
     }
 
@@ -124,7 +124,7 @@ internal class ExportWordsViewModel @Inject constructor(
 
         _uiState.update { currentState ->
 
-            val updatedList = currentState.exportableWords.map { word ->
+            val updatedList = currentState.wordsToExport.map { word ->
 
                 if (word.uuid == wordToUpdate.uuid) {
 
@@ -133,10 +133,10 @@ internal class ExportWordsViewModel @Inject constructor(
                 else { word }
             }
 
-            currentState.copy(exportableWords = updatedList)
+            currentState.copy(wordsToExport = updatedList)
         }
 
-        if (_uiState.value.showNoWordsSelectedBanner && _uiState.value.exportableWords.any { it.toExport == true }) {
+        if (_uiState.value.showNoWordsSelectedBanner && _uiState.value.wordsToExport.any { it.toExport == true }) {
 
             setShowNoWordsSelectedBanner(visible = false)
         }
@@ -144,7 +144,7 @@ internal class ExportWordsViewModel @Inject constructor(
 
     private fun tryToSwitchToExportSettings() {
 
-        val atLeastOneSelectedWord = _uiState.value.exportableWords.any { it.toExport }
+        val atLeastOneSelectedWord = _uiState.value.wordsToExport.any { it.toExport }
 
         if (atLeastOneSelectedWord) {
 

@@ -177,7 +177,7 @@ class ExportWordsViewModelTest {
 
         viewModel.uiState.test {
 
-            assertEquals(emptyList<ExportableSavedWord>(), awaitItem().exportableWords)
+            assertEquals(emptyList<ExportableSavedWord>(), awaitItem().wordsToExport)
             cancelAndIgnoreRemainingEvents()
         }
     }
@@ -187,11 +187,11 @@ class ExportWordsViewModelTest {
 
         viewModel.uiState.test {
 
-            assertEquals(emptyList<ExportableSavedWord>(), awaitItem().exportableWords)
+            assertEquals(emptyList<ExportableSavedWord>(), awaitItem().wordsToExport)
 
             dataStateFlow.update { SavedWordsRepositoryDataState.Loaded.Data(savedWords) }
 
-            assertEquals(exportableWords, awaitItem().exportableWords)
+            assertEquals(exportableWords, awaitItem().wordsToExport)
 
             cancelAndIgnoreRemainingEvents()
         }
@@ -202,7 +202,7 @@ class ExportWordsViewModelTest {
 
         viewModel.uiState.test {
 
-            assertEquals(emptyList<ExportableSavedWord>(), awaitItem().exportableWords)
+            assertEquals(emptyList<ExportableSavedWord>(), awaitItem().wordsToExport)
 
             dataStateFlow.update { SavedWordsRepositoryDataState.Loaded.NoData }
 
@@ -217,10 +217,10 @@ class ExportWordsViewModelTest {
 
         viewModel.uiState.test {
 
-            assertEquals(emptyList<ExportableSavedWord>(), awaitItem().exportableWords)
+            assertEquals(emptyList<ExportableSavedWord>(), awaitItem().wordsToExport)
 
             dataStateFlow.update { SavedWordsRepositoryDataState.Loaded.Data(savedWords) }
-            assertEquals(exportableWords, awaitItem().exportableWords)
+            assertEquals(exportableWords, awaitItem().wordsToExport)
 
             dataStateFlow.update { SavedWordsRepositoryDataState.FailedToLoad("error") }
 
@@ -235,10 +235,10 @@ class ExportWordsViewModelTest {
 
         viewModel.uiState.test {
 
-            assertEquals(emptyList<ExportableSavedWord>(), awaitItem().exportableWords)
+            assertEquals(emptyList<ExportableSavedWord>(), awaitItem().wordsToExport)
 
             dataStateFlow.update { SavedWordsRepositoryDataState.Loaded.Data(savedWords) }
-            assertEquals(exportableWords, awaitItem().exportableWords)
+            assertEquals(exportableWords, awaitItem().wordsToExport)
 
             dataStateFlow.update { SavedWordsRepositoryDataState.Loaded.Data(savedWords) }
             expectNoEvents()
@@ -251,10 +251,10 @@ class ExportWordsViewModelTest {
     fun `uiState does not change when connectivity status changes to Disconnected`() = runTest {
 
         viewModel.uiState.test {
-            assertEquals(emptyList<ExportableSavedWord>(), awaitItem().exportableWords)
+            assertEquals(emptyList<ExportableSavedWord>(), awaitItem().wordsToExport)
 
             dataStateFlow.update { SavedWordsRepositoryDataState.Loaded.Data(savedWords) }
-            assertEquals(exportableWords, awaitItem().exportableWords)
+            assertEquals(exportableWords, awaitItem().wordsToExport)
 
             connectivityFlow.update { ConnectivityStatus.Disconnected }
 
@@ -269,7 +269,7 @@ class ExportWordsViewModelTest {
 
         viewModel.uiState.test {
 
-            assertEquals(emptyList<ExportableSavedWord>(), awaitItem().exportableWords)
+            assertEquals(emptyList<ExportableSavedWord>(), awaitItem().wordsToExport)
 
             dataStateFlow.update { SavedWordsRepositoryDataState.Loaded.Data(emptyList()) }
 
@@ -313,13 +313,13 @@ class ExportWordsViewModelTest {
 
         viewModel.uiState.test {
 
-            assertEquals(emptyList<ExportableSavedWord>(), awaitItem().exportableWords)
+            assertEquals(emptyList<ExportableSavedWord>(), awaitItem().wordsToExport)
 
             dataStateFlow.update { SavedWordsRepositoryDataState.Loaded.Data(savedWords) }
-            assertEquals(exportableWords, awaitItem().exportableWords)
+            assertEquals(exportableWords, awaitItem().wordsToExport)
 
             viewModel.onIntent(ExportWordsIntent.ChangeWordSelection(firstExportableInstance))
-            assertEquals(exportableSavedWordsFirstTrue, awaitItem().exportableWords)
+            assertEquals(exportableSavedWordsFirstTrue, awaitItem().wordsToExport)
 
             expectNoEvents()
             cancelAndIgnoreRemainingEvents()
@@ -331,16 +331,16 @@ class ExportWordsViewModelTest {
 
         viewModel.uiState.test {
 
-            assertEquals(emptyList<ExportableSavedWord>(), awaitItem().exportableWords)
+            assertEquals(emptyList<ExportableSavedWord>(), awaitItem().wordsToExport)
 
             dataStateFlow.update { SavedWordsRepositoryDataState.Loaded.Data(savedWords) }
-            assertEquals(exportableSavedWords, awaitItem().exportableWords)
+            assertEquals(exportableSavedWords, awaitItem().wordsToExport)
 
             viewModel.onIntent(ExportWordsIntent.ChangeWordSelection(firstExportableInstance))
-            assertEquals(exportableSavedWordsFirstTrue, awaitItem().exportableWords)
+            assertEquals(exportableSavedWordsFirstTrue, awaitItem().wordsToExport)
 
             viewModel.onIntent(ExportWordsIntent.ChangeWordSelection(firstExportableInstance))
-            assertEquals(exportableSavedWords, awaitItem().exportableWords)
+            assertEquals(exportableSavedWords, awaitItem().wordsToExport)
 
             expectNoEvents()
             cancelAndIgnoreRemainingEvents()
@@ -353,23 +353,23 @@ class ExportWordsViewModelTest {
         viewModel.uiState.test {
 
             // Step 1: Initial state
-            assertEquals(emptyList<ExportableSavedWord>(), awaitItem().exportableWords)
+            assertEquals(emptyList<ExportableSavedWord>(), awaitItem().wordsToExport)
 
             // Step 2: Load words
             dataStateFlow.update { SavedWordsRepositoryDataState.Loaded.Data(savedWords) }
 
-            val loadedWords = awaitItem().exportableWords
+            val loadedWords = awaitItem().wordsToExport
             assertEquals(exportableSavedWords, loadedWords)
 
             // Step 3: Toggle each word
             viewModel.onIntent(ExportWordsIntent.ChangeWordSelection(firstExportableInstance))
-            val afterFirstToggle = awaitItem().exportableWords
+            val afterFirstToggle = awaitItem().wordsToExport
 
             viewModel.onIntent(ExportWordsIntent.ChangeWordSelection(secondExportableInstance))
-            val afterSecondToggle = awaitItem().exportableWords
+            val afterSecondToggle = awaitItem().wordsToExport
 
             viewModel.onIntent(ExportWordsIntent.ChangeWordSelection(thirdExportableInstance))
-            val afterThirdToggle = awaitItem().exportableWords
+            val afterThirdToggle = awaitItem().wordsToExport
 
             // Step 4: Expected
             val expected = listOf(
@@ -390,10 +390,10 @@ class ExportWordsViewModelTest {
 
         viewModel.uiState.test {
 
-            assertEquals(emptyList<ExportableSavedWord>(), awaitItem().exportableWords)
+            assertEquals(emptyList<ExportableSavedWord>(), awaitItem().wordsToExport)
 
             dataStateFlow.update { SavedWordsRepositoryDataState.Loaded.Data(savedWords) }
-            assertEquals(exportableSavedWords, awaitItem().exportableWords)
+            assertEquals(exportableSavedWords, awaitItem().wordsToExport)
 
             val notExistingWord = ExportableSavedWord(UUID.randomUUID(), "Ghost", "Unknown")
 
@@ -409,16 +409,16 @@ class ExportWordsViewModelTest {
 
         viewModel.uiState.test {
 
-            assertEquals(emptyList<ExportableSavedWord>(), awaitItem().exportableWords)
+            assertEquals(emptyList<ExportableSavedWord>(), awaitItem().wordsToExport)
 
             dataStateFlow.update { SavedWordsRepositoryDataState.Loaded.Data(savedWords) }
-            assertEquals(exportableWords, awaitItem().exportableWords)
+            assertEquals(exportableWords, awaitItem().wordsToExport)
 
             viewModel.onIntent(ExportWordsIntent.TryToSwitchToExportSettings)
             assertTrue(awaitItem().showNoWordsSelectedBanner)
 
             viewModel.onIntent(ExportWordsIntent.ChangeWordSelection(firstExportableInstance))
-            assertEquals(exportableSavedWordsFirstTrue, awaitItem().exportableWords)
+            assertEquals(exportableSavedWordsFirstTrue, awaitItem().wordsToExport)
 
             viewModel.onIntent(ExportWordsIntent.TryToSwitchToExportSettings)
             assertFalse(awaitItem().showNoWordsSelectedBanner)
@@ -443,15 +443,15 @@ class ExportWordsViewModelTest {
         viewModel.uiState.test {
 
             // default
-            assertEquals(emptyList<ExportableSavedWord>(), awaitItem().exportableWords)
+            assertEquals(emptyList<ExportableSavedWord>(), awaitItem().wordsToExport)
 
             // set LoadedData
             dataStateFlow.update { SavedWordsRepositoryDataState.Loaded.Data(savedWords) }
-            assertEquals(exportableWords, awaitItem().exportableWords)
+            assertEquals(exportableWords, awaitItem().wordsToExport)
 
             // select word
             viewModel.onIntent(ExportWordsIntent.ChangeWordSelection(firstExportableInstance))
-            assertEquals(exportableSavedWordsFirstTrue, awaitItem().exportableWords)
+            assertEquals(exportableSavedWordsFirstTrue, awaitItem().wordsToExport)
 
             // switch to select words
             viewModel.onIntent(ExportWordsIntent.TryToSwitchToExportSettings)
@@ -472,11 +472,11 @@ class ExportWordsViewModelTest {
         viewModel.uiState.test {
 
             // default
-            assertEquals(emptyList<ExportableSavedWord>(), awaitItem().exportableWords)
+            assertEquals(emptyList<ExportableSavedWord>(), awaitItem().wordsToExport)
 
             // set LoadedData
             dataStateFlow.update { SavedWordsRepositoryDataState.Loaded.Data(savedWords) }
-            assertEquals(exportableWords, awaitItem().exportableWords)
+            assertEquals(exportableWords, awaitItem().wordsToExport)
 
             // switch to select words
             viewModel.onIntent(ExportWordsIntent.TryToSwitchToExportSettings)
@@ -498,11 +498,11 @@ class ExportWordsViewModelTest {
         viewModel.uiState.test {
 
             // default
-            assertEquals(emptyList<ExportableSavedWord>(), awaitItem().exportableWords)
+            assertEquals(emptyList<ExportableSavedWord>(), awaitItem().wordsToExport)
 
             // set LoadedData
             dataStateFlow.update { SavedWordsRepositoryDataState.Loaded.Data(savedWords) }
-            assertEquals(exportableWords, awaitItem().exportableWords)
+            assertEquals(exportableWords, awaitItem().wordsToExport)
 
             // switch to select words
             viewModel.onIntent(ExportWordsIntent.TryToSwitchToExportSettings)
@@ -521,15 +521,15 @@ class ExportWordsViewModelTest {
         viewModel.uiState.test {
 
             // default
-            assertEquals(emptyList<ExportableSavedWord>(), awaitItem().exportableWords)
+            assertEquals(emptyList<ExportableSavedWord>(), awaitItem().wordsToExport)
 
             // set LoadedData
             dataStateFlow.update { SavedWordsRepositoryDataState.Loaded.Data(savedWords) }
-            assertEquals(exportableWords, awaitItem().exportableWords)
+            assertEquals(exportableWords, awaitItem().wordsToExport)
 
             // select word
             viewModel.onIntent(ExportWordsIntent.ChangeWordSelection(firstExportableInstance))
-            assertEquals(exportableSavedWordsFirstTrue, awaitItem().exportableWords)
+            assertEquals(exportableSavedWordsFirstTrue, awaitItem().wordsToExport)
 
             // switch to select words
             viewModel.onIntent(ExportWordsIntent.TryToSwitchToExportSettings)

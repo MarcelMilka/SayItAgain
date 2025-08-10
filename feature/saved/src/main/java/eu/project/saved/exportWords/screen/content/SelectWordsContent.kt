@@ -61,7 +61,7 @@ internal fun ColumnScope.selectWordsContent(
         verticalArrangement = Arrangement.Top,
         content = {
 
-            this.items(uiState.exportableWords) { exportableWord ->
+            this.items(uiState.wordsToExport) { exportableWord ->
 
                 exportableWord.exportableSavedWordCard { onChangeWordSelection(exportableWord) }
             }
