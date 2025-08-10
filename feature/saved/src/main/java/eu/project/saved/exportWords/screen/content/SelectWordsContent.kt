@@ -1,5 +1,13 @@
 package eu.project.saved.exportWords.screen.content
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.FastOutLinearInEasing
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.fillMaxSize
@@ -25,14 +33,25 @@ internal fun ColumnScope.selectWordsContent(
     onChangeWordSelection: (ExportableSavedWord) -> Unit
 ) {
 
-    if (uiState.showNoWordsSelectedBanner) {
+    AnimatedVisibility(
+        visible = uiState.showNoWordsSelectedBanner,
+        enter = fadeIn() + slideInVertically(
+            initialOffsetY = { -40 },
+            animationSpec = tween(durationMillis = 500, easing = FastOutSlowInEasing)
+        ),
+        exit = fadeOut() + slideOutVertically(
+            targetOffsetY = { -40 },
+            animationSpec = tween(durationMillis = 300, easing = FastOutLinearInEasing)
+        ),
+        content = {
 
-        warningBanner(
-            headline = stringResource(R.string.no_words_selected),
-            body = stringResource(R.string.please_select_at_least_one_word_before_continuing),
-            testTag = TestTags.EXPORT_WORDS_SCREEN_WARNING_BANNER
-        )
-    }
+            warningBanner(
+                headline = stringResource(R.string.no_words_selected),
+                body = stringResource(R.string.please_select_at_least_one_word_before_continuing),
+                testTag = TestTags.EXPORT_WORDS_SCREEN_WARNING_BANNER
+            )
+        }
+    )
 
     LazyColumn(
         modifier = Modifier
