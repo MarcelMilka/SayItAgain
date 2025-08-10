@@ -12,9 +12,9 @@ import eu.project.common.TestTags
 import eu.project.saved.exportWords.model.ExportWordsScreenState
 import eu.project.saved.exportWords.model.ExportWordsUiState
 import eu.project.saved.exportWords.model.ExportableSavedWord
-import eu.project.saved.exportWords.ui.showReadyToExport
-import eu.project.saved.exportWords.ui.showDisconnected
-import eu.project.saved.exportWords.ui.showError
+import eu.project.saved.exportWords.ui.exportWordsLoadedContent
+import eu.project.saved.exportWords.ui.exportWordsDisconnectedContent
+import eu.project.saved.exportWords.ui.exportWordsErrorContent
 import eu.project.ui.dimensions.ScreenPadding
 
 @Composable
@@ -37,10 +37,10 @@ internal fun exportWordsScreen(
         content = {
 
             when(screenState) {
-                ExportWordsScreenState.Error -> showError()
-                ExportWordsScreenState.Initial -> showError()
-                ExportWordsScreenState.Disconnected -> showDisconnected()
-                ExportWordsScreenState.ReadyToExport -> showReadyToExport(
+                ExportWordsScreenState.Error -> exportWordsErrorContent()
+                ExportWordsScreenState.Loading -> exportWordsErrorContent()
+                ExportWordsScreenState.Disconnected -> exportWordsDisconnectedContent()
+                ExportWordsScreenState.Loaded -> exportWordsLoadedContent(
                     listState = listState,
                     uiState = uiState,
                     onChangeWordSelection = { onChangeWordSelection(it) },

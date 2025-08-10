@@ -34,7 +34,7 @@ internal class ExportWordsViewModel @Inject constructor(
 ): ViewModel() {
 
 
-    private var _screenState = MutableStateFlow<ExportWordsScreenState>(ExportWordsScreenState.Initial)
+    private var _screenState = MutableStateFlow<ExportWordsScreenState>(ExportWordsScreenState.Loading)
     val screenState = _screenState.asStateFlow()
 
     private var _uiState = MutableStateFlow<ExportWordsUiState>(ExportWordsUiState())
@@ -74,7 +74,7 @@ internal class ExportWordsViewModel @Inject constructor(
 
                 when(combinedFlows.connectivityStatus) {
 
-                    ConnectivityStatus.Connected -> ExportWordsScreenState.ReadyToExport
+                    ConnectivityStatus.Connected -> ExportWordsScreenState.Loaded
                     ConnectivityStatus.Disconnected -> ExportWordsScreenState.Disconnected
                 }
             }

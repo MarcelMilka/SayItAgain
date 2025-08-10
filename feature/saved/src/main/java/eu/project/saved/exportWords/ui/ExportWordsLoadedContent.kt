@@ -13,11 +13,11 @@ import eu.project.common.TestTags
 import eu.project.saved.exportWords.model.ExportWordsSubscreen
 import eu.project.saved.exportWords.model.ExportWordsUiState
 import eu.project.saved.exportWords.model.ExportableSavedWord
-import eu.project.saved.exportWords.screen.subscreen.exportSettingsSubscreen
-import eu.project.saved.exportWords.screen.subscreen.selectWordsSubscreen
+import eu.project.saved.exportWords.screen.subscreen.exportSettingsContent
+import eu.project.saved.exportWords.screen.subscreen.selectWordsContent
 
 @Composable
-internal fun BoxScope.showReadyToExport(
+internal fun BoxScope.exportWordsLoadedContent(
     listState: LazyListState,
     uiState: ExportWordsUiState,
     onChangeWordSelection: (ExportableSavedWord) -> Unit,
@@ -43,13 +43,13 @@ internal fun BoxScope.showReadyToExport(
 
             when(uiState.subscreenControllerState.exportWordsSubscreen) {
 
-                ExportWordsSubscreen.SelectWords -> selectWordsSubscreen(
+                ExportWordsSubscreen.SelectWords -> selectWordsContent(
                     listState = listState,
                     uiState = uiState,
                     onChangeWordSelection = onChangeWordSelection
                 )
 
-                ExportWordsSubscreen.ExportSettings -> exportSettingsSubscreen(
+                ExportWordsSubscreen.ExportSettings -> exportSettingsContent(
                     uiState,
                     onClickSendMethod = { onClickSendMethod() },
                     onClickDownloadMethod = { onClickDownloadMethod() }

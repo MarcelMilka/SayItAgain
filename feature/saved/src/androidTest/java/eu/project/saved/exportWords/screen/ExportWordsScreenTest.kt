@@ -53,7 +53,7 @@ internal class ExportWordsScreenTest {
     @Before
     fun setUp() {
 
-        screenState = MutableStateFlow(ExportWordsScreenState.Initial)
+        screenState = MutableStateFlow(ExportWordsScreenState.Loading)
         uiState = MutableStateFlow(ExportWordsUiState(exportableWords))
 
         onClickLeft = false
@@ -117,7 +117,7 @@ internal class ExportWordsScreenTest {
     fun exportWordsScreen_screenStateReadyToExport_showReadyToExportDisplayed() {
 
         // set up
-        screenState.value = ExportWordsScreenState.ReadyToExport
+        screenState.value = ExportWordsScreenState.Loaded
 
         // test
         composeTestRule
@@ -130,7 +130,7 @@ internal class ExportWordsScreenTest {
     fun subscreenController_isVisibleTrue_subscreenControllerIsVisible() {
 
         // set up
-        screenState.value = ExportWordsScreenState.ReadyToExport
+        screenState.value = ExportWordsScreenState.Loaded
         uiState.update {
 
             it.copy(
@@ -150,7 +150,7 @@ internal class ExportWordsScreenTest {
     fun subscreenController_leftButtonActive_leftButtonIsNotEnabled() {
 
         // set up
-        screenState.value = ExportWordsScreenState.ReadyToExport
+        screenState.value = ExportWordsScreenState.Loaded
         uiState.update {
 
             it.copy(
@@ -168,7 +168,7 @@ internal class ExportWordsScreenTest {
     fun subscreenController_leftButtonInactive_leftButtonIsEnabled() {
 
         // set up
-        screenState.value = ExportWordsScreenState.ReadyToExport
+        screenState.value = ExportWordsScreenState.Loaded
         uiState.update {
 
             it.copy(
@@ -186,7 +186,7 @@ internal class ExportWordsScreenTest {
     fun subscreenController_leftButtonClick_callsLambda() {
 
         // set up
-        screenState.value = ExportWordsScreenState.ReadyToExport
+        screenState.value = ExportWordsScreenState.Loaded
         uiState.update {
 
             it.copy(
@@ -205,7 +205,7 @@ internal class ExportWordsScreenTest {
     fun subscreenController_rightButtonActive_rightButtonIsNotEnabled() {
 
         // set up
-        screenState.value = ExportWordsScreenState.ReadyToExport
+        screenState.value = ExportWordsScreenState.Loaded
         uiState.update {
 
             it.copy(
@@ -223,7 +223,7 @@ internal class ExportWordsScreenTest {
     fun subscreenController_rightButtonInactive_rightButtonIsEnabled() {
 
         // set up
-        screenState.value = ExportWordsScreenState.ReadyToExport
+        screenState.value = ExportWordsScreenState.Loaded
         uiState.update {
 
             it.copy(
@@ -241,7 +241,7 @@ internal class ExportWordsScreenTest {
     fun subscreenController_rightButtonClick_callsLambda() {
 
         // set up
-        screenState.value = ExportWordsScreenState.ReadyToExport
+        screenState.value = ExportWordsScreenState.Loaded
         uiState.update {
 
             it.copy(
@@ -261,7 +261,7 @@ internal class ExportWordsScreenTest {
     fun showNoWordsSelectedBannerIsTrue_warningBannerIsDisplayed() {
 
         // set up
-        screenState.value = ExportWordsScreenState.ReadyToExport
+        screenState.value = ExportWordsScreenState.Loaded
         uiState.update { it.copy(showNoWordsSelectedBanner = true) }
 
         // test
@@ -272,7 +272,7 @@ internal class ExportWordsScreenTest {
     fun showNoWordsSelectedBannerIsFalse_warningBannerIsNotDisplayed() {
 
         // set up
-        screenState.value = ExportWordsScreenState.ReadyToExport
+        screenState.value = ExportWordsScreenState.Loaded
         uiState.update { it.copy(showNoWordsSelectedBanner = false) }
 
         // test

@@ -18,7 +18,7 @@ import eu.project.ui.components.spacers.spacerV8
 import eu.project.ui.components.text.headlineSmall
 
 @Composable
-internal fun ColumnScope.exportSettingsSubscreen(
+internal fun ColumnScope.exportSettingsContent(
     uiState: ExportWordsUiState,
     onClickSendMethod: () -> Unit,
     onClickDownloadMethod: () -> Unit

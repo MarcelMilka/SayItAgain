@@ -21,7 +21,7 @@ import eu.project.ui.components.banners.warningBanner
 import eu.project.ui.dimensions.WidgetPadding
 
 @Composable
-internal fun ColumnScope.selectWordsSubscreen(
+internal fun ColumnScope.selectWordsContent(
     listState: LazyListState,
     uiState: ExportWordsUiState,
     onChangeWordSelection: (ExportableSavedWord) -> Unit

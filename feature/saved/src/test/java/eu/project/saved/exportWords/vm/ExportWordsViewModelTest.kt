@@ -152,7 +152,7 @@ class ExportWordsViewModelTest {
 
         viewModel.screenState.test {
 
-            assertEquals(ExportWordsScreenState.ReadyToExport, awaitItem())
+            assertEquals(ExportWordsScreenState.Loaded, awaitItem())
             cancelAndIgnoreRemainingEvents()
         }
     }
