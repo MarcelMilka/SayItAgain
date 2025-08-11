@@ -151,10 +151,11 @@ internal class ExportWordsViewModel @Inject constructor(
             _uiState.update { uiState ->
 
                 uiState.copy(
+                    currentSubscreen = ExportWordsSubscreen.ExportSettings,
+
                     subscreenControllerState = uiState.subscreenControllerState.copy(
-                        exportWordsSubscreen = ExportWordsSubscreen.ExportSettings,
-                        leftButton = SubscreenControllerButtonVariants.leftInactive,
-                        rightButton = SubscreenControllerButtonVariants.rightActive
+                        selectWordsButtonState = SubscreenControllerButtonVariants.selectWordsEnabled,
+                        exportSettingsButtonState = SubscreenControllerButtonVariants.exportSettingsDisabled
                     )
                 )
             }
@@ -174,10 +175,11 @@ internal class ExportWordsViewModel @Inject constructor(
         _uiState.update { uiState ->
 
             uiState.copy(
+                currentSubscreen = ExportWordsSubscreen.SelectWords,
+
                 subscreenControllerState = uiState.subscreenControllerState.copy(
-                    exportWordsSubscreen = ExportWordsSubscreen.SelectWords,
-                    leftButton = SubscreenControllerButtonVariants.leftActive,
-                    rightButton = SubscreenControllerButtonVariants.rightInactive
+                    selectWordsButtonState = SubscreenControllerButtonVariants.selectWordsDisabled,
+                    exportSettingsButtonState = SubscreenControllerButtonVariants.exportSettingsEnabled
                 )
             )
         }

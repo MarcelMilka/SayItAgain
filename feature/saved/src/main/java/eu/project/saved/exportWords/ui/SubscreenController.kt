@@ -38,15 +38,15 @@ internal fun subscreenController(
         content = {
 
             subscreenControllerButton(
-                buttonState = subscreenControllerState.leftButton,
+                buttonState = subscreenControllerState.selectWordsButtonState,
                 testTag = TestTags.EXPORT_WORDS_SCREEN_SUBSCREEN_CONTROLLER_LEFT_BUTTON,
-                onClick = { onClickLeft() }
+                onClick = onClickLeft
             )
 
             Spacer(modifier = Modifier.width(4.dp))
 
             subscreenControllerButton(
-                buttonState = subscreenControllerState.rightButton,
+                buttonState = subscreenControllerState.exportSettingsButtonState,
                 testTag = TestTags.EXPORT_WORDS_SCREEN_SUBSCREEN_CONTROLLER_RIGHT_BUTTON,
                 onClick = { onClickRight() }
             )

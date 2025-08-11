@@ -12,14 +12,16 @@ internal data class ExportWordsUiState(
     val exportMethod: ExportMethod = ExportMethod.NotSpecified,
     val email: Email? = null,
 
+    // navigation state
+    val currentSubscreen: ExportWordsSubscreen = ExportWordsSubscreen.SelectWords,
+    val subscreenControllerState: SubscreenControllerState = SubscreenControllerState(),
+
     // ui state for each subscreen
-//    val selectWordsUiState: SelectWordsUiState = SelectWordsUiState(),
     val exportSettingsUiState: ExportSettingsUiState = ExportSettingsUiState(),
 
-    val subscreenControllerState: SubscreenControllerState = SubscreenControllerState(),
-    val showNoWordsSelectedBanner: Boolean = false,
-    val exportMethodControllerState: ExportMethodControllerState = ExportMethodControllerState(),
-    val showEmailTextField: Boolean = false,
+    val showNoWordsSelectedBanner: Boolean = false, // TODO: remove it
+    val exportMethodControllerState: ExportMethodControllerState = ExportMethodControllerState(), // TODO: remove it
+    val showEmailTextField: Boolean = false, // TODO: remove it
 )
 
 

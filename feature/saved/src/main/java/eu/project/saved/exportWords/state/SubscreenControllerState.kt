@@ -9,10 +9,8 @@ import eu.project.ui.theme.Primary
 import eu.project.ui.theme.SecondaryWhite
 
 internal data class SubscreenControllerState(
-    val isVisible: Boolean = true,
-    val exportWordsSubscreen: ExportWordsSubscreen = ExportWordsSubscreen.SelectWords,
-    val leftButton: SubscreenControllerButtonState = SubscreenControllerButtonVariants.leftActive,
-    val rightButton: SubscreenControllerButtonState = SubscreenControllerButtonVariants.rightInactive
+    val selectWordsButtonState: SubscreenControllerButtonState = SubscreenControllerButtonVariants.selectWordsDisabled,
+    val exportSettingsButtonState: SubscreenControllerButtonState = SubscreenControllerButtonVariants.exportSettingsEnabled
 )
 
 internal enum class ExportWordsSubscreen {
@@ -30,7 +28,7 @@ internal data class SubscreenControllerButtonState(
 
 internal object SubscreenControllerButtonVariants {
 
-    val leftActive = SubscreenControllerButtonState(
+    val selectWordsDisabled = SubscreenControllerButtonState(
         text = R.string.select_words,
         enabled = false,
         containerColor = Primary,
@@ -38,7 +36,7 @@ internal object SubscreenControllerButtonVariants {
         borderColor = Primary
     )
 
-    val leftInactive = SubscreenControllerButtonState(
+    val selectWordsEnabled = SubscreenControllerButtonState(
         text = R.string.select_words,
         enabled = true,
         containerColor = Transparent,
@@ -46,7 +44,7 @@ internal object SubscreenControllerButtonVariants {
         borderColor = SecondaryWhite
     )
 
-    val rightActive = SubscreenControllerButtonState(
+    val exportSettingsDisabled = SubscreenControllerButtonState(
         text = R.string.export_settings,
         enabled = false,
         containerColor = Primary,
@@ -54,7 +52,7 @@ internal object SubscreenControllerButtonVariants {
         borderColor = Primary
     )
 
-    val rightInactive = SubscreenControllerButtonState(
+    val exportSettingsEnabled = SubscreenControllerButtonState(
         text = R.string.export_settings,
         enabled = true,
         containerColor = Transparent,

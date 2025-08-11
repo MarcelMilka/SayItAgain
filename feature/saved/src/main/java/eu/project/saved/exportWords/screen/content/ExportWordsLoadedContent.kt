@@ -38,7 +38,7 @@ internal fun BoxScope.exportWordsLoadedContent(
                 onClickRight = onClickRight
             )
 
-            when(uiState.subscreenControllerState.exportWordsSubscreen) {
+            when(uiState.currentSubscreen) {
 
                 ExportWordsSubscreen.SelectWords -> selectWordsContent(
                     uiState = uiState,
