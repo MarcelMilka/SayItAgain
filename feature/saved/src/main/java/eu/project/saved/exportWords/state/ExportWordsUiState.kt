@@ -2,7 +2,6 @@ package eu.project.saved.exportWords.state
 
 import eu.project.saved.exportWords.model.Email
 import eu.project.saved.exportWords.model.ExportMethod
-import eu.project.saved.exportWords.model.ExportMethodVariants
 import eu.project.saved.exportWords.model.ExportableSavedWord
 
 internal data class ExportWordsUiState(
@@ -20,20 +19,3 @@ internal data class ExportWordsUiState(
     val selectWordsUiState: SelectWordsUiState = SelectWordsUiState(),
     val exportSettingsUiState: ExportSettingsUiState = ExportSettingsUiState(),
 )
-
-
-
-// ExportSettingsUiState.kt--------------------------------------------------------------------
-internal data class ExportSettingsUiState(
-    val sendMethodState: ExportMethodState = ExportMethodVariants.sendNotSelected,
-    val emailTextFieldUiState: EmailTextFieldUiState = EmailTextFieldUiState(),
-    val downloadMethodState: ExportMethodState = ExportMethodVariants.downloadNotSelected,
-)
-
-// EmailTextFieldUiState.kt--------------------------------------------------------------------
-internal data class EmailTextFieldUiState(
-    val isVisible: Boolean = false
-)
-
-// SelectWordsUiState.kt--------------------------------------------------------------------
-internal data class SelectWordsUiState(val showNoWordsSelectedBanner: Boolean = false)
