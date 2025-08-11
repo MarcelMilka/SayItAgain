@@ -19,9 +19,6 @@ internal data class ExportWordsUiState(
     // ui state for each subscreen
     val selectWordsUiState: SelectWordsUiState = SelectWordsUiState(),
     val exportSettingsUiState: ExportSettingsUiState = ExportSettingsUiState(),
-
-    val exportMethodControllerState: ExportMethodControllerState = ExportMethodControllerState(), // TODO: remove it
-    val showEmailTextField: Boolean = false, // TODO: remove it
 )
 
 
