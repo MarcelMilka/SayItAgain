@@ -20,8 +20,8 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import eu.project.common.TestTags
-import eu.project.saved.exportWords.state.ExportWordsUiState
 import eu.project.saved.exportWords.model.ExportableSavedWord
+import eu.project.saved.exportWords.state.SelectWordsUiState
 import eu.project.saved.exportWords.ui.exportableSavedWordCard
 import eu.project.ui.R
 import eu.project.ui.components.banners.warningBanner
@@ -29,12 +29,13 @@ import eu.project.ui.dimensions.WidgetPadding
 
 @Composable
 internal fun ColumnScope.selectWordsContent(
-    uiState: ExportWordsUiState,
+    selectWordsUiState: SelectWordsUiState,
+    wordsToExport: List<ExportableSavedWord>,
     onChangeWordSelection: (ExportableSavedWord) -> Unit
 ) {
 
     AnimatedVisibility(
-        visible = uiState.showNoWordsSelectedBanner,
+        visible = selectWordsUiState.showNoWordsSelectedBanner,
         enter = fadeIn() + slideInVertically(
             initialOffsetY = { -40 },
             animationSpec = tween(durationMillis = 500, easing = FastOutSlowInEasing)
@@ -61,7 +62,7 @@ internal fun ColumnScope.selectWordsContent(
         verticalArrangement = Arrangement.Top,
         content = {
 
-            this.items(uiState.wordsToExport) { exportableWord ->
+            this.items(wordsToExport) { exportableWord ->
 
                 exportableWord.exportableSavedWordCard { onChangeWordSelection(exportableWord) }
             }

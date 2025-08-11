@@ -41,7 +41,8 @@ internal fun BoxScope.exportWordsLoadedContent(
             when(uiState.currentSubscreen) {
 
                 ExportWordsSubscreen.SelectWords -> selectWordsContent(
-                    uiState = uiState,
+                    selectWordsUiState = uiState.selectWordsUiState,
+                    wordsToExport = uiState.wordsToExport,
                     onChangeWordSelection = onChangeWordSelection
                 )
 

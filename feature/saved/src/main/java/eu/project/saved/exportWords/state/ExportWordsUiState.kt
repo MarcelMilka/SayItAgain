@@ -17,9 +17,9 @@ internal data class ExportWordsUiState(
     val subscreenControllerState: SubscreenControllerState = SubscreenControllerState(),
 
     // ui state for each subscreen
+    val selectWordsUiState: SelectWordsUiState = SelectWordsUiState(),
     val exportSettingsUiState: ExportSettingsUiState = ExportSettingsUiState(),
 
-    val showNoWordsSelectedBanner: Boolean = false, // TODO: remove it
     val exportMethodControllerState: ExportMethodControllerState = ExportMethodControllerState(), // TODO: remove it
     val showEmailTextField: Boolean = false, // TODO: remove it
 )
@@ -37,3 +37,6 @@ internal data class ExportSettingsUiState(
 internal data class EmailTextFieldUiState(
     val isVisible: Boolean = false
 )
+
+// SelectWordsUiState.kt--------------------------------------------------------------------
+internal data class SelectWordsUiState(val showNoWordsSelectedBanner: Boolean = false)

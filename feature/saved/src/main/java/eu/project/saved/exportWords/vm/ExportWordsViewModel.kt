@@ -126,19 +126,20 @@ internal class ExportWordsViewModel @Inject constructor(
 
             val updatedList = currentState.wordsToExport.map { word ->
 
-                if (word.uuid == wordToUpdate.uuid) {
-
-                    word.copy(toExport = !word.toExport)
-                }
-                else { word }
+                if (word.uuid == wordToUpdate.uuid) word.copy(toExport = !word.toExport)
+                else word
             }
 
-            currentState.copy(wordsToExport = updatedList)
-        }
+            val showNoWordsSelectedBanner =
+                if (currentState.selectWordsUiState.showNoWordsSelectedBanner && updatedList.any { it.toExport == true }) { false }
+                else { currentState.selectWordsUiState.showNoWordsSelectedBanner }
 
-        if (_uiState.value.showNoWordsSelectedBanner && _uiState.value.wordsToExport.any { it.toExport == true }) {
-
-            setShowNoWordsSelectedBanner(visible = false)
+            currentState.copy(
+                wordsToExport = updatedList,
+                selectWordsUiState = currentState.selectWordsUiState.copy(
+                    showNoWordsSelectedBanner = showNoWordsSelectedBanner
+                )
+            )
         }
     }
 
@@ -163,9 +164,12 @@ internal class ExportWordsViewModel @Inject constructor(
 
         else {
 
-            if (!_uiState.value.showNoWordsSelectedBanner) {
+            if (!_uiState.value.selectWordsUiState.showNoWordsSelectedBanner) {
 
-                setShowNoWordsSelectedBanner(visible = true)
+                _uiState.update { uiState ->
+
+                    uiState.copy(selectWordsUiState = uiState.selectWordsUiState.copy(showNoWordsSelectedBanner = true))
+                }
             }
         }
     }
@@ -220,16 +224,6 @@ internal class ExportWordsViewModel @Inject constructor(
                     )
                 )
             )
-        }
-    }
-
-
-    // intent helpers
-    private fun setShowNoWordsSelectedBanner(visible: Boolean) {
-
-        _uiState.update { uiState ->
-
-            uiState.copy(showNoWordsSelectedBanner = visible)
         }
     }
 }
