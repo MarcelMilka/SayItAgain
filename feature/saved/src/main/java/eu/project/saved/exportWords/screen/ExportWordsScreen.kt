@@ -21,8 +21,8 @@ internal fun exportWordsScreen(
     screenState: ExportWordsScreenState,
     uiState: ExportWordsUiState,
     onChangeWordSelection: (ExportableSavedWord) -> Unit,
-    onClickLeft: () -> Unit,
-    onClickRight: () -> Unit,
+    onSwitchToSelectWords: () -> Unit,
+    onTryToSwitchToExportSettings: () -> Unit,
     onClickSendMethod: () -> Unit,
     onClickDownloadMethod: () -> Unit
 ) {
@@ -41,8 +41,8 @@ internal fun exportWordsScreen(
                 ExportWordsScreenState.Loaded -> exportWordsLoadedContent(
                     uiState = uiState,
                     onChangeWordSelection = onChangeWordSelection,
-                    onClickLeft = onClickLeft,
-                    onClickRight = onClickRight,
+                    onSwitchToSelectWords = onSwitchToSelectWords,
+                    onTryToSwitchToExportSettings = onTryToSwitchToExportSettings,
                     onClickSendMethod = onClickSendMethod,
                     onClickDownloadMethod = onClickDownloadMethod
                 )

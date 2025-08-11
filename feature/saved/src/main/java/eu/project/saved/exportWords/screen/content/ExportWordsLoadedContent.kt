@@ -18,8 +18,8 @@ import eu.project.saved.exportWords.ui.subscreenController
 internal fun BoxScope.exportWordsLoadedContent(
     uiState: ExportWordsUiState,
     onChangeWordSelection: (ExportableSavedWord) -> Unit,
-    onClickLeft: () -> Unit,
-    onClickRight: () -> Unit,
+    onSwitchToSelectWords: () -> Unit,
+    onTryToSwitchToExportSettings: () -> Unit,
     onClickSendMethod: () -> Unit,
     onClickDownloadMethod: () -> Unit
 ) {
@@ -34,8 +34,8 @@ internal fun BoxScope.exportWordsLoadedContent(
 
             subscreenController(
                 subscreenControllerState = uiState.subscreenControllerState,
-                onClickLeft = onClickLeft,
-                onClickRight = onClickRight
+                onSwitchToSelectWords = onSwitchToSelectWords,
+                onTryToSwitchToExportSettings = onTryToSwitchToExportSettings
             )
 
             when(uiState.currentSubscreen) {

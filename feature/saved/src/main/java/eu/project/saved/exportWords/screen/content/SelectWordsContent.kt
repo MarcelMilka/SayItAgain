@@ -34,6 +34,7 @@ internal fun ColumnScope.selectWordsContent(
     onChangeWordSelection: (ExportableSavedWord) -> Unit
 ) {
 
+    // TODO: get rid of magic values
     AnimatedVisibility(
         visible = selectWordsUiState.showNoWordsSelectedBanner,
         enter = fadeIn() + slideInVertically(

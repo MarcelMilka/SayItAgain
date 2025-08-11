@@ -5,10 +5,8 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.runtime.Composable
@@ -20,14 +18,15 @@ import androidx.compose.ui.unit.dp
 import eu.project.common.TestTags
 import eu.project.saved.exportWords.state.SubscreenControllerButtonState
 import eu.project.saved.exportWords.state.SubscreenControllerState
+import eu.project.ui.components.spacers.spacerHorizontal4
 import eu.project.ui.components.text.labelLarge
 import eu.project.ui.dimensions.BetweenWidgetsPadding
 
 @Composable
 internal fun subscreenController(
     subscreenControllerState: SubscreenControllerState,
-    onClickLeft: () -> Unit,
-    onClickRight: () -> Unit
+    onSwitchToSelectWords: () -> Unit,
+    onTryToSwitchToExportSettings: () -> Unit
 ) {
 
     Row(
@@ -40,15 +39,15 @@ internal fun subscreenController(
             subscreenControllerButton(
                 buttonState = subscreenControllerState.selectWordsButtonState,
                 testTag = TestTags.EXPORT_WORDS_SCREEN_SUBSCREEN_CONTROLLER_LEFT_BUTTON,
-                onClick = onClickLeft
+                onClick = onSwitchToSelectWords
             )
 
-            Spacer(modifier = Modifier.width(4.dp))
+            spacerHorizontal4()
 
             subscreenControllerButton(
                 buttonState = subscreenControllerState.exportSettingsButtonState,
                 testTag = TestTags.EXPORT_WORDS_SCREEN_SUBSCREEN_CONTROLLER_RIGHT_BUTTON,
-                onClick = { onClickRight() }
+                onClick = onTryToSwitchToExportSettings
             )
         }
     )
