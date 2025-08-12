@@ -3,6 +3,7 @@ package eu.project.saved.exportWords.screen.content
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -15,7 +16,7 @@ import eu.project.saved.exportWords.state.ExportWordsSubscreen
 import eu.project.saved.exportWords.ui.subscreenController
 
 @Composable
-internal fun BoxScope.exportWordsLoadedContent(
+internal fun ColumnScope.exportWordsLoadedContent(
     uiState: ExportWordsUiState,
     onChangeWordSelection: (ExportableSavedWord) -> Unit,
     onSwitchToSelectWords: () -> Unit,
@@ -24,34 +25,24 @@ internal fun BoxScope.exportWordsLoadedContent(
     onClickDownloadMethod: () -> Unit
 ) {
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .testTag(TestTags.EXPORT_WORDS_SCREEN_SHOW_READY_TO_EXPORT),
-        verticalArrangement = Arrangement.Top,
-        horizontalAlignment = Alignment.Start,
-        content = {
-
-            subscreenController(
-                subscreenControllerState = uiState.subscreenControllerState,
-                onSwitchToSelectWords = onSwitchToSelectWords,
-                onTryToSwitchToExportSettings = onTryToSwitchToExportSettings
-            )
-
-            when(uiState.currentSubscreen) {
-
-                ExportWordsSubscreen.SelectWords -> selectWordsContent(
-                    selectWordsUiState = uiState.selectWordsUiState,
-                    wordsToExport = uiState.wordsToExport,
-                    onChangeWordSelection = onChangeWordSelection
-                )
-
-                ExportWordsSubscreen.ExportSettings -> exportSettingsContent(
-                    exportSettingsUiState = uiState.exportSettingsUiState,
-                    onClickSendMethod = onClickSendMethod,
-                    onClickDownloadMethod = onClickDownloadMethod,
-                )
-            }
-        }
+    subscreenController(
+        subscreenControllerState = uiState.subscreenControllerState,
+        onSwitchToSelectWords = onSwitchToSelectWords,
+        onTryToSwitchToExportSettings = onTryToSwitchToExportSettings
     )
+
+    when(uiState.currentSubscreen) {
+
+        ExportWordsSubscreen.SelectWords -> selectWordsContent(
+            selectWordsUiState = uiState.selectWordsUiState,
+            wordsToExport = uiState.wordsToExport,
+            onChangeWordSelection = onChangeWordSelection
+        )
+
+        ExportWordsSubscreen.ExportSettings -> exportSettingsContent(
+            exportSettingsUiState = uiState.exportSettingsUiState,
+            onClickSendMethod = onClickSendMethod,
+            onClickDownloadMethod = onClickDownloadMethod,
+        )
+    }
 }

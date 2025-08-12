@@ -2,11 +2,9 @@ package eu.project.saved.exportWords.screen.content
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -21,14 +19,13 @@ import eu.project.ui.components.text.headlineLarge
 import eu.project.ui.theme.SecondaryWhite
 
 @Composable
-fun BoxScope.exportWordsDisconnectedContent() {
+fun ColumnScope.exportWordsDisconnectedContent() {
 
     // upper content
     Column(
         modifier = Modifier
-            .align(Alignment.TopCenter)
             .fillMaxWidth()
-            .fillMaxHeight(0.50f),
+            .weight(1f),
         verticalArrangement = Arrangement.Bottom,
         horizontalAlignment = Alignment.CenterHorizontally,
         content = {
@@ -43,9 +40,8 @@ fun BoxScope.exportWordsDisconnectedContent() {
     // bottom content
     Column(
         modifier = Modifier
-            .align(Alignment.BottomCenter)
             .fillMaxWidth()
-            .fillMaxHeight(0.50f),
+            .weight(1f),
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally,
         content = {

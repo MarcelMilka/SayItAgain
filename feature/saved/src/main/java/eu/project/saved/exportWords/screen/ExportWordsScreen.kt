@@ -1,9 +1,11 @@
 package eu.project.saved.exportWords.screen
 
-import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
@@ -27,11 +29,13 @@ internal fun exportWordsScreen(
     onClickDownloadMethod: () -> Unit
 ) {
 
-    Box(
+    Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(horizontal = ScreenPadding.dp)
-            .testTag(tag = TestTags.EXPORT_WORDS_SCREEN),
+            .testTag(TestTags.EXPORT_WORDS_SCREEN),
+        verticalArrangement = Arrangement.Top,
+        horizontalAlignment = Alignment.Start,
         content = {
 
             when(screenState) {
