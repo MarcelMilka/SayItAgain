@@ -26,10 +26,9 @@ object TestTags {
 
     // ExportWordsScreen
     const val EXPORT_WORDS_SCREEN = "ExportWordsScreen"
-    const val EXPORT_WORDS_SCREEN_SHOW_READY_TO_EXPORT = "ExportWordsScreen -> ShowReadyToExport"
     const val EXPORT_WORDS_SCREEN_SUBSCREEN_CONTROLLER = "ExportWordsScreen - SubscreenController"
-    const val EXPORT_WORDS_SCREEN_SUBSCREEN_CONTROLLER_LEFT_BUTTON = "ExportWordsScreen - SubscreenController - SubscreenControllerButton - Left"
-    const val EXPORT_WORDS_SCREEN_SUBSCREEN_CONTROLLER_RIGHT_BUTTON = "ExportWordsScreen - SubscreenController - SubscreenControllerButton - Right"
+    const val EXPORT_WORDS_SCREEN_SUBSCREEN_CONTROLLER_SELECT_WORDS_BUTTON = "ExportWordsScreen - SubscreenController - 'Select words' button"
+    const val EXPORT_WORDS_SCREEN_SUBSCREEN_CONTROLLER_EXPORT_SETTINGS_BUTTON = "ExportWordsScreen - SubscreenController - 'Export settings' button"
     const val EXPORT_WORDS_SCREEN_WARNING_BANNER = "ExportWordsScreen - WarningBanner"
     const val EXPORT_WORDS_SCREEN_LAZY_COLUMN = "ExportWordsScreen - LazyColumn"
 

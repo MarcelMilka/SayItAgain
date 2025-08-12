@@ -38,7 +38,7 @@ internal fun subscreenController(
 
             subscreenControllerButton(
                 buttonState = subscreenControllerState.selectWordsButtonState,
-                testTag = TestTags.EXPORT_WORDS_SCREEN_SUBSCREEN_CONTROLLER_LEFT_BUTTON,
+                testTag = TestTags.EXPORT_WORDS_SCREEN_SUBSCREEN_CONTROLLER_SELECT_WORDS_BUTTON,
                 onClick = onSwitchToSelectWords
             )
 
@@ -46,7 +46,7 @@ internal fun subscreenController(
 
             subscreenControllerButton(
                 buttonState = subscreenControllerState.exportSettingsButtonState,
-                testTag = TestTags.EXPORT_WORDS_SCREEN_SUBSCREEN_CONTROLLER_RIGHT_BUTTON,
+                testTag = TestTags.EXPORT_WORDS_SCREEN_SUBSCREEN_CONTROLLER_EXPORT_SETTINGS_BUTTON,
                 onClick = onTryToSwitchToExportSettings
             )
         }
