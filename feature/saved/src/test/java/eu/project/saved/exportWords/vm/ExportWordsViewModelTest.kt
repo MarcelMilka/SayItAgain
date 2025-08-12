@@ -6,6 +6,7 @@ import eu.project.common.connectivity.ConnectivityStatus
 import eu.project.common.localData.SavedWordsRepository
 import eu.project.common.localData.SavedWordsRepositoryDataState
 import eu.project.common.model.SavedWord
+import eu.project.common.testHelpers.SavedWordTestInstances
 import eu.project.saved.exportWords.intent.ExportWordsIntent
 import eu.project.saved.exportWords.model.ExportMethod
 import eu.project.saved.exportWords.model.ExportMethodVariants
@@ -32,7 +33,6 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TestWatcher
 import org.junit.runner.Description
-import java.util.UUID
 
 @ExperimentalCoroutinesApi
 class MainDispatcherRule(
@@ -46,19 +46,6 @@ class MainDispatcherRule(
     override fun finished(description: Description) {
         Dispatchers.resetMain()
     }
-}
-
-object SavedWordTestInstances {
-
-    val list = listOf(
-        SavedWord(UUID.fromString("a81bc81b-dead-4e5d-abff-90865d1e13b1"), "Cat", "English"),
-        SavedWord(UUID.fromString("550e8400-e29b-41d4-a716-446655440000"), "Monitor lizard", "English"),
-        SavedWord(UUID.fromString("123e4567-e89b-12d3-a456-426614174000"), "Hagetreboa", "Norwegian")
-    )
-
-    val first = list[0]
-    val second = list[1]
-    val third = list[2]
 }
 
 internal object ExportableSavedWordTestInstances {

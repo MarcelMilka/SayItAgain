@@ -34,17 +34,8 @@ internal fun ColumnScope.selectWordsContent(
     onChangeWordSelection: (ExportableSavedWord) -> Unit
 ) {
 
-    // TODO: get rid of magic values
-    AnimatedVisibility(
+    animatedVisibilityWrapper(
         visible = selectWordsUiState.showNoWordsSelectedBanner,
-        enter = fadeIn() + slideInVertically(
-            initialOffsetY = { -40 },
-            animationSpec = tween(durationMillis = 500, easing = FastOutSlowInEasing)
-        ),
-        exit = fadeOut() + slideOutVertically(
-            targetOffsetY = { -40 },
-            animationSpec = tween(durationMillis = 300, easing = FastOutLinearInEasing)
-        ),
         content = {
 
             warningBanner(
@@ -68,5 +59,29 @@ internal fun ColumnScope.selectWordsContent(
                 exportableWord.exportableSavedWordCard { onChangeWordSelection(exportableWord) }
             }
         }
+    )
+}
+
+// TODO: put it into the module 'ui'
+@Composable
+fun animatedVisibilityWrapper(
+    visible: Boolean,
+    content: @Composable() () -> Unit
+) {
+
+    // as the composable is going to be used globally without
+    // any other options, I decided to hardcode the values
+
+    AnimatedVisibility(
+        visible = visible,
+        enter = fadeIn() + slideInVertically(
+            initialOffsetY = { -40 },
+            animationSpec = tween(durationMillis = 500, easing = FastOutSlowInEasing)
+        ),
+        exit = fadeOut() + slideOutVertically(
+            targetOffsetY = { -40 },
+            animationSpec = tween(durationMillis = 300, easing = FastOutLinearInEasing)
+        ),
+        content = { content() }
     )
 }
