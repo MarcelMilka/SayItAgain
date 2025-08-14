@@ -53,7 +53,11 @@ internal fun homeScreen(
                         targetOffsetY = { -40 },
                         animationSpec = tween(durationMillis = 300, easing = FastOutLinearInEasing)
                     ),
-                    content = { noConnectionBanner() }
+                    content = {
+
+                        // TODO: replace with  warningBanner
+                        noConnectionBanner()
+                    }
                 )
             }
         )

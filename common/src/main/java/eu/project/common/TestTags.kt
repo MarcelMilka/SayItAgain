@@ -24,6 +24,15 @@ object TestTags {
     const val SAVED_WORDS_SCREEN_PRIMARY_BUTTON = "SavedWordsScreen - PrimaryButton - Cancel"
 
 
+    // ExportWordsScreen
+    const val EXPORT_WORDS_SCREEN = "ExportWordsScreen"
+    const val EXPORT_WORDS_SCREEN_SUBSCREEN_CONTROLLER = "ExportWordsScreen - SubscreenController"
+    const val EXPORT_WORDS_SCREEN_SUBSCREEN_CONTROLLER_SELECT_WORDS_BUTTON = "ExportWordsScreen - SubscreenController - 'Select words' button"
+    const val EXPORT_WORDS_SCREEN_SUBSCREEN_CONTROLLER_EXPORT_SETTINGS_BUTTON = "ExportWordsScreen - SubscreenController - 'Export settings' button"
+    const val EXPORT_WORDS_SCREEN_WARNING_BANNER = "ExportWordsScreen - WarningBanner"
+    const val EXPORT_WORDS_SCREEN_LAZY_COLUMN = "ExportWordsScreen - LazyColumn"
+
+
     // TopBar
     const val TOP_BAR = "TopBar"
     const val TOP_BAR_ICON_BUTTON_BACK_ICON = "TopBar - IconButtonBack - Back icon"

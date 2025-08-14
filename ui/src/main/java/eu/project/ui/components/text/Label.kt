@@ -19,3 +19,17 @@ fun labelLarge(
         style = SayItAgainTypography.labelLarge
     )
 }
+
+@Composable
+fun labelMedium(
+    text: String,
+    color: Color
+) {
+
+    Text(
+        text = text,
+        color = color,
+        textAlign = TextAlign.Center,
+        style = SayItAgainTypography.labelMedium
+    )
+}

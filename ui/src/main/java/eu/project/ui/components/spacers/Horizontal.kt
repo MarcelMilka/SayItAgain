@@ -6,6 +6,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
+@Composable
+fun spacerHorizontal4() {
+
+    Spacer(modifier = Modifier.width(4.dp))
+}
 
 @Composable
 fun spacerH8() {

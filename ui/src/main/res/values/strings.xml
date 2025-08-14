@@ -21,9 +21,26 @@
     <string name="delete">Delete</string>
     <string name="cancel">Cancel</string>
 
+
+    <!--   ExportWordsScreen   -->
+    <string name="no_words_selected">No words selected.</string>
+    <string name="please_select_at_least_one_word_before_continuing">Please select at least one word before continuing.</string>
+    <string name="how_would_you_like_to_export_your_words">How would you like to export your words?</string>
+    <string name="enter_the_email_to_receive_the_file">Enter the email to receive the file.</string>
+    <string name="email">E-mail</string>
+    <string name="download_to_device">Download to device</string>
+    <string name="download_to_device_explanation">The file will be saved directly to your device.</string>
+    <string name="send_to_email">Send to email</string>
+    <string name="send_to_email_explanation">The exported file will be sent to the email address you provide.</string>
+    <string name="or">Or</string>
+    <string name="something_went_wrong">Something went wrong.</string>
+    <string name="something_went_wrong_explanation">An unexpected error occurred. Please try again later.</string>
+
     <!--   Common   -->
     <string name="pick_and_transcribe">Pick and transcribe</string>
     <string name="something_is_off">Something’s off…</string>
+    <string name="no_internet_connection">No internet connection.</string>
+    <string name="no_internet_connection_explanation">You need to be online to generate a transcription. Please connect to the internet to continue.</string>
 
 
 
@@ -32,8 +49,13 @@
     <string name="back_icon_description">Back</string>
     <string name="info_icon_description">Info</string>
     <string name="illustration_error_description">Error</string>
+    <string name="illustration_offline_description">Offline</string>
     <string name="illustration_empty_description">Empty</string>
 
+
+    <!--   Content descriptions   -->
+    <string name="select_words">Select words</string>
+    <string name="export_settings">Export settings</string>
 
 
     <!--   Screen names   -->
