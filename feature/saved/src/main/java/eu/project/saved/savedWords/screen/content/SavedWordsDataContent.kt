@@ -1,4 +1,4 @@
-package eu.project.saved.savedWords.ui
+package eu.project.saved.savedWords.screen.content
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.BoxScope
@@ -11,10 +11,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import eu.project.common.model.SavedWord
+import eu.project.saved.savedWords.ui.savedWordCard
 import eu.project.ui.dimensions.WidgetPadding
 
 @Composable
-internal fun BoxScope.loadedDataComponent(
+internal fun BoxScope.savedWordsDataContent(
     retrievedData: List<SavedWord>,
     onRequestDelete: (SavedWord) -> Unit
 ) {

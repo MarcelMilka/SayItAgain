@@ -1,4 +1,4 @@
-package eu.project.saved.savedWords.ui
+package eu.project.saved.savedWords.screen.content
 
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
@@ -11,7 +11,7 @@ import eu.project.ui.components.text.labelLarge
 import eu.project.ui.theme.PrimaryWhite
 
 @Composable
-internal fun BoxScope.loadingComponent() {
+internal fun BoxScope.savedWordsLoadingContent() {
 
     Column(
         modifier = Modifier

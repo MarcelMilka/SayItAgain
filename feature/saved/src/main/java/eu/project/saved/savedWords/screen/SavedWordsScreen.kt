@@ -12,10 +12,10 @@ import eu.project.common.model.SavedWord
 import eu.project.saved.savedWords.state.DiscardWordDialogState
 import eu.project.saved.savedWords.state.SavedWordsScreenState
 import eu.project.saved.savedWords.ui.discardWordDialog
-import eu.project.saved.savedWords.ui.failedToLoadComponent
-import eu.project.saved.savedWords.ui.loadedDataComponent
-import eu.project.saved.savedWords.ui.loadingComponent
-import eu.project.saved.savedWords.ui.noDataComponent
+import eu.project.saved.savedWords.screen.content.savedWordsErrorContent
+import eu.project.saved.savedWords.screen.content.savedWordsDataContent
+import eu.project.saved.savedWords.screen.content.savedWordsLoadingContent
+import eu.project.saved.savedWords.screen.content.savedWordsNoDataContent
 import eu.project.ui.dimensions.ScreenPadding
 
 @Composable
@@ -37,22 +37,13 @@ internal fun savedWordsScreen(
 
             when(screenState) {
 
-                SavedWordsScreenState.Loading ->
-                    loadingComponent()
-
-                SavedWordsScreenState.Loaded.NoData ->
-                    noDataComponent { onNavigateSelectAudioScreen() }
-
-                is SavedWordsScreenState.Loaded.Data ->
-                    loadedDataComponent(
-                        retrievedData = screenState.retrievedData,
-                        onRequestDelete = { onRequestDelete(it) }
-                    )
-
-                is SavedWordsScreenState.Error ->
-                    failedToLoadComponent(
-                        cause = screenState.cause
-                    )
+                SavedWordsScreenState.Loading -> savedWordsLoadingContent()
+                is SavedWordsScreenState.Error -> savedWordsErrorContent(cause = screenState.cause)
+                SavedWordsScreenState.Loaded.NoData -> savedWordsNoDataContent { onNavigateSelectAudioScreen() }
+                is SavedWordsScreenState.Loaded.Data -> savedWordsDataContent(
+                    retrievedData = screenState.retrievedData,
+                    onRequestDelete = { onRequestDelete(it) }
+                )
             }
         }
     )

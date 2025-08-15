@@ -1,4 +1,4 @@
-package eu.project.saved.savedWords.ui
+package eu.project.saved.savedWords.screen.content
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.BoxScope
@@ -11,17 +11,14 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import eu.project.common.TestTags
 import eu.project.ui.R
-import eu.project.ui.components.buttons.primaryButton
 import eu.project.ui.components.spacers.spacerV8
 import eu.project.ui.components.text.bodyLarge
 import eu.project.ui.components.text.headlineLarge
-import eu.project.ui.dimensions.ThumbReachPadding
 import eu.project.ui.theme.SecondaryWhite
 
 @Composable
-internal fun BoxScope.noDataComponent(onNavigateSelectAudioScreen: () -> Unit) {
+internal fun BoxScope.savedWordsErrorContent(cause: String?) {
 
     Column(
         modifier = Modifier
@@ -31,34 +28,20 @@ internal fun BoxScope.noDataComponent(onNavigateSelectAudioScreen: () -> Unit) {
         content = {
 
             Image(
-                painter = painterResource(id = R.drawable.empty),
-                contentDescription = stringResource(R.string.illustration_empty_description)
+                painter = painterResource(id = R.drawable.error),
+                contentDescription = stringResource(R.string.illustration_error_description)
             )
 
             spacerV8()
 
-            headlineLarge(text = stringResource(R.string.kinda_empty))
+            headlineLarge(text = stringResource(R.string.something_is_off))
 
             spacerV8()
 
             bodyLarge(
-                text = stringResource(R.string.once_you_save_your_first_word_it_will_show_up_here),
+                text = "$cause",
                 color = SecondaryWhite,
                 textAlign = TextAlign.Center
-            )
-        }
-    )
-
-    Column(
-        modifier = Modifier
-            .align(Alignment.BottomCenter)
-            .padding(bottom = ThumbReachPadding.dp),
-        content = {
-
-            primaryButton(
-                text = stringResource(R.string.pick_and_transcribe),
-                onClick = { onNavigateSelectAudioScreen() },
-                testTag = TestTags.SAVED_WORDS_SCREEN_BUTTON_PICK_AND_TRANSCRIBE
             )
         }
     )
