@@ -4,8 +4,8 @@ import app.cash.turbine.test
 import eu.project.common.localData.SavedWordsRepository
 import eu.project.common.localData.SavedWordsRepositoryDataState
 import eu.project.common.model.SavedWord
-import eu.project.saved.savedWords.model.DialogViewState
-import eu.project.saved.savedWords.model.SavedWordsScreenViewState
+import eu.project.saved.savedWords.state.DiscardWordDialogState
+import eu.project.saved.savedWords.state.SavedWordsScreenState
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
@@ -73,9 +73,9 @@ class SavedWordsScreenViewModelTest {
         savedWordsScreenViewModel = SavedWordsScreenViewModel(savedWordsRepository)
 
         // test
-        savedWordsScreenViewModel.viewState.test {
+        savedWordsScreenViewModel.screenState.test {
 
-            assertEquals(SavedWordsScreenViewState.Loading, this.awaitItem())
+            assertEquals(SavedWordsScreenState.Loading, this.awaitItem())
         }
     }
 
@@ -89,14 +89,14 @@ class SavedWordsScreenViewModelTest {
         savedWordsScreenViewModel = SavedWordsScreenViewModel(savedWordsRepository)
 
         // test
-        savedWordsScreenViewModel.viewState.test {
+        savedWordsScreenViewModel.screenState.test {
 
             // Loading by default
-            assertEquals(SavedWordsScreenViewState.Loading, this.awaitItem())
+            assertEquals(SavedWordsScreenState.Loading, this.awaitItem())
 
             // NoData
             dataStateFlow.value = SavedWordsRepositoryDataState.Loaded.NoData
-            assertEquals(SavedWordsScreenViewState.Loaded.NoData, this.awaitItem())
+            assertEquals(SavedWordsScreenState.Loaded.NoData, this.awaitItem())
         }
     }
 
@@ -110,15 +110,15 @@ class SavedWordsScreenViewModelTest {
         savedWordsScreenViewModel = SavedWordsScreenViewModel(savedWordsRepository)
 
         // test
-        savedWordsScreenViewModel.viewState.test {
+        savedWordsScreenViewModel.screenState.test {
 
             // Loading by default
-            assertEquals(SavedWordsScreenViewState.Loading, this.awaitItem())
+            assertEquals(SavedWordsScreenState.Loading, this.awaitItem())
 
             // Data
             val retrievedData = listOf(firstEntityInstance, secondEntityInstance, thirdEntityInstance)
             dataStateFlow.value = SavedWordsRepositoryDataState.Loaded.Data(retrievedData)
-            assertEquals(SavedWordsScreenViewState.Loaded.Data(retrievedData), this.awaitItem())
+            assertEquals(SavedWordsScreenState.Loaded.Data(retrievedData), this.awaitItem())
         }
     }
 
@@ -132,14 +132,14 @@ class SavedWordsScreenViewModelTest {
         savedWordsScreenViewModel = SavedWordsScreenViewModel(savedWordsRepository)
 
         // test
-        savedWordsScreenViewModel.viewState.test {
+        savedWordsScreenViewModel.screenState.test {
 
             // Loading by default
-            assertEquals(SavedWordsScreenViewState.Loading, this.awaitItem())
+            assertEquals(SavedWordsScreenState.Loading, this.awaitItem())
 
             // FailedToLoad
             dataStateFlow.value = SavedWordsRepositoryDataState.FailedToLoad("Exemplary cause")
-            assertEquals(SavedWordsScreenViewState.FailedToLoad("Exemplary cause"), this.awaitItem())
+            assertEquals(SavedWordsScreenState.Error("Exemplary cause"), this.awaitItem())
         }
     }
 
@@ -155,14 +155,14 @@ class SavedWordsScreenViewModelTest {
         savedWordsScreenViewModel = SavedWordsScreenViewModel(savedWordsRepository)
 
         // test
-        savedWordsScreenViewModel.dialogViewState.test {
+        savedWordsScreenViewModel.dialogState.test {
 
             // hidden by default
-            assertEquals(DialogViewState.Hidden, this.awaitItem())
+            assertEquals(DiscardWordDialogState.Hidden, this.awaitItem())
 
             // request word deletion
             savedWordsScreenViewModel.requestWordDeletion(firstEntityInstance)
-            assertEquals(DialogViewState.Visible(firstEntityInstance), this.awaitItem())
+            assertEquals(DiscardWordDialogState.Visible(firstEntityInstance), this.awaitItem())
         }
     }
 
@@ -178,18 +178,18 @@ class SavedWordsScreenViewModelTest {
         savedWordsScreenViewModel = SavedWordsScreenViewModel(savedWordsRepository)
 
         // test
-        savedWordsScreenViewModel.dialogViewState.test {
+        savedWordsScreenViewModel.dialogState.test {
 
             // hidden by default
-            assertEquals(DialogViewState.Hidden, this.awaitItem())
+            assertEquals(DiscardWordDialogState.Hidden, this.awaitItem())
 
             // request word deletion
             savedWordsScreenViewModel.requestWordDeletion(firstEntityInstance)
-            assertEquals(DialogViewState.Visible(firstEntityInstance), this.awaitItem())
+            assertEquals(DiscardWordDialogState.Visible(firstEntityInstance), this.awaitItem())
 
             // cancel word deletion
             savedWordsScreenViewModel.cancelWordDeletion()
-            assertEquals(DialogViewState.Hidden, this.awaitItem())
+            assertEquals(DiscardWordDialogState.Hidden, this.awaitItem())
         }
     }
 
@@ -209,18 +209,18 @@ class SavedWordsScreenViewModelTest {
         savedWordsScreenViewModel = SavedWordsScreenViewModel(savedWordsRepository)
 
         // test
-        savedWordsScreenViewModel.dialogViewState.test {
+        savedWordsScreenViewModel.dialogState.test {
 
             // hidden by default
-            assertEquals(DialogViewState.Hidden, this.awaitItem())
+            assertEquals(DiscardWordDialogState.Hidden, this.awaitItem())
 
             // request word deletion
             savedWordsScreenViewModel.requestWordDeletion(firstEntityInstance)
-            assertEquals(DialogViewState.Visible(firstEntityInstance), this.awaitItem())
+            assertEquals(DiscardWordDialogState.Visible(firstEntityInstance), this.awaitItem())
 
             // delete the word
             savedWordsScreenViewModel.deleteWord(firstEntityInstance)
-            assertEquals(DialogViewState.Hidden, this.awaitItem())
+            assertEquals(DiscardWordDialogState.Hidden, this.awaitItem())
         }
 
         // verify

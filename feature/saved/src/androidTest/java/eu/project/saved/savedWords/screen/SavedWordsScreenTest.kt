@@ -2,7 +2,6 @@ package eu.project.saved.savedWords.screen
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.test.assertIsDisplayed
@@ -15,8 +14,8 @@ import androidx.compose.ui.test.performClick
 import androidx.test.platform.app.InstrumentationRegistry
 import eu.project.common.TestTags
 import eu.project.common.model.SavedWord
-import eu.project.saved.savedWords.model.DialogViewState
-import eu.project.saved.savedWords.model.SavedWordsScreenViewState
+import eu.project.saved.savedWords.state.DiscardWordDialogState
+import eu.project.saved.savedWords.state.SavedWordsScreenState
 import eu.project.ui.R
 import eu.project.ui.theme.Background
 import junit.framework.TestCase.assertEquals
@@ -39,8 +38,8 @@ internal class SavedWordsScreenTest {
     private var onCancel = false
     private var onNavigateSelectAudioScreen = false
 
-    private lateinit var viewState: MutableStateFlow<SavedWordsScreenViewState>
-    private lateinit var dialogViewState: MutableStateFlow<DialogViewState>
+    private lateinit var viewState: MutableStateFlow<SavedWordsScreenState>
+    private lateinit var dialogViewState: MutableStateFlow<DiscardWordDialogState>
 
     private val firstInstance = SavedWord(
         uuid = UUID.fromString("a81bc81b-dead-4e5d-abff-90865d1e13b1"),
@@ -66,17 +65,16 @@ internal class SavedWordsScreenTest {
         onCancel = false
         onNavigateSelectAudioScreen = false
 
-        viewState = MutableStateFlow(SavedWordsScreenViewState.Loading)
-        dialogViewState = MutableStateFlow(DialogViewState.Hidden)
+        viewState = MutableStateFlow(SavedWordsScreenState.Loading)
+        dialogViewState = MutableStateFlow(DiscardWordDialogState.Hidden)
 
         composeTestRule.setContent {
 
             Box(Modifier.background(Background)) {
 
                 savedWordsScreen(
-                    viewState = viewState.collectAsState().value,
-                    listState = LazyListState(),
-                    dialogViewState = dialogViewState.collectAsState().value,
+                    screenState = viewState.collectAsState().value,
+                    dialogState = dialogViewState.collectAsState().value,
 
                     onRequestDelete = { onRequestDelete = it },
                     onDelete = { onDelete = it },
@@ -93,7 +91,7 @@ internal class SavedWordsScreenTest {
     fun savedWordsScreen_displaysLoadingComponent_whenStateIsLoading() {
 
         // stub
-        viewState.value = SavedWordsScreenViewState.Loading
+        viewState.value = SavedWordsScreenState.Loading
 
         // test
         composeTestRule.onNodeWithTag(TestTags.SAVED_WORDS_SCREEN).assertIsDisplayed()
@@ -105,7 +103,7 @@ internal class SavedWordsScreenTest {
     fun savedWordsScreen_displaysNoDataComponent_whenStateIsNoData() {
 
         // stub
-        viewState.value = SavedWordsScreenViewState.Loaded.NoData
+        viewState.value = SavedWordsScreenState.Loaded.NoData
 
         // test
         composeTestRule.onNodeWithTag(TestTags.SAVED_WORDS_SCREEN).assertIsDisplayed()
@@ -124,7 +122,7 @@ internal class SavedWordsScreenTest {
 
         // stub
         val retrievedData = listOf(firstInstance, secondInstance, thirdInstance)
-        viewState.value = SavedWordsScreenViewState.Loaded.Data(retrievedData)
+        viewState.value = SavedWordsScreenState.Loaded.Data(retrievedData)
 
         // test
         composeTestRule.onNodeWithTag(TestTags.SAVED_WORDS_SCREEN).assertIsDisplayed()
@@ -144,7 +142,7 @@ internal class SavedWordsScreenTest {
     fun savedWordsScreen_displaysErrorComponent_whenStateIsFailedToLoad() {
 
         // stub
-        viewState.value = SavedWordsScreenViewState.FailedToLoad("Exemplary error cause")
+        viewState.value = SavedWordsScreenState.Error("Exemplary error cause")
 
         // test
             composeTestRule.onNodeWithTag(TestTags.SAVED_WORDS_SCREEN).assertIsDisplayed()
@@ -161,7 +159,7 @@ internal class SavedWordsScreenTest {
     fun savedWordsScreen_switchesFromLoadingToNoData() {
 
         // stub
-        viewState.value = SavedWordsScreenViewState.Loading
+        viewState.value = SavedWordsScreenState.Loading
 
         // test
         composeTestRule.onNodeWithTag(TestTags.SAVED_WORDS_SCREEN).assertIsDisplayed()
@@ -170,7 +168,7 @@ internal class SavedWordsScreenTest {
             composeTestRule.onNodeWithText(context.getString(R.string.loading)).assertIsDisplayed()
 
             // NoData
-            viewState.value = SavedWordsScreenViewState.Loaded.NoData
+            viewState.value = SavedWordsScreenState.Loaded.NoData
 
             composeTestRule.onNodeWithContentDescription(context.getString(R.string.illustration_empty_description)).assertIsDisplayed()
             composeTestRule.onNodeWithText(context.getString(R.string.kinda_empty)).assertIsDisplayed()
@@ -185,7 +183,7 @@ internal class SavedWordsScreenTest {
     fun savedWordsScreen_switchesFromLoadingToData() {
 
         // stub
-        viewState.value = SavedWordsScreenViewState.Loading
+        viewState.value = SavedWordsScreenState.Loading
 
         // test
         composeTestRule.onNodeWithTag(TestTags.SAVED_WORDS_SCREEN).assertIsDisplayed()
@@ -195,7 +193,7 @@ internal class SavedWordsScreenTest {
 
             // Data
             val retrievedData = listOf(firstInstance, secondInstance, thirdInstance)
-            viewState.value = SavedWordsScreenViewState.Loaded.Data(retrievedData)
+            viewState.value = SavedWordsScreenState.Loaded.Data(retrievedData)
 
             composeTestRule.onNodeWithTag(firstInstance.toString()).assertIsDisplayed()
             composeTestRule.onNodeWithTag(secondInstance.toString()).assertIsDisplayed()
@@ -206,7 +204,7 @@ internal class SavedWordsScreenTest {
     fun savedWordsScreen_switchesFromLoadingToFailedToLoad() {
 
         // stub
-        viewState.value = SavedWordsScreenViewState.Loading
+        viewState.value = SavedWordsScreenState.Loading
 
         // test
         composeTestRule.onNodeWithTag(TestTags.SAVED_WORDS_SCREEN).assertIsDisplayed()
@@ -215,7 +213,7 @@ internal class SavedWordsScreenTest {
             composeTestRule.onNodeWithText(context.getString(R.string.loading)).assertIsDisplayed()
 
             // FailedToLoad
-            viewState.value = SavedWordsScreenViewState.FailedToLoad("Exemplary error cause")
+            viewState.value = SavedWordsScreenState.Error("Exemplary error cause")
 
             composeTestRule.onNodeWithContentDescription(context.getString(R.string.illustration_error_description)).assertIsDisplayed()
             composeTestRule.onNodeWithText(context.getString(R.string.something_is_off)).assertIsDisplayed()
@@ -226,7 +224,7 @@ internal class SavedWordsScreenTest {
     fun savedWordsScreen_switchesFromNoDataToData() {
 
         // stub
-        viewState.value = SavedWordsScreenViewState.Loaded.NoData
+        viewState.value = SavedWordsScreenState.Loaded.NoData
 
         // test
 
@@ -241,7 +239,7 @@ internal class SavedWordsScreenTest {
 
             // Data
             val retrievedData = listOf(firstInstance, secondInstance, thirdInstance)
-            viewState.value = SavedWordsScreenViewState.Loaded.Data(retrievedData)
+            viewState.value = SavedWordsScreenState.Loaded.Data(retrievedData)
 
             composeTestRule.onNodeWithTag(firstInstance.toString()).assertIsDisplayed()
             composeTestRule.onNodeWithTag(secondInstance.toString()).assertIsDisplayed()
@@ -253,7 +251,7 @@ internal class SavedWordsScreenTest {
 
         // stub
         val retrievedData = listOf(firstInstance, secondInstance, thirdInstance)
-        viewState.value = SavedWordsScreenViewState.Loaded.Data(retrievedData)
+        viewState.value = SavedWordsScreenState.Loaded.Data(retrievedData)
 
         // test
 
@@ -263,7 +261,7 @@ internal class SavedWordsScreenTest {
             composeTestRule.onNodeWithTag(thirdInstance.toString()).assertIsDisplayed()
 
             // FailedToLoad
-            viewState.value = SavedWordsScreenViewState.FailedToLoad("Exemplary error cause")
+            viewState.value = SavedWordsScreenState.Error("Exemplary error cause")
 
             composeTestRule.onNodeWithContentDescription(context.getString(R.string.illustration_error_description)).assertIsDisplayed()
             composeTestRule.onNodeWithText(context.getString(R.string.something_is_off)).assertIsDisplayed()
@@ -278,7 +276,7 @@ internal class SavedWordsScreenTest {
 
         // stub
         val retrievedData = listOf(firstInstance, secondInstance, thirdInstance)
-        viewState.value = SavedWordsScreenViewState.Loaded.Data(retrievedData)
+        viewState.value = SavedWordsScreenState.Loaded.Data(retrievedData)
 
         // test
         composeTestRule.onNodeWithContentDescription("${context.getString(R.string.delete)} - $secondInstance").performClick()
@@ -290,8 +288,8 @@ internal class SavedWordsScreenTest {
 
         // stub
         val retrievedData = listOf(firstInstance, secondInstance, thirdInstance)
-        viewState.value = SavedWordsScreenViewState.Loaded.Data(retrievedData)
-        dialogViewState.value = DialogViewState.Hidden
+        viewState.value = SavedWordsScreenState.Loaded.Data(retrievedData)
+        dialogViewState.value = DiscardWordDialogState.Hidden
 
         // test
         composeTestRule.onNodeWithTag(TestTags.DISCARD_WORD_DIALOG).assertDoesNotExist()
@@ -310,8 +308,8 @@ internal class SavedWordsScreenTest {
 
         // stub
         val retrievedData = listOf(firstInstance, secondInstance, thirdInstance)
-        viewState.value = SavedWordsScreenViewState.Loaded.Data(retrievedData)
-        dialogViewState.value = DialogViewState.Visible(firstInstance)
+        viewState.value = SavedWordsScreenState.Loaded.Data(retrievedData)
+        dialogViewState.value = DiscardWordDialogState.Visible(firstInstance)
 
         // test
 
@@ -332,8 +330,8 @@ internal class SavedWordsScreenTest {
 
         // stub
         val retrievedData = listOf(firstInstance, secondInstance, thirdInstance)
-        viewState.value = SavedWordsScreenViewState.Loaded.Data(retrievedData)
-        dialogViewState.value = DialogViewState.Visible(firstInstance)
+        viewState.value = SavedWordsScreenState.Loaded.Data(retrievedData)
+        dialogViewState.value = DiscardWordDialogState.Visible(firstInstance)
 
         // test
         composeTestRule.onNodeWithTag(TestTags.SAVED_WORDS_SCREEN_SECONDARY_BUTTON).performClick()
@@ -346,8 +344,8 @@ internal class SavedWordsScreenTest {
 
         // stub
         val retrievedData = listOf(firstInstance, secondInstance, thirdInstance)
-        viewState.value = SavedWordsScreenViewState.Loaded.Data(retrievedData)
-        dialogViewState.value = DialogViewState.Visible(firstInstance)
+        viewState.value = SavedWordsScreenState.Loaded.Data(retrievedData)
+        dialogViewState.value = DiscardWordDialogState.Visible(firstInstance)
 
         // test
         composeTestRule.onNodeWithTag(TestTags.SAVED_WORDS_SCREEN_PRIMARY_BUTTON).performClick()
@@ -359,7 +357,7 @@ internal class SavedWordsScreenTest {
     fun savedWordsScreen_calls_onNavigateSelectAudioScreen() {
 
         // stub
-        viewState.value = SavedWordsScreenViewState.Loaded.NoData
+        viewState.value = SavedWordsScreenState.Loaded.NoData
 
         // test
         composeTestRule.onNodeWithTag(TestTags.SAVED_WORDS_SCREEN_BUTTON_PICK_AND_TRANSCRIBE).performClick()

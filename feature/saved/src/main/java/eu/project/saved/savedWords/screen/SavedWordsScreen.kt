@@ -9,8 +9,8 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import eu.project.common.TestTags
 import eu.project.common.model.SavedWord
-import eu.project.saved.savedWords.model.DialogViewState
-import eu.project.saved.savedWords.model.SavedWordsScreenViewState
+import eu.project.saved.savedWords.state.DiscardWordDialogState
+import eu.project.saved.savedWords.state.SavedWordsScreenState
 import eu.project.saved.savedWords.ui.discardWordDialog
 import eu.project.saved.savedWords.ui.failedToLoadComponent
 import eu.project.saved.savedWords.ui.loadedDataComponent
@@ -20,8 +20,8 @@ import eu.project.ui.dimensions.ScreenPadding
 
 @Composable
 internal fun savedWordsScreen(
-    viewState: SavedWordsScreenViewState,
-    dialogViewState: DialogViewState,
+    screenState: SavedWordsScreenState,
+    dialogState: DiscardWordDialogState,
     onRequestDelete: (SavedWord) -> Unit,
     onDelete: (SavedWord) -> Unit,
     onCancel: () -> Unit,
@@ -35,33 +35,33 @@ internal fun savedWordsScreen(
             .testTag(tag = TestTags.SAVED_WORDS_SCREEN),
         content = {
 
-            when(viewState) {
+            when(screenState) {
 
-                SavedWordsScreenViewState.Loading ->
+                SavedWordsScreenState.Loading ->
                     loadingComponent()
 
-                SavedWordsScreenViewState.Loaded.NoData ->
+                SavedWordsScreenState.Loaded.NoData ->
                     noDataComponent { onNavigateSelectAudioScreen() }
 
-                is SavedWordsScreenViewState.Loaded.Data ->
+                is SavedWordsScreenState.Loaded.Data ->
                     loadedDataComponent(
-                        retrievedData = viewState.retrievedData,
+                        retrievedData = screenState.retrievedData,
                         onRequestDelete = { onRequestDelete(it) }
                     )
 
-                is SavedWordsScreenViewState.FailedToLoad ->
+                is SavedWordsScreenState.Error ->
                     failedToLoadComponent(
-                        cause = viewState.cause
+                        cause = screenState.cause
                     )
             }
         }
     )
 
-    if (dialogViewState is DialogViewState.Visible) {
+    if (dialogState is DiscardWordDialogState.Visible) {
 
         discardWordDialog(
-            wordToDelete = dialogViewState.wordToDelete,
-            onDelete = { onDelete(dialogViewState.wordToDelete) },
+            wordToDelete = dialogState.wordToDelete,
+            onDelete = { onDelete(dialogState.wordToDelete) },
             onCancel = { onCancel() }
         )
     }

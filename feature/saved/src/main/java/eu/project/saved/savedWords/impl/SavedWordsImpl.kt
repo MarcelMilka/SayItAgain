@@ -15,12 +15,12 @@ fun NavGraphBuilder.savedWordsImpl(controller: NavHostController) {
     composable<Navigation.Saved.SavedWordsScreen> { backStackEntry ->
 
         val viewModel = hiltViewModel<SavedWordsScreenViewModel>()
-        val viewState by viewModel.viewState.collectAsStateWithLifecycle()
-        val dialogViewState by viewModel.dialogViewState.collectAsStateWithLifecycle()
+        val screenState by viewModel.screenState.collectAsStateWithLifecycle()
+        val dialogState by viewModel.dialogState.collectAsStateWithLifecycle()
 
         savedWordsScreen(
-            viewState = viewState,
-            dialogViewState = dialogViewState,
+            screenState = screenState,
+            dialogState = dialogState,
             onRequestDelete = { viewModel.requestWordDeletion(it) },
             onDelete = { viewModel.deleteWord(it) },
             onCancel = { viewModel.cancelWordDeletion() },

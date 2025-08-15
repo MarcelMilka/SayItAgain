@@ -6,8 +6,8 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import eu.project.common.localData.SavedWordsRepository
 import eu.project.common.localData.SavedWordsRepositoryDataState
 import eu.project.common.model.SavedWord
-import eu.project.saved.savedWords.model.DialogViewState
-import eu.project.saved.savedWords.model.SavedWordsScreenViewState
+import eu.project.saved.savedWords.state.DiscardWordDialogState
+import eu.project.saved.savedWords.state.SavedWordsScreenState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
@@ -16,11 +16,11 @@ import javax.inject.Inject
 @HiltViewModel
 internal class SavedWordsScreenViewModel @Inject constructor(private val savedWordsRepository: SavedWordsRepository): ViewModel() {
 
-    private val _viewState = MutableStateFlow<SavedWordsScreenViewState>(SavedWordsScreenViewState.Loading)
-    val viewState = _viewState.asStateFlow()
+    private val _screenState = MutableStateFlow<SavedWordsScreenState>(SavedWordsScreenState.Loading)
+    val screenState = _screenState.asStateFlow()
 
-    private val _dialogViewState = MutableStateFlow<DialogViewState>(DialogViewState.Hidden)
-    val dialogViewState = _dialogViewState.asStateFlow()
+    private val _dialogState = MutableStateFlow<DiscardWordDialogState>(DiscardWordDialogState.Hidden)
+    val dialogState = _dialogState.asStateFlow()
 
     init {
 
@@ -33,16 +33,16 @@ internal class SavedWordsScreenViewModel @Inject constructor(private val savedWo
                     when(it) {
 
                         SavedWordsRepositoryDataState.Loading ->
-                            _viewState.value = SavedWordsScreenViewState.Loading
+                            _screenState.value = SavedWordsScreenState.Loading
 
                         SavedWordsRepositoryDataState.Loaded.NoData ->
-                            _viewState.value = SavedWordsScreenViewState.Loaded.NoData
+                            _screenState.value = SavedWordsScreenState.Loaded.NoData
 
                         is SavedWordsRepositoryDataState.Loaded.Data ->
-                            _viewState.value = SavedWordsScreenViewState.Loaded.Data(retrievedData = it.retrievedData)
+                            _screenState.value = SavedWordsScreenState.Loaded.Data(retrievedData = it.retrievedData)
 
                         is SavedWordsRepositoryDataState.FailedToLoad ->
-                            _viewState.value = SavedWordsScreenViewState.FailedToLoad(cause = it.cause)
+                            _screenState.value = SavedWordsScreenState.Error(cause = it.cause)
                     }
                 }
         }
@@ -52,7 +52,7 @@ internal class SavedWordsScreenViewModel @Inject constructor(private val savedWo
 
         viewModelScope.launch {
 
-            _dialogViewState.value = DialogViewState.Visible(wordToDelete)
+            _dialogState.value = DiscardWordDialogState.Visible(wordToDelete)
         }
     }
 
@@ -60,7 +60,7 @@ internal class SavedWordsScreenViewModel @Inject constructor(private val savedWo
 
         viewModelScope.launch {
 
-            _dialogViewState.value = DialogViewState.Hidden
+            _dialogState.value = DiscardWordDialogState.Hidden
         }
     }
 
@@ -69,7 +69,7 @@ internal class SavedWordsScreenViewModel @Inject constructor(private val savedWo
         viewModelScope.launch {
 
             savedWordsRepository.deleteWord(wordToDelete = wordToDelete)
-            _dialogViewState.value = DialogViewState.Hidden
+            _dialogState.value = DiscardWordDialogState.Hidden
         }
     }
 }
