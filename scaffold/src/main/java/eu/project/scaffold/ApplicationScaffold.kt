@@ -16,7 +16,7 @@ import eu.project.common.navigation.Navigation
 import eu.project.floatingActionButton.impl.floatingActionButtonImpl
 import eu.project.home.impl.homeScreenImpl
 import eu.project.saved.exportWords.impl.exportWordsImpl
-import eu.project.saved.savedWords.impl.savedWordsScreenImpl
+import eu.project.saved.savedWords.impl.savedWordsImpl
 import eu.project.topBar.impl.topBarImpl
 import eu.project.transcribe.selectAudio.impl.selectAudioScreenImpl
 import eu.project.ui.theme.Background
@@ -55,7 +55,7 @@ fun applicationScaffold() {
 
                     this.navigation<Navigation.Saved.RouteSaved>(startDestination = Navigation.Saved.SavedWordsScreen) {
 
-                        this.savedWordsScreenImpl(controller)
+                        this.savedWordsImpl(controller)
 
                         this.exportWordsImpl(controller)
                     }
