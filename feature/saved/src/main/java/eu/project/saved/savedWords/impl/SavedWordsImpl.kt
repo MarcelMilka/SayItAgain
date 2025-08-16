@@ -8,13 +8,13 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import eu.project.common.navigation.Navigation
 import eu.project.saved.savedWords.screen.savedWordsScreen
-import eu.project.saved.savedWords.vm.SavedWordsScreenViewModel
+import eu.project.saved.savedWords.vm.SavedWordsViewModel
 
 fun NavGraphBuilder.savedWordsImpl(controller: NavHostController) {
 
     composable<Navigation.Saved.SavedWordsScreen> { backStackEntry ->
 
-        val viewModel = hiltViewModel<SavedWordsScreenViewModel>()
+        val viewModel = hiltViewModel<SavedWordsViewModel>()
         val screenState by viewModel.screenState.collectAsStateWithLifecycle()
         val dialogState by viewModel.dialogState.collectAsStateWithLifecycle()
 

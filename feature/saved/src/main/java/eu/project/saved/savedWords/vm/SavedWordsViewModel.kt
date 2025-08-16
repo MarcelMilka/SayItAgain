@@ -19,7 +19,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-internal class SavedWordsScreenViewModel @Inject constructor(private val savedWordsRepository: SavedWordsRepository): ViewModel() {
+internal class SavedWordsViewModel @Inject constructor(private val savedWordsRepository: SavedWordsRepository): ViewModel() {
 
     private val _screenState = MutableStateFlow<SavedWordsScreenState>(SavedWordsScreenState.Loading)
     val screenState = _screenState.asStateFlow()

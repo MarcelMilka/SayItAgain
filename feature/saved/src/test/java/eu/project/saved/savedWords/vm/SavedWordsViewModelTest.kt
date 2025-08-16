@@ -19,7 +19,7 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Test
 
-class SavedWordsScreenViewModelTest {
+class SavedWordsViewModelTest {
 
     private val testDispatcher = StandardTestDispatcher()
 
@@ -28,13 +28,13 @@ class SavedWordsScreenViewModelTest {
     private var dataStateFlow = MutableStateFlow<SavedWordsRepositoryDataState>(SavedWordsRepositoryDataState.Loading)
 
     // tested class
-    private lateinit var viewModel: SavedWordsScreenViewModel
+    private lateinit var viewModel: SavedWordsViewModel
 
     @Before
     fun setup() {
 
         every { savedWordsRepository.dataState } returns dataStateFlow
-        viewModel = SavedWordsScreenViewModel(savedWordsRepository)
+        viewModel = SavedWordsViewModel(savedWordsRepository)
     }
 
 
