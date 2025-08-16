@@ -14,6 +14,7 @@ import androidx.compose.ui.test.performClick
 import androidx.test.platform.app.InstrumentationRegistry
 import eu.project.common.TestTags
 import eu.project.common.model.SavedWord
+import eu.project.common.testHelpers.SavedWordTestInstances
 import eu.project.saved.savedWords.state.DiscardWordDialogState
 import eu.project.saved.savedWords.state.SavedWordsScreenState
 import eu.project.ui.R
@@ -21,12 +22,12 @@ import eu.project.ui.theme.Background
 import junit.framework.TestCase.assertEquals
 import junit.framework.TestCase.assertTrue
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.update
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import java.util.UUID
 
-internal class SavedWordsScreenTest {
+class SavedWordsScreenTest {
 
     @get:Rule
     val composeTestRule = createComposeRule()
@@ -41,30 +42,18 @@ internal class SavedWordsScreenTest {
     private lateinit var viewState: MutableStateFlow<SavedWordsScreenState>
     private lateinit var dialogViewState: MutableStateFlow<DiscardWordDialogState>
 
-    private val firstInstance = SavedWord(
-        uuid = UUID.fromString("a81bc81b-dead-4e5d-abff-90865d1e13b1"),
-        word = "Cat",
-        language = "English"
-    )
-    private val secondInstance = SavedWord(
-        uuid = UUID.fromString("550e8400-e29b-41d4-a716-446655440000"),
-        word = "Monitor lizard",
-        language = "English"
-    )
-    private val thirdInstance = SavedWord(
-        uuid = UUID.fromString("123e4567-e89b-12d3-a456-426614174000"),
-        word = "Hagetreboa",
-        language = "Norwegian"
-    )
+    private val data = SavedWordTestInstances.list
+    private val swInstances = SavedWordTestInstances
 
     @Before
-    fun setUp() {
+    fun setup() {
 
         onRequestDelete = null
         onDelete = null
         onCancel = false
         onNavigateSelectAudioScreen = false
 
+        // initialize state flows
         viewState = MutableStateFlow(SavedWordsScreenState.Loading)
         dialogViewState = MutableStateFlow(DiscardWordDialogState.Hidden)
 
@@ -75,7 +64,6 @@ internal class SavedWordsScreenTest {
                 savedWordsScreen(
                     screenState = viewState.collectAsState().value,
                     dialogState = dialogViewState.collectAsState().value,
-
                     onRequestDelete = { onRequestDelete = it },
                     onDelete = { onDelete = it },
                     onCancel = { onCancel = true },
@@ -87,280 +75,319 @@ internal class SavedWordsScreenTest {
 
 
 
-    @Test
-    fun savedWordsScreen_displaysLoadingComponent_whenStateIsLoading() {
+//- screen state visibility tests --------------------------------------------------------------------------------------
 
-        // stub
-        viewState.value = SavedWordsScreenState.Loading
+    @Test
+    fun savedWordsScreen_loadingState_showsLoadingComponent() {
+
+        // setup
+        viewState.update { SavedWordsScreenState.Loading }
 
         // test
         composeTestRule.onNodeWithTag(TestTags.SAVED_WORDS_SCREEN).assertIsDisplayed()
-
         composeTestRule.onNodeWithText(context.getString(R.string.loading)).assertIsDisplayed()
     }
 
     @Test
-    fun savedWordsScreen_displaysNoDataComponent_whenStateIsNoData() {
+    fun savedWordsScreen_noDataState_showsNoDataComponent() {
 
-        // stub
-        viewState.value = SavedWordsScreenState.Loaded.NoData
-
-        // test
-        composeTestRule.onNodeWithTag(TestTags.SAVED_WORDS_SCREEN).assertIsDisplayed()
-
-            // illustration and text
-            composeTestRule.onNodeWithContentDescription(context.getString(R.string.illustration_empty_description)).assertIsDisplayed()
-            composeTestRule.onNodeWithText(context.getString(R.string.kinda_empty)).assertIsDisplayed()
-            composeTestRule.onNodeWithText(context.getString(R.string.kinda_empty_explanation)).assertIsDisplayed()
-
-            // button "Pick and transcribe"
-            composeTestRule.onNodeWithText(context.getString(R.string.pick_and_transcribe)).assertIsDisplayed()
-    }
-
-    @Test
-    fun savedWordsScreen_displaysDataComponent_whenStateIsLoadedWithData() {
-
-        // stub
-        val retrievedData = listOf(firstInstance, secondInstance, thirdInstance)
-        viewState.value = SavedWordsScreenState.Loaded.Data(retrievedData)
+        // setup
+        viewState.update { SavedWordsScreenState.Loaded.NoData }
 
         // test
         composeTestRule.onNodeWithTag(TestTags.SAVED_WORDS_SCREEN).assertIsDisplayed()
 
-            // saved words are displayed
-            composeTestRule.onNodeWithTag(firstInstance.toString()).assertIsDisplayed()
-            composeTestRule.onNodeWithTag(secondInstance.toString()).assertIsDisplayed()
-            composeTestRule.onNodeWithTag(thirdInstance.toString()).assertIsDisplayed()
+        // illustration and text
+        composeTestRule.onNodeWithContentDescription(context.getString(R.string.illustration_empty_description)).assertIsDisplayed()
+        composeTestRule.onNodeWithText(context.getString(R.string.kinda_empty)).assertIsDisplayed()
+        composeTestRule.onNodeWithText(context.getString(R.string.kinda_empty_explanation)).assertIsDisplayed()
 
-            // every savedWordCard's icon button is clickable
-            composeTestRule.onNodeWithContentDescription("${context.getString(R.string.delete)} - $firstInstance").assertIsEnabled()
-            composeTestRule.onNodeWithContentDescription("${context.getString(R.string.delete)} - $secondInstance").assertIsEnabled()
-            composeTestRule.onNodeWithContentDescription("${context.getString(R.string.delete)} - $thirdInstance").assertIsEnabled()
+        // button "Pick and transcribe"
+        composeTestRule.onNodeWithText(context.getString(R.string.pick_and_transcribe)).assertIsDisplayed()
     }
 
     @Test
-    fun savedWordsScreen_displaysErrorComponent_whenStateIsFailedToLoad() {
+    fun savedWordsScreen_dataState_showsDataComponentWithAllWords() {
 
-        // stub
-        viewState.value = SavedWordsScreenState.Error("Exemplary error cause")
-
-        // test
-            composeTestRule.onNodeWithTag(TestTags.SAVED_WORDS_SCREEN).assertIsDisplayed()
-
-            // illustration and text
-            composeTestRule.onNodeWithContentDescription(context.getString(R.string.illustration_error_description)).assertIsDisplayed()
-            composeTestRule.onNodeWithText(context.getString(R.string.something_is_off)).assertIsDisplayed()
-            composeTestRule.onNodeWithText("Exemplary error cause").assertIsDisplayed()
-    }
-
-
-
-    @Test
-    fun savedWordsScreen_switchesFromLoadingToNoData() {
-
-        // stub
-        viewState.value = SavedWordsScreenState.Loading
+        // setup
+        viewState.update { SavedWordsScreenState.Loaded.Data(data) }
 
         // test
         composeTestRule.onNodeWithTag(TestTags.SAVED_WORDS_SCREEN).assertIsDisplayed()
 
-            // Loading
-            composeTestRule.onNodeWithText(context.getString(R.string.loading)).assertIsDisplayed()
+        // saved words are displayed
+        composeTestRule.onNodeWithTag(swInstances.first.toString()).assertIsDisplayed()
+        composeTestRule.onNodeWithTag(swInstances.second.toString()).assertIsDisplayed()
+        composeTestRule.onNodeWithTag(swInstances.third.toString()).assertIsDisplayed()
 
-            // NoData
-            viewState.value = SavedWordsScreenState.Loaded.NoData
-
-            composeTestRule.onNodeWithContentDescription(context.getString(R.string.illustration_empty_description)).assertIsDisplayed()
-            composeTestRule.onNodeWithText(context.getString(R.string.kinda_empty)).assertIsDisplayed()
-            composeTestRule.onNodeWithText(context.getString(R.string.kinda_empty_explanation)).assertIsDisplayed()
-
-            composeTestRule.onNodeWithText(context.getString(R.string.pick_and_transcribe)).assertIsDisplayed()
-            composeTestRule.onNodeWithTag(TestTags.SAVED_WORDS_SCREEN_BUTTON_PICK_AND_TRANSCRIBE).assertIsDisplayed()
-            composeTestRule.onNodeWithTag(TestTags.SAVED_WORDS_SCREEN_BUTTON_PICK_AND_TRANSCRIBE).assertIsEnabled()
+        // every savedWordCard's icon button is clickable
+        composeTestRule.onNodeWithContentDescription("${context.getString(R.string.delete)} - ${swInstances.first}").assertIsEnabled()
+        composeTestRule.onNodeWithContentDescription("${context.getString(R.string.delete)} - ${swInstances.second}").assertIsEnabled()
+        composeTestRule.onNodeWithContentDescription("${context.getString(R.string.delete)} - ${swInstances.third}").assertIsEnabled()
     }
 
     @Test
-    fun savedWordsScreen_switchesFromLoadingToData() {
+    fun savedWordsScreen_errorState_showsErrorComponentWithCorrectMessage() {
 
-        // stub
-        viewState.value = SavedWordsScreenState.Loading
+        // setup
+        val errorMessage = "Exemplary error cause"
+        viewState.update { SavedWordsScreenState.Error(errorMessage) }
 
         // test
         composeTestRule.onNodeWithTag(TestTags.SAVED_WORDS_SCREEN).assertIsDisplayed()
 
-            // Loading
-            composeTestRule.onNodeWithText(context.getString(R.string.loading)).assertIsDisplayed()
-
-            // Data
-            val retrievedData = listOf(firstInstance, secondInstance, thirdInstance)
-            viewState.value = SavedWordsScreenState.Loaded.Data(retrievedData)
-
-            composeTestRule.onNodeWithTag(firstInstance.toString()).assertIsDisplayed()
-            composeTestRule.onNodeWithTag(secondInstance.toString()).assertIsDisplayed()
-            composeTestRule.onNodeWithTag(thirdInstance.toString()).assertIsDisplayed()
+        // illustration and text
+        composeTestRule.onNodeWithContentDescription(context.getString(R.string.illustration_error_description)).assertIsDisplayed()
+        composeTestRule.onNodeWithText(context.getString(R.string.something_went_wrong)).assertIsDisplayed()
+        composeTestRule.onNodeWithText(errorMessage).assertIsDisplayed()
     }
 
+
+
+//- screen state transition tests --------------------------------------------------------------------------------------
+
     @Test
-    fun savedWordsScreen_switchesFromLoadingToFailedToLoad() {
+    fun savedWordsScreen_transitionsFromLoadingToNoData_correctly() {
 
-        // stub
-        viewState.value = SavedWordsScreenState.Loading
+        // setup
+        viewState.update { SavedWordsScreenState.Loading }
 
-        // test
+        // test initial loading state
         composeTestRule.onNodeWithTag(TestTags.SAVED_WORDS_SCREEN).assertIsDisplayed()
+        composeTestRule.onNodeWithText(context.getString(R.string.loading)).assertIsDisplayed()
 
-            // Loading
-            composeTestRule.onNodeWithText(context.getString(R.string.loading)).assertIsDisplayed()
+        // transition to no data
+        viewState.update { SavedWordsScreenState.Loaded.NoData }
 
-            // FailedToLoad
-            viewState.value = SavedWordsScreenState.Error("Exemplary error cause")
-
-            composeTestRule.onNodeWithContentDescription(context.getString(R.string.illustration_error_description)).assertIsDisplayed()
-            composeTestRule.onNodeWithText(context.getString(R.string.something_is_off)).assertIsDisplayed()
-            composeTestRule.onNodeWithText("Exemplary error cause").assertIsDisplayed()
+        // verify no data state
+        composeTestRule.onNodeWithContentDescription(context.getString(R.string.illustration_empty_description)).assertIsDisplayed()
+        composeTestRule.onNodeWithText(context.getString(R.string.kinda_empty)).assertIsDisplayed()
+        composeTestRule.onNodeWithText(context.getString(R.string.kinda_empty_explanation)).assertIsDisplayed()
+        composeTestRule.onNodeWithText(context.getString(R.string.pick_and_transcribe)).assertIsDisplayed()
+        composeTestRule.onNodeWithTag(TestTags.SAVED_WORDS_SCREEN_BUTTON_PICK_AND_TRANSCRIBE).assertIsDisplayed()
+        composeTestRule.onNodeWithTag(TestTags.SAVED_WORDS_SCREEN_BUTTON_PICK_AND_TRANSCRIBE).assertIsEnabled()
     }
 
     @Test
-    fun savedWordsScreen_switchesFromNoDataToData() {
+    fun savedWordsScreen_transitionsFromLoadingToData_correctly() {
 
-        // stub
-        viewState.value = SavedWordsScreenState.Loaded.NoData
+        // setup
+        viewState.update { SavedWordsScreenState.Loading }
+
+        // test initial loading state
+        composeTestRule.onNodeWithTag(TestTags.SAVED_WORDS_SCREEN).assertIsDisplayed()
+        composeTestRule.onNodeWithText(context.getString(R.string.loading)).assertIsDisplayed()
+
+        // transition to data
+        viewState.update { SavedWordsScreenState.Loaded.Data(data) }
+
+        // verify data state
+        composeTestRule.onNodeWithTag(swInstances.first.toString()).assertIsDisplayed()
+        composeTestRule.onNodeWithTag(swInstances.second.toString()).assertIsDisplayed()
+        composeTestRule.onNodeWithTag(swInstances.third.toString()).assertIsDisplayed()
+    }
+
+    @Test
+    fun savedWordsScreen_transitionsFromLoadingToError_correctly() {
+
+        // setup
+        viewState.update { SavedWordsScreenState.Loading }
+
+        // test initial loading state
+        composeTestRule.onNodeWithTag(TestTags.SAVED_WORDS_SCREEN).assertIsDisplayed()
+        composeTestRule.onNodeWithText(context.getString(R.string.loading)).assertIsDisplayed()
+
+        // transition to error
+        val errorMessage = "Exemplary error cause"
+        viewState.update { SavedWordsScreenState.Error(errorMessage) }
+
+        // verify error state
+        composeTestRule.onNodeWithContentDescription(context.getString(R.string.illustration_error_description)).assertIsDisplayed()
+        composeTestRule.onNodeWithText(context.getString(R.string.something_went_wrong)).assertIsDisplayed()
+        composeTestRule.onNodeWithText(errorMessage).assertIsDisplayed()
+    }
+
+    @Test
+    fun savedWordsScreen_transitionsFromNoDataToData_correctly() {
+
+        // setup
+        viewState.update { SavedWordsScreenState.Loaded.NoData }
+
+        // test initial no data state
+        composeTestRule.onNodeWithContentDescription(context.getString(R.string.illustration_empty_description)).assertIsDisplayed()
+        composeTestRule.onNodeWithText(context.getString(R.string.kinda_empty)).assertIsDisplayed()
+        composeTestRule.onNodeWithText(context.getString(R.string.kinda_empty_explanation)).assertIsDisplayed()
+        composeTestRule.onNodeWithText(context.getString(R.string.pick_and_transcribe)).assertIsDisplayed()
+        composeTestRule.onNodeWithTag(TestTags.SAVED_WORDS_SCREEN_BUTTON_PICK_AND_TRANSCRIBE).assertIsDisplayed()
+        composeTestRule.onNodeWithTag(TestTags.SAVED_WORDS_SCREEN_BUTTON_PICK_AND_TRANSCRIBE).assertIsEnabled()
+
+        // transition to data
+        viewState.update { SavedWordsScreenState.Loaded.Data(data) }
+
+        // verify data state
+        composeTestRule.onNodeWithTag(swInstances.first.toString()).assertIsDisplayed()
+        composeTestRule.onNodeWithTag(swInstances.second.toString()).assertIsDisplayed()
+        composeTestRule.onNodeWithTag(swInstances.third.toString()).assertIsDisplayed()
+    }
+
+    @Test
+    fun savedWordsScreen_transitionsFromDataToError_correctly() {
+
+        // setup
+        viewState.update { SavedWordsScreenState.Loaded.Data(data) }
+
+        // test initial data state
+        composeTestRule.onNodeWithTag(swInstances.first.toString()).assertIsDisplayed()
+        composeTestRule.onNodeWithTag(swInstances.second.toString()).assertIsDisplayed()
+        composeTestRule.onNodeWithTag(swInstances.third.toString()).assertIsDisplayed()
+
+        // transition to error
+        val errorMessage = "Exemplary error cause"
+        viewState.update { SavedWordsScreenState.Error(errorMessage) }
+
+        // verify error state
+        composeTestRule.onNodeWithContentDescription(context.getString(R.string.illustration_error_description)).assertIsDisplayed()
+        composeTestRule.onNodeWithText(context.getString(R.string.something_went_wrong)).assertIsDisplayed()
+        composeTestRule.onNodeWithText(errorMessage).assertIsDisplayed()
+    }
+
+
+
+//- user interaction tests ---------------------------------------------------------------------------------------------
+
+    @Test
+    fun savedWordsScreen_deleteButtonClick_callsOnRequestDeleteWithCorrectWord() {
+
+        // setup
+        viewState.update { SavedWordsScreenState.Loaded.Data(data) }
 
         // test
-
-            // NoData
-            composeTestRule.onNodeWithContentDescription(context.getString(R.string.illustration_empty_description)).assertIsDisplayed()
-            composeTestRule.onNodeWithText(context.getString(R.string.kinda_empty)).assertIsDisplayed()
-            composeTestRule.onNodeWithText(context.getString(R.string.kinda_empty_explanation)).assertIsDisplayed()
-
-            composeTestRule.onNodeWithText(context.getString(R.string.pick_and_transcribe)).assertIsDisplayed()
-            composeTestRule.onNodeWithTag(TestTags.SAVED_WORDS_SCREEN_BUTTON_PICK_AND_TRANSCRIBE).assertIsDisplayed()
-            composeTestRule.onNodeWithTag(TestTags.SAVED_WORDS_SCREEN_BUTTON_PICK_AND_TRANSCRIBE).assertIsEnabled()
-
-            // Data
-            val retrievedData = listOf(firstInstance, secondInstance, thirdInstance)
-            viewState.value = SavedWordsScreenState.Loaded.Data(retrievedData)
-
-            composeTestRule.onNodeWithTag(firstInstance.toString()).assertIsDisplayed()
-            composeTestRule.onNodeWithTag(secondInstance.toString()).assertIsDisplayed()
-            composeTestRule.onNodeWithTag(thirdInstance.toString()).assertIsDisplayed()
+        composeTestRule.onNodeWithContentDescription("${context.getString(R.string.delete)} - ${swInstances.second}").performClick()
+        assertEquals(swInstances.second, onRequestDelete)
     }
 
     @Test
-    fun savedWordsScreen_switchesFromDataToFailedToLoad() {
+    fun savedWordsScreen_pickAndTranscribeButtonClick_callsOnNavigateSelectAudioScreen() {
 
-        // stub
-        val retrievedData = listOf(firstInstance, secondInstance, thirdInstance)
-        viewState.value = SavedWordsScreenState.Loaded.Data(retrievedData)
+        // setup
+        viewState.update { SavedWordsScreenState.Loaded.NoData }
 
         // test
-
-            // Data
-            composeTestRule.onNodeWithTag(firstInstance.toString()).assertIsDisplayed()
-            composeTestRule.onNodeWithTag(secondInstance.toString()).assertIsDisplayed()
-            composeTestRule.onNodeWithTag(thirdInstance.toString()).assertIsDisplayed()
-
-            // FailedToLoad
-            viewState.value = SavedWordsScreenState.Error("Exemplary error cause")
-
-            composeTestRule.onNodeWithContentDescription(context.getString(R.string.illustration_error_description)).assertIsDisplayed()
-            composeTestRule.onNodeWithText(context.getString(R.string.something_is_off)).assertIsDisplayed()
-            composeTestRule.onNodeWithText("Exemplary error cause").assertIsDisplayed()
-
+        composeTestRule.onNodeWithTag(TestTags.SAVED_WORDS_SCREEN_BUTTON_PICK_AND_TRANSCRIBE).performClick()
+        assertTrue(onNavigateSelectAudioScreen)
     }
 
 
 
-    @Test
-    fun savedWordsScreen_calls_onRequestDelete() {
-
-        // stub
-        val retrievedData = listOf(firstInstance, secondInstance, thirdInstance)
-        viewState.value = SavedWordsScreenState.Loaded.Data(retrievedData)
-
-        // test
-        composeTestRule.onNodeWithContentDescription("${context.getString(R.string.delete)} - $secondInstance").performClick()
-        assertEquals(secondInstance, onRequestDelete)
-    }
+//- dialog visibility tests --------------------------------------------------------------------------------------------
 
     @Test
-    fun savedWordsScreen_doesNotDisplayDiscardWordDialog_whenDialogViewStateHidden() {
+    fun savedWordsScreen_hiddenDialogState_doesNotDisplayDiscardWordDialog() {
 
-        // stub
-        val retrievedData = listOf(firstInstance, secondInstance, thirdInstance)
-        viewState.value = SavedWordsScreenState.Loaded.Data(retrievedData)
-        dialogViewState.value = DiscardWordDialogState.Hidden
+        // setup
+        viewState.update { SavedWordsScreenState.Loaded.Data(data) }
+        dialogViewState.update { DiscardWordDialogState.Hidden }
 
         // test
         composeTestRule.onNodeWithTag(TestTags.DISCARD_WORD_DIALOG).assertDoesNotExist()
-
         composeTestRule.onNodeWithText(context.getString(R.string.discard_the_word)).assertDoesNotExist()
         composeTestRule.onNodeWithText(context.getString(R.string.the_word)).assertDoesNotExist()
         composeTestRule.onNodeWithText(context.getString(R.string.will_be_deleted_forever)).assertDoesNotExist()
-        composeTestRule.onNodeWithText(context.getString(R.string.will_be_deleted_forever)).assertDoesNotExist()
-
         composeTestRule.onNodeWithTag(TestTags.SAVED_WORDS_SCREEN_SECONDARY_BUTTON).assertDoesNotExist()
         composeTestRule.onNodeWithTag(TestTags.SAVED_WORDS_SCREEN_PRIMARY_BUTTON).assertDoesNotExist()
     }
 
     @Test
-    fun savedWordsScreen_displaysDiscardWordDialog_whenDialogViewStateIsVisible() {
+    fun savedWordsScreen_visibleDialogState_displaysDiscardWordDialogCorrectly() {
 
-        // stub
-        val retrievedData = listOf(firstInstance, secondInstance, thirdInstance)
-        viewState.value = SavedWordsScreenState.Loaded.Data(retrievedData)
-        dialogViewState.value = DiscardWordDialogState.Visible(firstInstance)
+        // setup
+        viewState.update { SavedWordsScreenState.Loaded.Data(data) }
+        dialogViewState.update { DiscardWordDialogState.Visible(swInstances.first) }
 
         // test
-
         composeTestRule.onNodeWithTag(TestTags.DISCARD_WORD_DIALOG).assertIsDisplayed()
-
         composeTestRule.onNodeWithText(context.getString(R.string.discard_the_word)).assertIsDisplayed()
 
         val theWord = context.getString(R.string.the_word)
         val willBe = context.getString(R.string.will_be_deleted_forever)
-        composeTestRule.onNodeWithText("$theWord '${firstInstance.word}' $willBe").assertIsDisplayed()
+        composeTestRule.onNodeWithText("$theWord '${swInstances.first.word}' $willBe").assertIsDisplayed()
 
         composeTestRule.onNodeWithTag(TestTags.SAVED_WORDS_SCREEN_SECONDARY_BUTTON).assertIsDisplayed()
         composeTestRule.onNodeWithTag(TestTags.SAVED_WORDS_SCREEN_PRIMARY_BUTTON).assertIsDisplayed()
     }
 
-    @Test
-    fun discardWordDialog_calls_onDelete() {
 
-        // stub
-        val retrievedData = listOf(firstInstance, secondInstance, thirdInstance)
-        viewState.value = SavedWordsScreenState.Loaded.Data(retrievedData)
-        dialogViewState.value = DiscardWordDialogState.Visible(firstInstance)
+
+//- dialog interaction tests -------------------------------------------------------------------------------------------
+
+    @Test
+    fun discardWordDialog_deleteButtonClick_callsOnDeleteWithCorrectWord() {
+
+        // setup
+        viewState.update { SavedWordsScreenState.Loaded.Data(data) }
+        dialogViewState.update { DiscardWordDialogState.Visible(swInstances.first) }
 
         // test
         composeTestRule.onNodeWithTag(TestTags.SAVED_WORDS_SCREEN_SECONDARY_BUTTON).performClick()
-
-        assertEquals(firstInstance, onDelete)
+        assertEquals(swInstances.first, onDelete)
     }
 
     @Test
-    fun discardWordDialog_calls_onCancel() {
+    fun discardWordDialog_cancelButtonClick_callsOnCancel() {
 
-        // stub
-        val retrievedData = listOf(firstInstance, secondInstance, thirdInstance)
-        viewState.value = SavedWordsScreenState.Loaded.Data(retrievedData)
-        dialogViewState.value = DiscardWordDialogState.Visible(firstInstance)
+        // setup
+        viewState.update { SavedWordsScreenState.Loaded.Data(data) }
+        dialogViewState.update { DiscardWordDialogState.Visible(swInstances.first) }
 
         // test
         composeTestRule.onNodeWithTag(TestTags.SAVED_WORDS_SCREEN_PRIMARY_BUTTON).performClick()
-
         assertTrue(onCancel)
     }
 
-    @Test
-    fun savedWordsScreen_calls_onNavigateSelectAudioScreen() {
 
-        // stub
-        viewState.value = SavedWordsScreenState.Loaded.NoData
+
+//- edge case tests ---------------------------------------------------------------------------------------------------
+
+    @Test
+    fun savedWordsScreen_emptyDataList_displaysCorrectly() {
+
+        // setup
+        val emptyData = emptyList<SavedWord>()
+        viewState.update { SavedWordsScreenState.Loaded.Data(emptyData) }
 
         // test
-        composeTestRule.onNodeWithTag(TestTags.SAVED_WORDS_SCREEN_BUTTON_PICK_AND_TRANSCRIBE).performClick()
-        assertTrue(onNavigateSelectAudioScreen)
+        composeTestRule.onNodeWithTag(TestTags.SAVED_WORDS_SCREEN).assertIsDisplayed()
+        // Should not crash and should not display any word cards
+    }
+
+    @Test
+    fun savedWordsScreen_singleWordData_displaysCorrectly() {
+
+        // setup
+        val singleWordData = listOf(swInstances.first)
+        viewState.update { SavedWordsScreenState.Loaded.Data(singleWordData) }
+
+        // test
+        composeTestRule.onNodeWithTag(TestTags.SAVED_WORDS_SCREEN).assertIsDisplayed()
+        composeTestRule.onNodeWithTag(swInstances.first.toString()).assertIsDisplayed()
+        composeTestRule.onNodeWithContentDescription("${context.getString(R.string.delete)} - ${swInstances.first}").assertIsEnabled()
+    }
+
+    @Test
+    fun savedWordsScreen_multipleDeleteRequests_workCorrectly() {
+
+        // setup
+        viewState.update { SavedWordsScreenState.Loaded.Data(data) }
+
+        // test first word delete request
+        composeTestRule.onNodeWithContentDescription("${context.getString(R.string.delete)} - ${swInstances.first}").performClick()
+        assertEquals(swInstances.first, onRequestDelete)
+
+        // reset callback
+        onRequestDelete = null
+
+        // test second word delete request
+        composeTestRule.onNodeWithContentDescription("${context.getString(R.string.delete)} - ${swInstances.second}").performClick()
+        assertEquals(swInstances.second, onRequestDelete)
     }
 }
