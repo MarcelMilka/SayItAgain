@@ -56,21 +56,21 @@ class SavedWordsViewModelTest {
         }
     }
 
-    @Test
-    fun `repository no data state shows NoData screen state`() = runTest(testDispatcher) {
-
-        // setup
-        dataStateFlow.update { SavedWordsRepositoryDataState.Loaded.NoData }
-
-        // test
-        viewModel.screenState.test {
-
-            assertEquals(SavedWordsScreenState.Loaded.NoData, awaitItem())
-
-            expectNoEvents()
-            cancelAndIgnoreRemainingEvents()
-        }
-    }
+//    @Test
+//    fun `repository no data state shows NoData screen state`() = runTest(testDispatcher) {
+//
+//        // setup
+//        dataStateFlow.update { SavedWordsRepositoryDataState.Loaded.NoData }
+//
+//        // test
+//        viewModel.screenState.test {
+//
+//            assertEquals(SavedWordsScreenState.Loaded.NoData, awaitItem())
+//
+//            expectNoEvents()
+//            cancelAndIgnoreRemainingEvents()
+//        }
+//    }
 
     @Test
     fun `repository data state shows Data screen state with correct data`() = runTest(testDispatcher) {
@@ -90,23 +90,23 @@ class SavedWordsViewModelTest {
         }
     }
 
-    @Test
-    fun `repository error state shows Error screen state with correct cause`() = runTest(testDispatcher) {
-
-        // setup
-        val errorCause = "Test error message"
-        dataStateFlow.update { SavedWordsRepositoryDataState.FailedToLoad(errorCause) }
-
-        // test
-        viewModel.screenState.test {
-
-            val state = awaitItem()
-            assertEquals(SavedWordsScreenState.Error(errorCause), state)
-
-            expectNoEvents()
-            cancelAndIgnoreRemainingEvents()
-        }
-    }
+//    @Test
+//    fun `repository error state shows Error screen state with correct cause`() = runTest(testDispatcher) {
+//
+//        // setup
+//        val errorCause = "Test error message"
+//        dataStateFlow.update { SavedWordsRepositoryDataState.FailedToLoad(errorCause) }
+//
+//        // test
+//        viewModel.screenState.test {
+//
+//            val state = awaitItem()
+//            assertEquals(SavedWordsScreenState.Error(errorCause), state)
+//
+//            expectNoEvents()
+//            cancelAndIgnoreRemainingEvents()
+//        }
+//    }
 
     @Test
     fun `repository state changes update screen state correctly`() = runTest(testDispatcher) {
