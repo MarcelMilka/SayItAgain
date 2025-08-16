@@ -111,7 +111,7 @@ internal class SavedWordsScreenTest {
             // illustration and text
             composeTestRule.onNodeWithContentDescription(context.getString(R.string.illustration_empty_description)).assertIsDisplayed()
             composeTestRule.onNodeWithText(context.getString(R.string.kinda_empty)).assertIsDisplayed()
-            composeTestRule.onNodeWithText(context.getString(R.string.once_you_save_your_first_word_it_will_show_up_here)).assertIsDisplayed()
+            composeTestRule.onNodeWithText(context.getString(R.string.kinda_empty_explanation)).assertIsDisplayed()
 
             // button "Pick and transcribe"
             composeTestRule.onNodeWithText(context.getString(R.string.pick_and_transcribe)).assertIsDisplayed()
@@ -172,7 +172,7 @@ internal class SavedWordsScreenTest {
 
             composeTestRule.onNodeWithContentDescription(context.getString(R.string.illustration_empty_description)).assertIsDisplayed()
             composeTestRule.onNodeWithText(context.getString(R.string.kinda_empty)).assertIsDisplayed()
-            composeTestRule.onNodeWithText(context.getString(R.string.once_you_save_your_first_word_it_will_show_up_here)).assertIsDisplayed()
+            composeTestRule.onNodeWithText(context.getString(R.string.kinda_empty_explanation)).assertIsDisplayed()
 
             composeTestRule.onNodeWithText(context.getString(R.string.pick_and_transcribe)).assertIsDisplayed()
             composeTestRule.onNodeWithTag(TestTags.SAVED_WORDS_SCREEN_BUTTON_PICK_AND_TRANSCRIBE).assertIsDisplayed()
@@ -231,7 +231,7 @@ internal class SavedWordsScreenTest {
             // NoData
             composeTestRule.onNodeWithContentDescription(context.getString(R.string.illustration_empty_description)).assertIsDisplayed()
             composeTestRule.onNodeWithText(context.getString(R.string.kinda_empty)).assertIsDisplayed()
-            composeTestRule.onNodeWithText(context.getString(R.string.once_you_save_your_first_word_it_will_show_up_here)).assertIsDisplayed()
+            composeTestRule.onNodeWithText(context.getString(R.string.kinda_empty_explanation)).assertIsDisplayed()
 
             composeTestRule.onNodeWithText(context.getString(R.string.pick_and_transcribe)).assertIsDisplayed()
             composeTestRule.onNodeWithTag(TestTags.SAVED_WORDS_SCREEN_BUTTON_PICK_AND_TRANSCRIBE).assertIsDisplayed()

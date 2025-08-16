@@ -64,7 +64,7 @@ internal fun ColumnScope.savedWordsNoDataContent(onNavigateSelectAudioScreen: ()
                     spacerV8()
 
                     bodyLarge(
-                        text = stringResource(R.string.once_you_save_your_first_word_it_will_show_up_here),
+                        text = stringResource(R.string.kinda_empty_explanation),
                         color = SecondaryWhite,
                         textAlign = TextAlign.Center
                     )
