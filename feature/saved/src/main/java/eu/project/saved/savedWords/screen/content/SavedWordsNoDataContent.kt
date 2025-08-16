@@ -1,8 +1,10 @@
 package eu.project.saved.savedWords.screen.content
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.BoxScope
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -15,18 +17,21 @@ import eu.project.common.TestTags
 import eu.project.ui.R
 import eu.project.ui.components.buttons.primaryButton
 import eu.project.ui.components.spacers.spacerV8
+import eu.project.ui.components.spacers.spacerVertical32
 import eu.project.ui.components.text.bodyLarge
 import eu.project.ui.components.text.headlineLarge
 import eu.project.ui.dimensions.ThumbReachPadding
 import eu.project.ui.theme.SecondaryWhite
 
 @Composable
-internal fun BoxScope.savedWordsNoDataContent(onNavigateSelectAudioScreen: () -> Unit) {
+internal fun ColumnScope.savedWordsNoDataContent(onNavigateSelectAudioScreen: () -> Unit) {
 
+    // upper content
     Column(
         modifier = Modifier
-            .align(Alignment.CenterStart)
-            .padding(bottom = 100.dp),
+            .fillMaxWidth()
+            .weight(1f),
+        verticalArrangement = Arrangement.Bottom,
         horizontalAlignment = Alignment.CenterHorizontally,
         content = {
 
@@ -34,31 +39,49 @@ internal fun BoxScope.savedWordsNoDataContent(onNavigateSelectAudioScreen: () ->
                 painter = painterResource(id = R.drawable.empty),
                 contentDescription = stringResource(R.string.illustration_empty_description)
             )
-
-            spacerV8()
-
-            headlineLarge(text = stringResource(R.string.kinda_empty))
-
-            spacerV8()
-
-            bodyLarge(
-                text = stringResource(R.string.once_you_save_your_first_word_it_will_show_up_here),
-                color = SecondaryWhite,
-                textAlign = TextAlign.Center
-            )
         }
     )
 
+    // bottom content
     Column(
         modifier = Modifier
-            .align(Alignment.BottomCenter)
-            .padding(bottom = ThumbReachPadding.dp),
+            .fillMaxWidth()
+            .weight(1f),
+        verticalArrangement = Arrangement.SpaceBetween,
+        horizontalAlignment = Alignment.CenterHorizontally,
         content = {
 
-            primaryButton(
-                text = stringResource(R.string.pick_and_transcribe),
-                onClick = { onNavigateSelectAudioScreen() },
-                testTag = TestTags.SAVED_WORDS_SCREEN_BUTTON_PICK_AND_TRANSCRIBE
+            Column(
+                modifier = Modifier,
+                verticalArrangement = Arrangement.Top,
+                horizontalAlignment = Alignment.CenterHorizontally,
+                content = {
+
+                    spacerVertical32()
+
+                    headlineLarge(text = stringResource(R.string.kinda_empty))
+
+                    spacerV8()
+
+                    bodyLarge(
+                        text = stringResource(R.string.once_you_save_your_first_word_it_will_show_up_here),
+                        color = SecondaryWhite,
+                        textAlign = TextAlign.Center
+                    )
+                }
+            )
+
+            Column(
+                modifier = Modifier
+                    .padding(bottom = ThumbReachPadding.dp),
+                content = {
+
+                    primaryButton(
+                        text = stringResource(R.string.pick_and_transcribe),
+                        onClick = { onNavigateSelectAudioScreen() },
+                        testTag = TestTags.SAVED_WORDS_SCREEN_BUTTON_PICK_AND_TRANSCRIBE
+                    )
+                }
             )
         }
     )

@@ -1,7 +1,7 @@
 package eu.project.saved.savedWords.screen.content
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.BoxScope
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -15,7 +15,7 @@ import eu.project.saved.savedWords.ui.savedWordCard
 import eu.project.ui.dimensions.WidgetPadding
 
 @Composable
-internal fun BoxScope.savedWordsDataContent(
+internal fun ColumnScope.savedWordsDataContent(
     retrievedData: List<SavedWord>,
     onRequestDelete: (SavedWord) -> Unit
 ) {
@@ -23,9 +23,9 @@ internal fun BoxScope.savedWordsDataContent(
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
-            .padding(bottom = WidgetPadding.dp)
-            .align(Alignment.TopStart),
+            .padding(bottom = WidgetPadding.dp),
         verticalArrangement = Arrangement.Top,
+        horizontalAlignment = Alignment.CenterHorizontally,
         content = {
 
             this.items(retrievedData) { savedWord ->

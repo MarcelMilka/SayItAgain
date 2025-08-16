@@ -24,7 +24,13 @@ fun NavGraphBuilder.savedWordsImpl(controller: NavHostController) {
             onRequestDelete = { viewModel.requestWordDeletion(it) },
             onDelete = { viewModel.deleteWord(it) },
             onCancel = { viewModel.cancelWordDeletion() },
-            onNavigateSelectAudioScreen = { controller.navigate(Navigation.Saved.ExportWordsScreen) }
+            onNavigateSelectAudioScreen = {
+
+                controller.navigate(Navigation.Transcribe.SelectAudioScreen) {
+
+                    this.popUpTo(Navigation.HomeScreen) { inclusive = false }
+                }
+            }
         )
     }
 }
