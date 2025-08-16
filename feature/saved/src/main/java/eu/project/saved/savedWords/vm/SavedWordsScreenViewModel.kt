@@ -10,6 +10,11 @@ import eu.project.saved.savedWords.state.DiscardWordDialogState
 import eu.project.saved.savedWords.state.SavedWordsScreenState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -28,31 +33,32 @@ internal class SavedWordsScreenViewModel @Inject constructor(private val savedWo
 
             savedWordsRepository
                 .dataState
-                .collect {
-
-                    when(it) {
-
-                        SavedWordsRepositoryDataState.Loading ->
-                            _screenState.value = SavedWordsScreenState.Loading
-
-                        SavedWordsRepositoryDataState.Loaded.NoData ->
-                            _screenState.value = SavedWordsScreenState.Loaded.NoData
-
-                        is SavedWordsRepositoryDataState.Loaded.Data ->
-                            _screenState.value = SavedWordsScreenState.Loaded.Data(retrievedData = it.retrievedData)
-
-                        is SavedWordsRepositoryDataState.FailedToLoad ->
-                            _screenState.value = SavedWordsScreenState.Error(cause = it.cause)
-                    }
-                }
+                .map(::evaluateScreenState)
+                .distinctUntilChanged()
+                .onEach { newScreenState -> _screenState.update { newScreenState } }
+                .collect()
         }
     }
+
+
+
+    private fun evaluateScreenState(dataState: SavedWordsRepositoryDataState): SavedWordsScreenState {
+
+        return when(dataState) {
+            SavedWordsRepositoryDataState.Loading -> SavedWordsScreenState.Loading
+            SavedWordsRepositoryDataState.Loaded.NoData -> SavedWordsScreenState.Loaded.NoData
+            is SavedWordsRepositoryDataState.Loaded.Data -> SavedWordsScreenState.Loaded.Data(retrievedData = dataState.retrievedData)
+            is SavedWordsRepositoryDataState.FailedToLoad -> SavedWordsScreenState.Error(cause = dataState.cause)
+        }
+    }
+
+
 
     fun requestWordDeletion(wordToDelete: SavedWord) {
 
         viewModelScope.launch {
 
-            _dialogState.value = DiscardWordDialogState.Visible(wordToDelete)
+            _dialogState.update { DiscardWordDialogState.Visible(wordToDelete) }
         }
     }
 
@@ -60,7 +66,7 @@ internal class SavedWordsScreenViewModel @Inject constructor(private val savedWo
 
         viewModelScope.launch {
 
-            _dialogState.value = DiscardWordDialogState.Hidden
+            _dialogState.update { DiscardWordDialogState.Hidden }
         }
     }
 
@@ -69,7 +75,7 @@ internal class SavedWordsScreenViewModel @Inject constructor(private val savedWo
         viewModelScope.launch {
 
             savedWordsRepository.deleteWord(wordToDelete = wordToDelete)
-            _dialogState.value = DiscardWordDialogState.Hidden
+            _dialogState.update { DiscardWordDialogState.Hidden }
         }
     }
 }
