@@ -26,7 +26,7 @@ internal fun topBarImpl(controller: NavHostController) {
 
     topBar(
         topBarViewState = topBarViewState,
-        onNavigateBack = {},
+        onNavigateBack = { controller.navigateUp() },
         onDisplayInfo = {}
     )
 }
