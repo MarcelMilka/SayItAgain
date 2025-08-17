@@ -4,9 +4,7 @@
     <!--   HomeScreen   -->
     <string name="you_are_offline">Your are offline.</string>
     <string name="transcriptions_can_not_be_generated_while_offline">Transcriptions can’t be generated while offline.</string>
-
     <string name="struggling_to_catch_every_word">Struggling to catch every word?</string>
-
     <string name="my_vocabulary">My vocabulary</string>
 
 
@@ -22,8 +20,9 @@
     <string name="cancel">Cancel</string>
 
 
+
     <!--   ExportWordsScreen   -->
-    <string name="no_words_selected">No words selected.</string>
+    <string name="no_words_selected">No words selected</string>
     <string name="please_select_at_least_one_word_before_continuing">Please select at least one word before continuing.</string>
     <string name="how_would_you_like_to_export_your_words">How would you like to export your words?</string>
     <string name="enter_the_email_to_receive_the_file">Enter the email to receive the file.</string>
@@ -35,6 +34,14 @@
     <string name="or">Or</string>
     <string name="something_went_wrong">Something went wrong.</string>
     <string name="something_went_wrong_explanation">An unexpected error occurred. Please try again later.</string>
+
+
+
+    <!--   SelectAudioScreen   -->
+    <string name="coming_soon">Coming soon</string>
+    <string name="coming_soon_explanation">This feature isn’t ready yet, but it’ll be available in just a few weeks.</string>
+
+
 
     <!--   Common   -->
     <string name="pick_and_transcribe">Pick and transcribe</string>
@@ -51,6 +58,7 @@
     <string name="illustration_error_description">Error</string>
     <string name="illustration_offline_description">Offline</string>
     <string name="illustration_empty_description">Empty</string>
+    <string name="illustration_development_description">Development</string>
 
 
     <!--   Content descriptions   -->

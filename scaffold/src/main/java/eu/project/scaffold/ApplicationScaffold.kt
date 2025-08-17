@@ -18,7 +18,7 @@ import eu.project.home.impl.homeScreenImpl
 import eu.project.saved.exportWords.impl.exportWordsImpl
 import eu.project.saved.savedWords.impl.savedWordsImpl
 import eu.project.topBar.impl.topBarImpl
-import eu.project.transcribe.selectAudio.impl.selectAudioScreenImpl
+import eu.project.transcribe.selectAudio.impl.selectAudioImpl
 import eu.project.ui.theme.Background
 
 @OptIn(ExperimentalLayoutApi::class)
@@ -62,7 +62,7 @@ fun applicationScaffold() {
 
                     this.navigation<Navigation.Transcribe.RouteTranscribe>(startDestination = Navigation.Transcribe.SelectAudioScreen) {
 
-                        this.selectAudioScreenImpl()
+                        this.selectAudioImpl()
                     }
                 }
             )

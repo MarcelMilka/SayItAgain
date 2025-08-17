@@ -33,6 +33,10 @@ object TestTags {
     const val EXPORT_WORDS_SCREEN_LAZY_COLUMN = "ExportWordsScreen - LazyColumn"
 
 
+    // SelectAudioScreen
+    const val SELECT_AUDIO_SCREEN = "SelectAudioScreen"
+
+
     // TopBar
     const val TOP_BAR = "TopBar"
     const val TOP_BAR_ICON_BUTTON_BACK_ICON = "TopBar - IconButtonBack - Back icon"
