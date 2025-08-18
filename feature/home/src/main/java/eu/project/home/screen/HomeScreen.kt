@@ -19,10 +19,12 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import eu.project.common.TestTags
-import eu.project.home.ui.noConnectionBanner
-import eu.project.home.ui.pickAndTranscribeSection
 import eu.project.ui.R
+import eu.project.ui.components.banners.warningBanner
+import eu.project.ui.components.buttons.primaryButton
 import eu.project.ui.components.buttons.textButton
+import eu.project.ui.components.spacers.spacerV16
+import eu.project.ui.components.text.headlineLarge
 import eu.project.ui.dimensions.ScreenPadding
 
 @Composable
@@ -36,48 +38,82 @@ internal fun homeScreen(
         modifier = Modifier
             .fillMaxSize()
             .padding(horizontal = ScreenPadding.dp)
-            .testTag(TestTags.HOME_SCREEN)
-    ) {
+            .testTag(TestTags.HOME_SCREEN),
+        content = {
 
-        Column(
-            modifier = Modifier.align(Alignment.TopCenter),
-            content = {
+            // warning banner (top of the screen)
+            Column(
+                modifier = Modifier.align(Alignment.TopCenter),
+                content = {
 
-                AnimatedVisibility(
-                    visible = !isNetworkAvailable,
-                    enter = fadeIn() + slideInVertically(
-                        initialOffsetY = { -40 },
-                        animationSpec = tween(durationMillis = 500, easing = FastOutSlowInEasing)
-                    ),
-                    exit = fadeOut() + slideOutVertically(
-                        targetOffsetY = { -40 },
-                        animationSpec = tween(durationMillis = 300, easing = FastOutLinearInEasing)
-                    ),
-                    content = {
+                    animatedVisibilityWrapper(
+                        visible = !isNetworkAvailable,
+                        content = {
 
-                        // TODO: replace with  warningBanner
-                        noConnectionBanner()
-                    }
-                )
-            }
-        )
+                            warningBanner(
+                                headline = stringResource(R.string.you_are_offline),
+                                body = stringResource(R.string.you_are_offline_explanation),
+                                testTag = TestTags.HOME_SCREEN_NO_CONNECTION_BANNER
+                            )
+                        }
+                    )
+                }
+            )
 
-        Column(
-            modifier = Modifier.align(Alignment.Center),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            content = { pickAndTranscribeSection(onClick = onNavigateSelectAudioScreen) }
-        )
+            // CTA content
+            Column(
+                modifier = Modifier.align(Alignment.Center),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                content = {
 
-        Column(
-            modifier = Modifier.align(Alignment.BottomCenter),
-            content = {
+                    headlineLarge(text = stringResource(R.string.struggling_to_catch_every_word))
 
-                textButton(
-                    text = stringResource(R.string.my_vocabulary),
-                    onClick = onNavigateSavedWordsScreen,
-                    testTag = TestTags.HOME_SCREEN_TEXT_BUTTON_MY_VOCABULARY
-                )
-            }
-        )
-    }
+                    spacerV16()
+
+                    primaryButton(
+                        text = stringResource(R.string.pick_and_transcribe),
+                        onClick = onNavigateSelectAudioScreen,
+                        testTag = TestTags.HOME_SCREEN_PRIMARY_BUTTON_PRICK_AND_TRANSCRIBE
+                    )
+                }
+            )
+
+            // Button 'My vocabulary'
+            Column(
+                modifier = Modifier.align(Alignment.BottomCenter),
+                content = {
+
+                    textButton(
+                        text = stringResource(R.string.my_vocabulary),
+                        onClick = onNavigateSavedWordsScreen,
+                        testTag = TestTags.HOME_SCREEN_TEXT_BUTTON_MY_VOCABULARY
+                    )
+                }
+            )
+        }
+    )
+}
+
+// TODO: replace with animatedVisibilityWrapper from the module ui
+@Composable
+private fun animatedVisibilityWrapper(
+    visible: Boolean,
+    content: @Composable() () -> Unit
+) {
+
+    // as the composable is going to be used globally without
+    // any other options, I decided to hardcode the values
+
+    AnimatedVisibility(
+        visible = visible,
+        enter = fadeIn() + slideInVertically(
+            initialOffsetY = { -40 },
+            animationSpec = tween(durationMillis = 500, easing = FastOutSlowInEasing)
+        ),
+        exit = fadeOut() + slideOutVertically(
+            targetOffsetY = { -40 },
+            animationSpec = tween(durationMillis = 300, easing = FastOutLinearInEasing)
+        ),
+        content = { content() }
+    )
 }
