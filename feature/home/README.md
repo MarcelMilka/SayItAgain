@@ -21,10 +21,10 @@ It encapsulates UI logic, state management, and event handling specific to the H
 Stateless composable function that presents the UI. Allows the user to navigate to `SavedWordsScreen` or  
 `SelectAudioScreen`, and displays connectivity status when offline.
 
-### ``HomeScreenViewModel``
+### ``HomeViewModel``
 Manages the UI state of `HomeScreen`. Depends on `ConnectivityObserver` to reflect network status.
 
-### ``HomeScreenImpl``
+### ``HomeImpl``
 Combines `HomeScreen` and `HomeScreenViewModel`. Defined as an extension function on `NavGraphBuilder`, integrating  
 the entire Home screen flow into the Compose-based navigation system (see `:scaffold` for more).
 
@@ -35,13 +35,13 @@ the entire Home screen flow into the Compose-based navigation system (see `:scaf
 flowchart TD
 
     ConnectivityObserverModule["<big>ConnectivityObserverModule</big>"]
-    homeScreenImpl["<big>homeScreenImpl</big>"]
+    homeScreenImpl["<big>homeImpl</big>"]
 
-    HomeScreenViewModel[<big>HomeScreenViewModel</big><small>ConnectivityObserver</small>]
+    HomeViewModel[<big>HomeViewModel</big><div><small>ConnectivityObserver</small>]
 
     subgraph ":feature:home"
 
-        HomeScreenViewModel --> homeScreenImpl
+        HomeViewModel --> homeScreenImpl
     end
 
     subgraph ":connectivity"
@@ -50,7 +50,7 @@ flowchart TD
     end
 
 
-    ConnectivityObserverModule -- ConnectivityObserverImpl --> HomeScreenViewModel
+    ConnectivityObserverModule -- ConnectivityObserverImpl --> HomeViewModel
 ```
 
 
