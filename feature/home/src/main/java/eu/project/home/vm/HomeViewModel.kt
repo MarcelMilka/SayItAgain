@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
 
 @HiltViewModel
-internal class HomeScreenViewModel @Inject constructor(connectivityObserver: ConnectivityObserver): ViewModel() {
+internal class HomeViewModel @Inject constructor(connectivityObserver: ConnectivityObserver): ViewModel() {
 
     val isNetworkAvailable =
         connectivityObserver

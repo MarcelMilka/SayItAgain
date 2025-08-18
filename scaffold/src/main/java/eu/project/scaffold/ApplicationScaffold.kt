@@ -14,7 +14,7 @@ import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
 import eu.project.common.navigation.Navigation
 import eu.project.floatingActionButton.impl.floatingActionButtonImpl
-import eu.project.home.impl.homeScreenImpl
+import eu.project.home.impl.homeImpl
 import eu.project.saved.exportWords.impl.exportWordsImpl
 import eu.project.saved.savedWords.impl.savedWordsImpl
 import eu.project.topBar.impl.topBarImpl
@@ -51,7 +51,7 @@ fun applicationScaffold() {
                 startDestination = Navigation.HomeScreen,
                 builder = {
 
-                    this.homeScreenImpl(controller)
+                    this.homeImpl(controller)
 
                     this.navigation<Navigation.Saved.RouteSaved>(startDestination = Navigation.Saved.SavedWordsScreen) {
 
