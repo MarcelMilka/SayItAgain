@@ -1,7 +1,6 @@
 package eu.project.sayitagain
 
 import android.app.Application
-import android.util.Log
 import dagger.hilt.android.HiltAndroidApp
 import eu.project.common.localData.SavedWordsRepository
 import javax.inject.Inject
