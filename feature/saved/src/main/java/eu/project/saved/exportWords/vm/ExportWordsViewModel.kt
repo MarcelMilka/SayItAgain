@@ -199,10 +199,10 @@ internal class ExportWordsViewModel @Inject constructor(
                 exportSettingsUiState = uiState.exportSettingsUiState.copy(
                     sendMethodState = ExportMethodVariants.sendSelected,
                     downloadMethodState = ExportMethodVariants.downloadNotSelected,
-
-                    emailTextFieldUiState = uiState.exportSettingsUiState.emailTextFieldUiState.copy(
-                        isVisible = true
-                    )
+                    showExportMethodNotAvailableBanner = true,
+//                    emailTextFieldUiState = uiState.exportSettingsUiState.emailTextFieldUiState.copy(
+//                        isVisible = true
+//                    )
                 )
             )
         }
@@ -218,10 +218,10 @@ internal class ExportWordsViewModel @Inject constructor(
                 exportSettingsUiState = uiState.exportSettingsUiState.copy(
                     sendMethodState = ExportMethodVariants.sendNotSelected,
                     downloadMethodState = ExportMethodVariants.downloadSelected,
-
-                    emailTextFieldUiState = uiState.exportSettingsUiState.emailTextFieldUiState.copy(
-                        isVisible = false
-                    )
+                    showExportMethodNotAvailableBanner = false
+//                    emailTextFieldUiState = uiState.exportSettingsUiState.emailTextFieldUiState.copy(
+//                        isVisible = false
+//                    )
                 )
             )
         }

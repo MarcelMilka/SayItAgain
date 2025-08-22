@@ -6,4 +6,5 @@ internal data class ExportSettingsUiState(
     val sendMethodState: ExportMethodState = ExportMethodVariants.sendNotSelected,
     val emailTextFieldUiState: EmailTextFieldUiState = EmailTextFieldUiState(),
     val downloadMethodState: ExportMethodState = ExportMethodVariants.downloadNotSelected,
+    val showExportMethodNotAvailableBanner: Boolean = false
 )
