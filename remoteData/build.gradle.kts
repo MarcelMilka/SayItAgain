@@ -73,9 +73,15 @@ dependencies {
     // OkHttp
     implementation(libs.okhttp)
     implementation(libs.logging.interceptor)
+    testImplementation(libs.mockwebserver)
 
     // Jackson converter
     implementation(libs.converter.jackson)
+
+    // MockK
+    testImplementation(libs.mockk)
+    testImplementation(libs.mockk.android)
+    testImplementation(libs.mockk.agent)
 
     implementation(project(":common"))
 }
