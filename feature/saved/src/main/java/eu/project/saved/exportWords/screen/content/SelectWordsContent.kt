@@ -41,7 +41,7 @@ internal fun ColumnScope.selectWordsContent(
             warningBanner(
                 headline = stringResource(R.string.no_words_selected),
                 body = stringResource(R.string.please_select_at_least_one_word_before_continuing),
-                testTag = TestTags.EXPORT_WORDS_SCREEN_WARNING_BANNER
+                testTag = TestTags.EXPORT_WORDS_SCREEN_SELECT_WORDS_WARNING_BANNER
             )
         }
     )
