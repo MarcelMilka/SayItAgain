@@ -22,8 +22,8 @@ android {
 
     buildTypes {
 
-        val siaapiDevOnlyKey = gradleLocalProperties(rootDir, providers).getProperty("SIAAPI_DEV_ONLY_KEY")
-        val siaapiBaseUrl = gradleLocalProperties(rootDir, providers).getProperty("SIAAPI_BASE_URL")
+        val siaapiDevOnlyKey = gradleLocalProperties(rootDir, providers).getProperty("SIAAPI_DEV_ONLY_KEY") ?: "QWERTY"
+        val siaapiBaseUrl = gradleLocalProperties(rootDir, providers).getProperty("SIAAPI_BASE_URL") ?: "\"https://api.example.com\""
 
         release {
             isMinifyEnabled = false
