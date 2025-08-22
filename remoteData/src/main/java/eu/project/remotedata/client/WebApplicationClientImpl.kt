@@ -3,7 +3,7 @@ package eu.project.remotedata.client
 import eu.project.remotedata.BuildConfig
 import eu.project.remotedata.endpoint.ExportEndpoints
 import retrofit2.Retrofit
-import retrofit2.converter.jackson.JacksonConverterFactory
+import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Inject
 
 internal class WebApplicationClientImpl @Inject constructor(okHttpClient: ApplicationOkHttpClient): WebApplicationClient {
@@ -13,7 +13,7 @@ internal class WebApplicationClientImpl @Inject constructor(okHttpClient: Applic
     private val retrofit = Retrofit.Builder()
         .baseUrl(baseUrl)
         .client(okHttpClient.client)
-        .addConverterFactory(JacksonConverterFactory.create())
+        .addConverterFactory(GsonConverterFactory.create())
         .build()
 
     override val exportEndpoints: ExportEndpoints =

@@ -1,6 +1,6 @@
 package eu.project.remotedata.interceptor
 
-import com.fasterxml.jackson.annotation.JsonProperty
+import com.google.gson.annotations.SerializedName
 import eu.project.remotedata.BuildConfig
 import junit.framework.TestCase.assertEquals
 import okhttp3.OkHttpClient
@@ -11,7 +11,7 @@ import org.junit.Before
 import org.junit.Test
 import retrofit2.Call
 import retrofit2.Retrofit
-import retrofit2.converter.jackson.JacksonConverterFactory
+import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
 
 class AuthenticationInterceptorTest {
@@ -38,7 +38,7 @@ class AuthenticationInterceptorTest {
         retrofit = Retrofit.Builder()
             .baseUrl(mockWebServer.url("/"))
             .client(okHttpClient)
-            .addConverterFactory(JacksonConverterFactory.create())
+            .addConverterFactory(GsonConverterFactory.create())
             .build()
 
         testApiImpl = retrofit.create(TestApi::class.java)
@@ -69,5 +69,5 @@ class AuthenticationInterceptorTest {
         fun test(): Call<TestData>
     }
 
-    private data class TestData(@JsonProperty("value") val value: String)
+    private data class TestData(@SerializedName("value") val value: String)
 }

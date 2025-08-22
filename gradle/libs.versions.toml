@@ -1,5 +1,5 @@
 [versions]
-converterJacksonVersion = "3.0.0"
+converterGsonVersion = "3.0.0"
 hiltNavigationComposeVersion = "1.2.0"
 kotlin = "1.9.0"
 activityComposeVersion = "1.10.1"
@@ -54,7 +54,7 @@ androidx-ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
 androidx-ui-test-junit4 = { module = "androidx.compose.ui:ui-test-junit4" }
 androidx-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
 compose-bom = { module = "androidx.compose:compose-bom", version.ref = "composeBomVersion" }
-converter-jackson = { module = "com.squareup.retrofit2:converter-jackson", version.ref = "converterJacksonVersion" }
+converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "converterGsonVersion" }
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hiltAndroidVersion" }
 hilt-android-compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hiltAndroidCompilerVersion" }
 junit = { module = "junit:junit", version.ref = "junit" }

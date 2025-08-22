@@ -1,7 +1,6 @@
 package eu.project.remotedata.repository
 
-import com.fasterxml.jackson.core.type.TypeReference
-import com.fasterxml.jackson.databind.ObjectMapper
+import com.google.gson.Gson
 import eu.project.common.model.SavedWord
 import eu.project.common.remoteData.CsvFile
 import eu.project.common.remoteData.ExportError
@@ -14,7 +13,7 @@ internal class ExportRepositoryImpl @Inject constructor(
     private val exportEndpoints: ExportEndpoints
 ): ExportRepository {
 
-    private val objectMapper = ObjectMapper()
+    private val gson = Gson()
 
 
     override suspend fun requestDownloadToDevice(wordsToExport: List<SavedWord>): Result<CsvFile> {
@@ -51,7 +50,7 @@ internal class ExportRepositoryImpl @Inject constructor(
 
             errorBody?.let { json ->
 
-                objectMapper.readValue(json, object : TypeReference<List<String>>() {})
+                gson.fromJson(json, Array<String>::class.java).toList()
             } ?: listOf("Unknown validation error")
         }
 

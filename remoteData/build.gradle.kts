@@ -75,8 +75,8 @@ dependencies {
     implementation(libs.logging.interceptor)
     testImplementation(libs.mockwebserver)
 
-    // Jackson converter
-    implementation(libs.converter.jackson)
+    // Gson converter
+    implementation(libs.converter.gson)
 
     // MockK
     testImplementation(libs.mockk)
