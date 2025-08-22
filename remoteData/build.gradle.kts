@@ -22,7 +22,7 @@ android {
 
     buildTypes {
 
-        val siaapiDevOnlyKey = gradleLocalProperties(rootDir, providers).getProperty("SIAAPI_DEV_ONLY_KEY") ?: "QWERTY"
+        val siaapiDevOnlyKey = gradleLocalProperties(rootDir, providers).getProperty("SIAAPI_DEV_ONLY_KEY") ?: "\"QWERTY\""
         val siaapiBaseUrl = gradleLocalProperties(rootDir, providers).getProperty("SIAAPI_BASE_URL") ?: "\"https://api.example.com\""
 
         release {
