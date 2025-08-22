@@ -897,7 +897,8 @@ class ExportWordsViewModelTest {
             assertEquals(ExportMethodVariants.sendSelected, state.exportSettingsUiState.sendMethodState)
             assertEquals(ExportMethodVariants.downloadNotSelected, state.exportSettingsUiState.downloadMethodState)
 
-            assertTrue(state.exportSettingsUiState.emailTextFieldUiState.isVisible)
+            assertFalse(state.exportSettingsUiState.emailTextFieldUiState.isVisible)
+            assertTrue(state.exportSettingsUiState.showExportMethodNotAvailableBanner)
 
             expectNoEvents()
             cancelAndIgnoreRemainingEvents()
@@ -943,6 +944,7 @@ class ExportWordsViewModelTest {
             assertEquals(ExportMethodVariants.downloadSelected, state.exportSettingsUiState.downloadMethodState)
 
             assertFalse(state.exportSettingsUiState.emailTextFieldUiState.isVisible)
+            assertFalse(state.exportSettingsUiState.showExportMethodNotAvailableBanner)
 
             expectNoEvents()
             cancelAndIgnoreRemainingEvents()
@@ -985,7 +987,8 @@ class ExportWordsViewModelTest {
             assertEquals(ExportMethod.SendToEmail, sendState.exportMethod)
             assertEquals(ExportMethodVariants.sendSelected, sendState.exportSettingsUiState.sendMethodState)
             assertEquals(ExportMethodVariants.downloadNotSelected, sendState.exportSettingsUiState.downloadMethodState)
-            assertTrue(sendState.exportSettingsUiState.emailTextFieldUiState.isVisible)
+            assertFalse(sendState.exportSettingsUiState.emailTextFieldUiState.isVisible)
+            assertTrue(sendState.exportSettingsUiState.showExportMethodNotAvailableBanner)
 
             // then switch to Download method
             viewModel.onIntent(ExportWordsIntent.SelectExportMethodDownload)
@@ -994,6 +997,7 @@ class ExportWordsViewModelTest {
             assertEquals(ExportMethodVariants.sendNotSelected, downloadState.exportSettingsUiState.sendMethodState)
             assertEquals(ExportMethodVariants.downloadSelected, downloadState.exportSettingsUiState.downloadMethodState)
             assertFalse(downloadState.exportSettingsUiState.emailTextFieldUiState.isVisible)
+            assertTrue(sendState.exportSettingsUiState.showExportMethodNotAvailableBanner)
 
             expectNoEvents()
             cancelAndIgnoreRemainingEvents()
@@ -1017,6 +1021,7 @@ class ExportWordsViewModelTest {
             assertEquals(ExportMethodVariants.sendNotSelected, downloadState.exportSettingsUiState.sendMethodState)
             assertEquals(ExportMethodVariants.downloadSelected, downloadState.exportSettingsUiState.downloadMethodState)
             assertFalse(downloadState.exportSettingsUiState.emailTextFieldUiState.isVisible)
+            assertFalse(downloadState.exportSettingsUiState.showExportMethodNotAvailableBanner)
 
             // then switch to Send method
             viewModel.onIntent(ExportWordsIntent.SelectExportMethodSend)
@@ -1024,7 +1029,8 @@ class ExportWordsViewModelTest {
             assertEquals(ExportMethod.SendToEmail, sendState.exportMethod)
             assertEquals(ExportMethodVariants.sendSelected, sendState.exportSettingsUiState.sendMethodState)
             assertEquals(ExportMethodVariants.downloadNotSelected, sendState.exportSettingsUiState.downloadMethodState)
-            assertTrue(sendState.exportSettingsUiState.emailTextFieldUiState.isVisible)
+            assertFalse(sendState.exportSettingsUiState.emailTextFieldUiState.isVisible)
+            assertTrue(sendState.exportSettingsUiState.showExportMethodNotAvailableBanner)
 
             expectNoEvents()
             cancelAndIgnoreRemainingEvents()
