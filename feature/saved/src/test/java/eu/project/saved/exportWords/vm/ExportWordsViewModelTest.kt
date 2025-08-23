@@ -11,6 +11,7 @@ import eu.project.saved.exportWords.intent.ExportWordsIntent
 import eu.project.saved.exportWords.model.ExportMethod
 import eu.project.saved.exportWords.model.ExportMethodVariants
 import eu.project.saved.exportWords.model.convertToExportable
+import eu.project.saved.exportWords.state.ExportWordsButtonVariants
 import eu.project.saved.exportWords.state.ExportWordsScreenState
 import eu.project.saved.exportWords.state.ExportWordsSubscreen
 import eu.project.saved.exportWords.state.SubscreenControllerButtonVariants
@@ -899,6 +900,7 @@ class ExportWordsViewModelTest {
 
             assertFalse(state.exportSettingsUiState.emailTextFieldUiState.isVisible)
             assertTrue(state.exportSettingsUiState.showExportMethodNotAvailableBanner)
+            assertEquals(ExportWordsButtonVariants.disabled, state.exportSettingsUiState.exportWordsButtonState)
 
             expectNoEvents()
             cancelAndIgnoreRemainingEvents()
@@ -945,6 +947,7 @@ class ExportWordsViewModelTest {
 
             assertFalse(state.exportSettingsUiState.emailTextFieldUiState.isVisible)
             assertFalse(state.exportSettingsUiState.showExportMethodNotAvailableBanner)
+            assertEquals(ExportWordsButtonVariants.enabled, state.exportSettingsUiState.exportWordsButtonState)
 
             expectNoEvents()
             cancelAndIgnoreRemainingEvents()
@@ -989,6 +992,7 @@ class ExportWordsViewModelTest {
             assertEquals(ExportMethodVariants.downloadNotSelected, sendState.exportSettingsUiState.downloadMethodState)
             assertFalse(sendState.exportSettingsUiState.emailTextFieldUiState.isVisible)
             assertTrue(sendState.exportSettingsUiState.showExportMethodNotAvailableBanner)
+            assertEquals(ExportWordsButtonVariants.disabled, sendState.exportSettingsUiState.exportWordsButtonState)
 
             // then switch to Download method
             viewModel.onIntent(ExportWordsIntent.SelectExportMethodDownload)
@@ -998,6 +1002,7 @@ class ExportWordsViewModelTest {
             assertEquals(ExportMethodVariants.downloadSelected, downloadState.exportSettingsUiState.downloadMethodState)
             assertFalse(downloadState.exportSettingsUiState.emailTextFieldUiState.isVisible)
             assertTrue(sendState.exportSettingsUiState.showExportMethodNotAvailableBanner)
+            assertEquals(ExportWordsButtonVariants.enabled, downloadState.exportSettingsUiState.exportWordsButtonState)
 
             expectNoEvents()
             cancelAndIgnoreRemainingEvents()
@@ -1022,6 +1027,7 @@ class ExportWordsViewModelTest {
             assertEquals(ExportMethodVariants.downloadSelected, downloadState.exportSettingsUiState.downloadMethodState)
             assertFalse(downloadState.exportSettingsUiState.emailTextFieldUiState.isVisible)
             assertFalse(downloadState.exportSettingsUiState.showExportMethodNotAvailableBanner)
+            assertEquals(ExportWordsButtonVariants.enabled, downloadState.exportSettingsUiState.exportWordsButtonState)
 
             // then switch to Send method
             viewModel.onIntent(ExportWordsIntent.SelectExportMethodSend)
@@ -1031,6 +1037,7 @@ class ExportWordsViewModelTest {
             assertEquals(ExportMethodVariants.downloadNotSelected, sendState.exportSettingsUiState.downloadMethodState)
             assertFalse(sendState.exportSettingsUiState.emailTextFieldUiState.isVisible)
             assertTrue(sendState.exportSettingsUiState.showExportMethodNotAvailableBanner)
+            assertEquals(ExportWordsButtonVariants.disabled, sendState.exportSettingsUiState.exportWordsButtonState)
 
             expectNoEvents()
             cancelAndIgnoreRemainingEvents()
@@ -1064,6 +1071,7 @@ class ExportWordsViewModelTest {
             assertEquals(ExportMethodVariants.sendNotSelected, finalState.exportSettingsUiState.sendMethodState)
             assertEquals(ExportMethodVariants.downloadSelected, finalState.exportSettingsUiState.downloadMethodState)
             assertFalse(finalState.exportSettingsUiState.emailTextFieldUiState.isVisible)
+            assertEquals(ExportWordsButtonVariants.enabled, finalState.exportSettingsUiState.exportWordsButtonState)
 
             expectNoEvents()
             cancelAndIgnoreRemainingEvents()
@@ -1088,8 +1096,8 @@ class ExportWordsViewModelTest {
 
             // switch between export methods
             viewModel.onIntent(ExportWordsIntent.SelectExportMethodSend)
-            val sendState = awaitItem()
-            
+            skipItems(1)
+
             viewModel.onIntent(ExportWordsIntent.SelectExportMethodDownload)
             val downloadState = awaitItem()
 
