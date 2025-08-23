@@ -5,7 +5,9 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.assertIsEnabled
 import androidx.compose.ui.test.assertIsNotDisplayed
+import androidx.compose.ui.test.assertIsNotEnabled
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
@@ -13,6 +15,7 @@ import androidx.compose.ui.test.performClick
 import androidx.test.platform.app.InstrumentationRegistry
 import eu.project.common.TestTags
 import eu.project.saved.exportWords.state.ExportSettingsUiState
+import eu.project.saved.exportWords.state.ExportWordsButtonVariants
 import eu.project.ui.R
 import eu.project.ui.theme.Background
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -30,6 +33,7 @@ class ExportSettingsContentTest {
     private lateinit var exportSettingsUiState: MutableStateFlow<ExportSettingsUiState>
     private var onClickSendMethodWasClicked: Boolean = false
     private var onClickDownloadMethodWasClicked: Boolean = false
+    private var onClickExportWordsWasClicked: Boolean = false
 
     @Before
     fun setUp() {
@@ -37,6 +41,7 @@ class ExportSettingsContentTest {
         exportSettingsUiState = MutableStateFlow(ExportSettingsUiState())
         onClickSendMethodWasClicked = false
         onClickDownloadMethodWasClicked = false
+        onClickExportWordsWasClicked = false
 
         composeTestRule.setContent {
 
@@ -48,6 +53,9 @@ class ExportSettingsContentTest {
                     },
                     onClickDownloadMethod = {
                         onClickDownloadMethodWasClicked = true
+                    },
+                    onClickExportWords = {
+                        onClickExportWordsWasClicked = true
                     }
                 )
             }
@@ -172,6 +180,127 @@ class ExportSettingsContentTest {
         assertTrue(onClickDownloadMethodWasClicked)
     }
 
+    //- export words button tests ------------------------------------------------------------------------------------------
+
+    @Test
+    fun exportSettingsContent_defaultState_exportWordsButtonIsDisplayed() {
+
+        composeTestRule
+            .onNodeWithTag(TestTags.EXPORT_WORDS_SCREEN_EXPORT_SETTINGS_EXPORT_WORDS_BUTTON)
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun exportSettingsContent_defaultState_exportWordsButtonDisplaysCorrectText() {
+
+        composeTestRule
+            .onNodeWithText(context.getString(R.string.export_words_button))
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun exportSettingsContent_defaultState_exportWordsButtonIsDisabled() {
+
+        exportSettingsUiState.value = ExportSettingsUiState(
+            exportWordsButtonState = ExportWordsButtonVariants.disabled
+        )
+
+        composeTestRule
+            .onNodeWithTag(TestTags.EXPORT_WORDS_SCREEN_EXPORT_SETTINGS_EXPORT_WORDS_BUTTON)
+            .assertIsNotEnabled()
+    }
+
+    @Test
+    fun exportSettingsContent_enabledButtonState_exportWordsButtonIsEnabled() {
+
+        exportSettingsUiState.value = ExportSettingsUiState(
+            exportWordsButtonState = ExportWordsButtonVariants.enabled
+        )
+
+        composeTestRule
+            .onNodeWithTag(TestTags.EXPORT_WORDS_SCREEN_EXPORT_SETTINGS_EXPORT_WORDS_BUTTON)
+            .assertIsEnabled()
+    }
+
+    @Test
+    fun exportSettingsContent_enabledButtonState_exportWordsButtonClicked_callsOnClickExportWords() {
+
+        exportSettingsUiState.value = ExportSettingsUiState(
+            exportWordsButtonState = ExportWordsButtonVariants.enabled
+        )
+
+        composeTestRule
+            .onNodeWithTag(TestTags.EXPORT_WORDS_SCREEN_EXPORT_SETTINGS_EXPORT_WORDS_BUTTON)
+            .performClick()
+
+        assertTrue(onClickExportWordsWasClicked)
+    }
+
+    @Test
+    fun exportSettingsContent_enabledButtonState_exportWordsButtonClickedMultipleTimes_callsOnClickExportWordsEachTime() {
+
+        exportSettingsUiState.value = ExportSettingsUiState(
+            exportWordsButtonState = ExportWordsButtonVariants.enabled
+        )
+
+        // Click export words button
+        composeTestRule
+            .onNodeWithTag(TestTags.EXPORT_WORDS_SCREEN_EXPORT_SETTINGS_EXPORT_WORDS_BUTTON)
+            .performClick()
+
+        assertTrue(onClickExportWordsWasClicked)
+
+        // Reset the callback result
+        onClickExportWordsWasClicked = false
+
+        // Click export words button again
+        composeTestRule
+            .onNodeWithTag(TestTags.EXPORT_WORDS_SCREEN_EXPORT_SETTINGS_EXPORT_WORDS_BUTTON)
+            .performClick()
+
+        assertTrue(onClickExportWordsWasClicked)
+    }
+
+    @Test
+    fun exportSettingsContent_buttonStateChangedFromDisabledToEnabled_exportWordsButtonBecomesClickable() {
+
+        // Start with disabled button
+        exportSettingsUiState.value = ExportSettingsUiState(
+            exportWordsButtonState = ExportWordsButtonVariants.disabled
+        )
+
+        // Change to enabled button
+        exportSettingsUiState.value = ExportSettingsUiState(
+            exportWordsButtonState = ExportWordsButtonVariants.enabled
+        )
+
+        // Click the button
+        composeTestRule
+            .onNodeWithTag(TestTags.EXPORT_WORDS_SCREEN_EXPORT_SETTINGS_EXPORT_WORDS_BUTTON)
+            .performClick()
+
+        assertTrue(onClickExportWordsWasClicked)
+    }
+
+    @Test
+    fun exportSettingsContent_buttonStateChangedFromEnabledToDisabled_exportWordsButtonBecomesUnclickable() {
+
+        // Start with enabled button
+        exportSettingsUiState.value = ExportSettingsUiState(
+            exportWordsButtonState = ExportWordsButtonVariants.enabled
+        )
+
+        // Change to disabled button
+        exportSettingsUiState.value = ExportSettingsUiState(
+            exportWordsButtonState = ExportWordsButtonVariants.disabled
+        )
+
+        // The button should still be displayed but not clickable
+        composeTestRule
+            .onNodeWithTag(TestTags.EXPORT_WORDS_SCREEN_EXPORT_SETTINGS_EXPORT_WORDS_BUTTON)
+            .assertIsNotEnabled()
+    }
+
     //- animation wrapper tests --------------------------------------------------------------------------------------------
 
     @Test
@@ -194,3 +323,4 @@ class ExportSettingsContentTest {
             .assertIsNotDisplayed()
     }
 }
+
