@@ -36,6 +36,7 @@ fun warningBanner(
 
     Column(
         modifier = Modifier
+            .padding(bottom = WidgetPadding.dp)
             .fillMaxWidth()
             .background(
                 color = WarningBanner,

@@ -15,6 +15,7 @@ import eu.project.saved.exportWords.state.ExportWordsUiState
 import eu.project.saved.exportWords.model.ExportableSavedWord
 import eu.project.saved.exportWords.model.convertToExportable
 import eu.project.saved.exportWords.model.convertToModel
+import eu.project.saved.exportWords.state.ExportWordsButtonVariants
 import eu.project.saved.exportWords.state.ExportWordsSubscreen
 import eu.project.saved.exportWords.state.SubscreenControllerButtonVariants
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -26,6 +27,12 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+
+// TODO: --- implement logic to manage visibility of the temporary fake floating action button
+// TODO: --- test logic to manage visibility of the temporary fake floating action button
+// TODO: implement fake floating action button
+// TODO: prepare compose tests
+
 
 @HiltViewModel
 internal class ExportWordsViewModel @Inject constructor(
@@ -200,9 +207,9 @@ internal class ExportWordsViewModel @Inject constructor(
                     sendMethodState = ExportMethodVariants.sendSelected,
                     downloadMethodState = ExportMethodVariants.downloadNotSelected,
 
-                    emailTextFieldUiState = uiState.exportSettingsUiState.emailTextFieldUiState.copy(
-                        isVisible = true
-                    )
+                    // temporary properties
+                    showExportMethodNotAvailableBanner = true,
+                    exportWordsButtonState = ExportWordsButtonVariants.disabled
                 )
             )
         }
@@ -219,9 +226,9 @@ internal class ExportWordsViewModel @Inject constructor(
                     sendMethodState = ExportMethodVariants.sendNotSelected,
                     downloadMethodState = ExportMethodVariants.downloadSelected,
 
-                    emailTextFieldUiState = uiState.exportSettingsUiState.emailTextFieldUiState.copy(
-                        isVisible = false
-                    )
+                    // temporary properties
+                    showExportMethodNotAvailableBanner = false,
+                    exportWordsButtonState = ExportWordsButtonVariants.enabled
                 )
             )
         }

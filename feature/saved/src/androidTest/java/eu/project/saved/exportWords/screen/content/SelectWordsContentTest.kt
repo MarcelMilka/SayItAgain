@@ -73,7 +73,7 @@ class SelectWordsContentTest {
     fun selectWordsContent_defaultState_warningBannerIsNotDisplayed() {
 
         composeTestRule
-            .onNodeWithTag(TestTags.EXPORT_WORDS_SCREEN_WARNING_BANNER)
+            .onNodeWithTag(TestTags.EXPORT_WORDS_SCREEN_SELECT_WORDS_WARNING_BANNER)
             .assertIsNotDisplayed()
     }
 
@@ -83,7 +83,7 @@ class SelectWordsContentTest {
         selectWordsUiState.value = SelectWordsUiState(showNoWordsSelectedBanner = true)
 
         composeTestRule
-            .onNodeWithTag(TestTags.EXPORT_WORDS_SCREEN_WARNING_BANNER)
+            .onNodeWithTag(TestTags.EXPORT_WORDS_SCREEN_SELECT_WORDS_WARNING_BANNER)
             .assertIsDisplayed()
     }
 
@@ -93,7 +93,7 @@ class SelectWordsContentTest {
         selectWordsUiState.value = SelectWordsUiState(showNoWordsSelectedBanner = false)
 
         composeTestRule
-            .onNodeWithTag(TestTags.EXPORT_WORDS_SCREEN_WARNING_BANNER)
+            .onNodeWithTag(TestTags.EXPORT_WORDS_SCREEN_SELECT_WORDS_WARNING_BANNER)
             .assertIsNotDisplayed()
     }
 
@@ -177,7 +177,7 @@ class SelectWordsContentTest {
         selectWordsUiState.value = SelectWordsUiState(showNoWordsSelectedBanner = true)
 
         composeTestRule
-            .onNodeWithTag(TestTags.EXPORT_WORDS_SCREEN_WARNING_BANNER)
+            .onNodeWithTag(TestTags.EXPORT_WORDS_SCREEN_SELECT_WORDS_WARNING_BANNER)
             .assertIsDisplayed()
     }
 
@@ -187,7 +187,7 @@ class SelectWordsContentTest {
         selectWordsUiState.value = SelectWordsUiState(showNoWordsSelectedBanner = false)
 
         composeTestRule
-            .onNodeWithTag(TestTags.EXPORT_WORDS_SCREEN_WARNING_BANNER)
+            .onNodeWithTag(TestTags.EXPORT_WORDS_SCREEN_SELECT_WORDS_WARNING_BANNER)
             .assertIsNotDisplayed()
     }
 }

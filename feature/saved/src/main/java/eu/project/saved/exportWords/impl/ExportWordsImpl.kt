@@ -27,6 +27,7 @@ fun NavGraphBuilder.exportWordsImpl(controller: NavHostController) {
             onTryToSwitchToExportSettings = { viewModel.onIntent(ExportWordsIntent.TryToSwitchToExportSettings) },
             onClickSendMethod = { viewModel.onIntent(ExportWordsIntent.SelectExportMethodSend) },
             onClickDownloadMethod = { viewModel.onIntent(ExportWordsIntent.SelectExportMethodDownload) },
+            onClickExportWords = {}
         )
     }
 }
