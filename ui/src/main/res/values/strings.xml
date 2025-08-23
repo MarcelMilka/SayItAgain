@@ -36,6 +36,7 @@
     <string name="something_went_wrong_explanation">An unexpected error occurred. Please try again later.</string>
     <string name="export_method_not_available">Export method not available.</string>
     <string name="export_method_not_available_explanation">This way of export is not available yet, please select ‘Download to device’.</string>
+    <string name="export_words_button">Export words</string>
 
 
 
