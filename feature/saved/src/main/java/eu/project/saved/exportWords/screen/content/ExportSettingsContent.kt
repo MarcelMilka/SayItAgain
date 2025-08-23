@@ -1,11 +1,14 @@
 package eu.project.saved.exportWords.screen.content
 
 import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import eu.project.common.TestTags
 import eu.project.saved.exportWords.state.ExportSettingsUiState
 import eu.project.saved.exportWords.ui.exportMethod
+import eu.project.saved.exportWords.ui.exportWordsButton
 import eu.project.ui.R
 import eu.project.ui.components.banners.warningBanner
 import eu.project.ui.components.spacers.spacerV8
@@ -15,13 +18,13 @@ import eu.project.ui.components.text.headlineSmall
 internal fun ColumnScope.exportSettingsContent(
     exportSettingsUiState: ExportSettingsUiState,
     onClickSendMethod: () -> Unit,
-    onClickDownloadMethod: () -> Unit
+    onClickDownloadMethod: () -> Unit,
+    onClickExportWords: () -> Unit
 ) {
 
     animatedVisibilityWrapper(
         visible = exportSettingsUiState.showExportMethodNotAvailableBanner,
         content = {
-
             warningBanner(
                 headline = stringResource(R.string.export_method_not_available),
                 body = stringResource(R.string.export_method_not_available_explanation),
@@ -44,5 +47,13 @@ internal fun ColumnScope.exportSettingsContent(
     exportMethod(
         state = exportSettingsUiState.downloadMethodState,
         onClick = onClickDownloadMethod
+    )
+
+    Spacer(modifier = Modifier.weight(1f))
+
+    exportWordsButton(
+        state = exportSettingsUiState.exportWordsButtonState,
+        onClick = onClickExportWords,
+        testTag = TestTags.EXPORT_WORDS_SCREEN_EXPORT_SETTINGS_EXPORT_WORDS_BUTTON
     )
 }

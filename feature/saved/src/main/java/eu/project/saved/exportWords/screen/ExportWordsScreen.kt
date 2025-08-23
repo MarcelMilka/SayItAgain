@@ -26,7 +26,8 @@ internal fun exportWordsScreen(
     onSwitchToSelectWords: () -> Unit,
     onTryToSwitchToExportSettings: () -> Unit,
     onClickSendMethod: () -> Unit,
-    onClickDownloadMethod: () -> Unit
+    onClickDownloadMethod: () -> Unit,
+    onClickExportWords: () -> Unit
 ) {
 
     Column(
@@ -35,7 +36,7 @@ internal fun exportWordsScreen(
             .padding(horizontal = ScreenPadding.dp)
             .testTag(TestTags.EXPORT_WORDS_SCREEN),
         verticalArrangement = Arrangement.Top,
-        horizontalAlignment = Alignment.Start,
+        horizontalAlignment = Alignment.CenterHorizontally,
         content = {
 
             when(screenState) {
@@ -48,7 +49,8 @@ internal fun exportWordsScreen(
                     onSwitchToSelectWords = onSwitchToSelectWords,
                     onTryToSwitchToExportSettings = onTryToSwitchToExportSettings,
                     onClickSendMethod = onClickSendMethod,
-                    onClickDownloadMethod = onClickDownloadMethod
+                    onClickDownloadMethod = onClickDownloadMethod,
+                    onClickExportWords = onClickExportWords
                 )
             }
         }
