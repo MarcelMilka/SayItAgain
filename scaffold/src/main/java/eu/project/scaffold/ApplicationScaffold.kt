@@ -15,6 +15,7 @@ import androidx.navigation.compose.rememberNavController
 import eu.project.common.navigation.Navigation
 import eu.project.floatingActionButton.impl.floatingActionButtonImpl
 import eu.project.home.impl.homeImpl
+import eu.project.saved.exportResult.impl.exportResultImpl
 import eu.project.saved.exportWords.impl.exportWordsImpl
 import eu.project.saved.savedWords.impl.savedWordsImpl
 import eu.project.topBar.impl.topBarImpl
@@ -58,6 +59,8 @@ fun applicationScaffold() {
                         this.savedWordsImpl(controller)
 
                         this.exportWordsImpl(controller)
+
+                        this.exportResultImpl(controller)
                     }
 
                     this.navigation<Navigation.Transcribe.RouteTranscribe>(startDestination = Navigation.Transcribe.SelectAudioScreen) {

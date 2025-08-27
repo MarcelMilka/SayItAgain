@@ -10,6 +10,7 @@ import eu.project.common.navigation.Navigation
 import eu.project.saved.exportWords.intent.ExportWordsIntent
 import eu.project.saved.exportWords.screen.exportWordsScreen
 import eu.project.saved.exportWords.vm.ExportWordsViewModel
+import eu.project.common.navigation.Navigation.Saved.ExportResultScreen
 
 fun NavGraphBuilder.exportWordsImpl(controller: NavHostController) {
 
@@ -27,7 +28,15 @@ fun NavGraphBuilder.exportWordsImpl(controller: NavHostController) {
             onTryToSwitchToExportSettings = { viewModel.onIntent(ExportWordsIntent.TryToSwitchToExportSettings) },
             onClickSendMethod = { viewModel.onIntent(ExportWordsIntent.SelectExportMethodSend) },
             onClickDownloadMethod = { viewModel.onIntent(ExportWordsIntent.SelectExportMethodDownload) },
-            onClickExportWords = {}
+            onClickExportWords = {
+
+                val exportSettingsSerialized = viewModel.prepareExportSettings()
+
+                controller.navigate(ExportResultScreen(exportSettingsSerialized = exportSettingsSerialized)) {
+
+                    this.popUpTo<Navigation.HomeScreen> { inclusive = false }
+                }
+            }
         )
     }
 }

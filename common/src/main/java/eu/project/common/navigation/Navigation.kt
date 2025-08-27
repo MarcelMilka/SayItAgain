@@ -17,6 +17,9 @@ sealed class Navigation {
 
             @Serializable
             data object ExportWordsScreen: Saved()
+
+            @Serializable
+            data class ExportResultScreen(val exportSettingsSerialized: String): Saved()
     }
 
     sealed class Transcribe: Navigation() {
