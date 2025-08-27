@@ -6,6 +6,7 @@ import eu.project.common.connectivity.ConnectivityStatus
 import eu.project.common.localData.SavedWordsRepository
 import eu.project.common.localData.SavedWordsRepositoryDataState
 import eu.project.common.model.SavedWord
+import eu.project.common.model.decodeToExportSettings
 import eu.project.common.testHelpers.SavedWordTestInstances
 import eu.project.saved.exportWords.intent.ExportWordsIntent
 import eu.project.saved.exportWords.model.ExportMethod
@@ -1113,6 +1114,338 @@ class ExportWordsViewModelTest {
             val firstWord = downloadState.wordsToExport.find { it.uuid == SavedWordTestInstances.first.uuid }
             assertTrue(firstWord?.toExport == true)
 
+            expectNoEvents()
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+
+
+//- prepareExportSettings tests ------------------------------------------------------------------------------------------
+
+    @Test
+    fun `prepareExportSettings returns empty JSON when no words are selected`() = runTest {
+
+        // setup
+        dataStateFlow.update { SavedWordsRepositoryDataState.Loaded.Data(SavedWordTestInstances.list) }
+
+        // ensure no words are selected
+        viewModel.uiState.test {
+            skipItems(1)
+            
+            val result = viewModel.prepareExportSettings()
+            
+            // should return JSON with empty wordsToExport array
+            assertEquals("""{"wordsToExport":[]}""", result)
+            
+            expectNoEvents()
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `prepareExportSettings returns correct JSON when one word is selected`() = runTest {
+
+        // setup
+        dataStateFlow.update { SavedWordsRepositoryDataState.Loaded.Data(SavedWordTestInstances.list) }
+
+        viewModel.uiState.test {
+            skipItems(1)
+
+            // select first word
+            viewModel.onIntent(ExportWordsIntent.ChangeWordSelection(SavedWordTestInstances.first.convertToExportable()))
+            awaitItem()
+
+            val result = viewModel.prepareExportSettings()
+            
+            // should return JSON with one word
+            val expectedJson = """{"wordsToExport":[{"value":"${SavedWordTestInstances.first.word}"}]}"""
+            assertEquals(expectedJson, result)
+            
+            expectNoEvents()
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `prepareExportSettings returns correct JSON when multiple words are selected`() = runTest {
+
+        // setup
+        dataStateFlow.update { SavedWordsRepositoryDataState.Loaded.Data(SavedWordTestInstances.list) }
+
+        viewModel.uiState.test {
+            skipItems(1)
+
+            // select first and second words
+            viewModel.onIntent(ExportWordsIntent.ChangeWordSelection(SavedWordTestInstances.first.convertToExportable()))
+            awaitItem()
+            viewModel.onIntent(ExportWordsIntent.ChangeWordSelection(SavedWordTestInstances.second.convertToExportable()))
+            awaitItem()
+
+            val result = viewModel.prepareExportSettings()
+            
+            // should return JSON with two words
+            val expectedJson = """{"wordsToExport":[{"value":"${SavedWordTestInstances.first.word}"},{"value":"${SavedWordTestInstances.second.word}"}]}"""
+            assertEquals(expectedJson, result)
+            
+            expectNoEvents()
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `prepareExportSettings returns correct JSON when all words are selected`() = runTest {
+
+        // setup
+        dataStateFlow.update { SavedWordsRepositoryDataState.Loaded.Data(SavedWordTestInstances.list) }
+
+        viewModel.uiState.test {
+            skipItems(1)
+
+            // select all words
+            viewModel.onIntent(ExportWordsIntent.ChangeWordSelection(SavedWordTestInstances.first.convertToExportable()))
+            awaitItem()
+            viewModel.onIntent(ExportWordsIntent.ChangeWordSelection(SavedWordTestInstances.second.convertToExportable()))
+            awaitItem()
+            viewModel.onIntent(ExportWordsIntent.ChangeWordSelection(SavedWordTestInstances.third.convertToExportable()))
+            awaitItem()
+
+            val result = viewModel.prepareExportSettings()
+            
+            // should return JSON with all three words
+            val expectedJson = """{"wordsToExport":[{"value":"${SavedWordTestInstances.first.word}"},{"value":"${SavedWordTestInstances.second.word}"},{"value":"${SavedWordTestInstances.third.word}"}]}"""
+            assertEquals(expectedJson, result)
+            
+            expectNoEvents()
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `prepareExportSettings only includes selected words when some are deselected`() = runTest {
+
+        // setup
+        dataStateFlow.update { SavedWordsRepositoryDataState.Loaded.Data(SavedWordTestInstances.list) }
+
+        viewModel.uiState.test {
+            skipItems(1)
+
+            // select all words first
+            viewModel.onIntent(ExportWordsIntent.ChangeWordSelection(SavedWordTestInstances.first.convertToExportable()))
+            awaitItem()
+            viewModel.onIntent(ExportWordsIntent.ChangeWordSelection(SavedWordTestInstances.second.convertToExportable()))
+            awaitItem()
+            viewModel.onIntent(ExportWordsIntent.ChangeWordSelection(SavedWordTestInstances.third.convertToExportable()))
+            awaitItem()
+
+            // deselect second word
+            viewModel.onIntent(ExportWordsIntent.ChangeWordSelection(SavedWordTestInstances.second.convertToExportable()))
+            awaitItem()
+
+            val result = viewModel.prepareExportSettings()
+            
+            // should return JSON with only first and third words
+            val expectedJson = """{"wordsToExport":[{"value":"${SavedWordTestInstances.first.word}"},{"value":"${SavedWordTestInstances.third.word}"}]}"""
+            assertEquals(expectedJson, result)
+            
+            expectNoEvents()
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `prepareExportSettings handles words with special characters correctly`() = runTest {
+
+        // setup - create words with special characters
+        val specialWords = listOf(
+            SavedWordTestInstances.first.copy(word = "hello world"),
+            SavedWordTestInstances.second.copy(word = "test@email.com"),
+            SavedWordTestInstances.third.copy(word = "word with \"quotes\"")
+        )
+        dataStateFlow.update { SavedWordsRepositoryDataState.Loaded.Data(specialWords) }
+
+        viewModel.uiState.test {
+            skipItems(1)
+
+            // select all words
+            viewModel.onIntent(ExportWordsIntent.ChangeWordSelection(specialWords[0].convertToExportable()))
+            awaitItem()
+            viewModel.onIntent(ExportWordsIntent.ChangeWordSelection(specialWords[1].convertToExportable()))
+            awaitItem()
+            viewModel.onIntent(ExportWordsIntent.ChangeWordSelection(specialWords[2].convertToExportable()))
+            awaitItem()
+
+            val result = viewModel.prepareExportSettings()
+            
+            // should return properly escaped JSON
+            val expectedJson = """{"wordsToExport":[{"value":"hello world"},{"value":"test@email.com"},{"value":"word with \"quotes\""}]}"""
+            assertEquals(expectedJson, result)
+            
+            expectNoEvents()
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `prepareExportSettings handles empty word list correctly`() = runTest {
+
+        // setup - no words in repository
+        dataStateFlow.update { SavedWordsRepositoryDataState.Loaded.Data(emptyList()) }
+
+        viewModel.uiState.test {
+            skipItems(1)
+
+            val result = viewModel.prepareExportSettings()
+            
+            // should return JSON with empty wordsToExport array
+            assertEquals("""{"wordsToExport":[]}""", result)
+            
+            expectNoEvents()
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `prepareExportSettings returns valid JSON that can be decoded`() = runTest {
+
+        // setup
+        dataStateFlow.update { SavedWordsRepositoryDataState.Loaded.Data(SavedWordTestInstances.list) }
+
+        viewModel.uiState.test {
+            skipItems(1)
+
+            // select some words
+            viewModel.onIntent(ExportWordsIntent.ChangeWordSelection(SavedWordTestInstances.first.convertToExportable()))
+            awaitItem()
+            viewModel.onIntent(ExportWordsIntent.ChangeWordSelection(SavedWordTestInstances.second.convertToExportable()))
+            awaitItem()
+
+            val result = viewModel.prepareExportSettings()
+            
+            // should return valid JSON that can be decoded
+            val decodedSettings = result.decodeToExportSettings()
+            assertEquals(2, decodedSettings.wordsToExport.size)
+            assertEquals(SavedWordTestInstances.first.word, decodedSettings.wordsToExport[0].value)
+            assertEquals(SavedWordTestInstances.second.word, decodedSettings.wordsToExport[1].value)
+            
+            expectNoEvents()
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `prepareExportSettings maintains order of selected words`() = runTest {
+
+        // setup
+        dataStateFlow.update { SavedWordsRepositoryDataState.Loaded.Data(SavedWordTestInstances.list) }
+
+        viewModel.uiState.test {
+            skipItems(1)
+
+            // select words in specific order: second, first, third
+            viewModel.onIntent(ExportWordsIntent.ChangeWordSelection(SavedWordTestInstances.second.convertToExportable()))
+            awaitItem()
+            viewModel.onIntent(ExportWordsIntent.ChangeWordSelection(SavedWordTestInstances.first.convertToExportable()))
+            awaitItem()
+            viewModel.onIntent(ExportWordsIntent.ChangeWordSelection(SavedWordTestInstances.third.convertToExportable()))
+            awaitItem()
+
+            val result = viewModel.prepareExportSettings()
+            
+            // should maintain the order from the original list (not selection order)
+            val expectedJson = """{"wordsToExport":[{"value":"${SavedWordTestInstances.first.word}"},{"value":"${SavedWordTestInstances.second.word}"},{"value":"${SavedWordTestInstances.third.word}"}]}"""
+            assertEquals(expectedJson, result)
+            
+            expectNoEvents()
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `prepareExportSettings works correctly after switching subscreens`() = runTest {
+
+        // setup
+        dataStateFlow.update { SavedWordsRepositoryDataState.Loaded.Data(SavedWordTestInstances.list) }
+
+        viewModel.uiState.test {
+            skipItems(1)
+
+            // select a word and switch to export settings
+            viewModel.onIntent(ExportWordsIntent.ChangeWordSelection(SavedWordTestInstances.first.convertToExportable()))
+            awaitItem()
+            viewModel.onIntent(ExportWordsIntent.TryToSwitchToExportSettings)
+            awaitItem()
+
+            // switch back to select words
+            viewModel.onIntent(ExportWordsIntent.SwitchToSelectWords)
+            awaitItem()
+
+            val result = viewModel.prepareExportSettings()
+            
+            // should still return the selected word
+            val expectedJson = """{"wordsToExport":[{"value":"${SavedWordTestInstances.first.word}"}]}"""
+            assertEquals(expectedJson, result)
+            
+            expectNoEvents()
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `prepareExportSettings works correctly after export method selection`() = runTest {
+
+        // setup
+        dataStateFlow.update { SavedWordsRepositoryDataState.Loaded.Data(SavedWordTestInstances.list) }
+
+        viewModel.uiState.test {
+            skipItems(1)
+
+            // select a word and switch to export settings
+            viewModel.onIntent(ExportWordsIntent.ChangeWordSelection(SavedWordTestInstances.first.convertToExportable()))
+            awaitItem()
+            viewModel.onIntent(ExportWordsIntent.TryToSwitchToExportSettings)
+            awaitItem()
+
+            // select an export method
+            viewModel.onIntent(ExportWordsIntent.SelectExportMethodDownload)
+            awaitItem()
+
+            val result = viewModel.prepareExportSettings()
+            
+            // should still return the selected word regardless of export method
+            val expectedJson = """{"wordsToExport":[{"value":"${SavedWordTestInstances.first.word}"}]}"""
+            assertEquals(expectedJson, result)
+            
+            expectNoEvents()
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `prepareExportSettings handles rapid word selection changes correctly`() = runTest {
+
+        // setup
+        dataStateFlow.update { SavedWordsRepositoryDataState.Loaded.Data(SavedWordTestInstances.list) }
+
+        viewModel.uiState.test {
+            skipItems(1)
+
+            // rapid selection changes
+            viewModel.onIntent(ExportWordsIntent.ChangeWordSelection(SavedWordTestInstances.first.convertToExportable()))
+            awaitItem()
+            viewModel.onIntent(ExportWordsIntent.ChangeWordSelection(SavedWordTestInstances.second.convertToExportable()))
+            awaitItem()
+            viewModel.onIntent(ExportWordsIntent.ChangeWordSelection(SavedWordTestInstances.first.convertToExportable())) // deselect first
+            awaitItem()
+            viewModel.onIntent(ExportWordsIntent.ChangeWordSelection(SavedWordTestInstances.third.convertToExportable()))
+            awaitItem()
+
+            val result = viewModel.prepareExportSettings()
+            
+            // should only include second and third words (first was deselected)
+            val expectedJson = """{"wordsToExport":[{"value":"${SavedWordTestInstances.second.word}"},{"value":"${SavedWordTestInstances.third.word}"}]}"""
+            assertEquals(expectedJson, result)
+            
             expectNoEvents()
             cancelAndIgnoreRemainingEvents()
         }
