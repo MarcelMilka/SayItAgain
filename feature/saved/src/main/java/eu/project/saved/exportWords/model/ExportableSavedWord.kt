@@ -1,6 +1,7 @@
 package eu.project.saved.exportWords.model
 
 import eu.project.common.model.SavedWord
+import eu.project.common.model.Word
 import java.util.UUID
 
 internal data class ExportableSavedWord(
@@ -23,3 +24,6 @@ internal fun SavedWord.convertToExportable(): ExportableSavedWord =
         word = this.word,
         language = this.language
     )
+
+internal fun ExportableSavedWord.convertToWord(): Word =
+    Word(value = this.word)

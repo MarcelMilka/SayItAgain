@@ -7,6 +7,8 @@ import eu.project.common.connectivity.ConnectivityObserver
 import eu.project.common.connectivity.ConnectivityStatus
 import eu.project.common.localData.SavedWordsRepository
 import eu.project.common.localData.SavedWordsRepositoryDataState
+import eu.project.common.model.ExportSettings
+import eu.project.common.model.encodeToString
 import eu.project.saved.exportWords.intent.ExportWordsIntent
 import eu.project.saved.exportWords.model.ExportMethod
 import eu.project.saved.exportWords.model.ExportMethodVariants
@@ -15,6 +17,7 @@ import eu.project.saved.exportWords.state.ExportWordsUiState
 import eu.project.saved.exportWords.model.ExportableSavedWord
 import eu.project.saved.exportWords.model.convertToExportable
 import eu.project.saved.exportWords.model.convertToModel
+import eu.project.saved.exportWords.model.convertToWord
 import eu.project.saved.exportWords.state.ExportWordsButtonVariants
 import eu.project.saved.exportWords.state.ExportWordsSubscreen
 import eu.project.saved.exportWords.state.SubscreenControllerButtonVariants
@@ -28,18 +31,11 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-// TODO: --- implement logic to manage visibility of the temporary fake floating action button
-// TODO: --- test logic to manage visibility of the temporary fake floating action button
-// TODO: implement fake floating action button
-// TODO: prepare compose tests
-
-
 @HiltViewModel
 internal class ExportWordsViewModel @Inject constructor(
     private val savedWordsRepository: SavedWordsRepository,
     private val connectivityObserver: ConnectivityObserver,
 ): ViewModel() {
-
 
     private var _screenState = MutableStateFlow<ExportWordsScreenState>(ExportWordsScreenState.Loading)
     val screenState = _screenState.asStateFlow()
@@ -232,5 +228,20 @@ internal class ExportWordsViewModel @Inject constructor(
                 )
             )
         }
+    }
+
+
+
+    fun prepareExportSettings(): String {
+
+        val wordsToExport = _uiState
+            .value
+            .wordsToExport
+            .filter { it.toExport == true }
+            .map { it.convertToWord() }
+
+        val exportSettingsSerialized = ExportSettings(wordsToExport = wordsToExport).encodeToString()
+
+        return exportSettingsSerialized
     }
 }
