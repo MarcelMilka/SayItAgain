@@ -47,6 +47,12 @@ dependencies {
     implementation(libs.hilt.android)
     ksp(libs.hilt.android.compiler)
 
+    // Turbine
+    testImplementation(libs.turbine)
+
+    // Coroutines test
+    testImplementation(libs.kotlinx.coroutines.test)
+
     // Serialization
     implementation(libs.kotlinx.serialization.json)
 
