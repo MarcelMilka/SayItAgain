@@ -1,0 +1,29 @@
+package eu.project.sayitagain
+
+import android.app.Activity
+import android.content.Context
+import android.content.Intent
+import android.net.Uri
+import androidx.activity.result.contract.ActivityResultContract
+
+class SaveFileContract: ActivityResultContract<Unit, Uri?>() {
+
+    override fun createIntent(context: Context, input: Unit): Intent {
+
+        val intent = Intent(Intent.ACTION_CREATE_DOCUMENT)
+        intent.addCategory(Intent.CATEGORY_OPENABLE)
+        intent.type = "text/csv"
+        intent.putExtra(Intent.EXTRA_TITLE, "exported_words.csv")
+
+        return intent
+    }
+
+    override fun parseResult(resultCode: Int, intent: Intent?): Uri? {
+
+        if (resultCode != Activity.RESULT_OK) {
+            return null
+        }
+
+        return intent?.data
+    }
+}
