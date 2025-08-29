@@ -1,8 +1,8 @@
 package eu.project.remotedata.repository
 
-import eu.project.common.model.SavedWord
 import eu.project.common.remoteData.ExportError
 import eu.project.common.remoteData.ExportRepository
+import eu.project.common.testHelpers.WordTestInstances
 import eu.project.remotedata.endpoint.ExportEndpoints
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -15,12 +15,15 @@ import retrofit2.Response
 import okhttp3.ResponseBody.Companion.toResponseBody
 import org.junit.Before
 import org.junit.Test
-import java.util.UUID
 
 class ExportRepositoryImplTest {
 
     private lateinit var exportEndpoints: ExportEndpoints
     private lateinit var exportRepositoryImpl: ExportRepository
+
+    // 'ti' is an abbreviation for TestInstances
+    private val ti = WordTestInstances
+    private val savedWords = ti.list
 
     @Before
     fun setUp() {
@@ -34,7 +37,7 @@ class ExportRepositoryImplTest {
     @Test
     fun `requestDownloadToDevice returns CsvFile when response is successful and body is not null`() = runTest {
 
-        val json = """[{"Term":"Katt","Definiton":""},{"Term":"Hund","Definiton":""},{"Term":"Fugl","Definiton":""}]"""
+        val json = """[{"Term":"${ti.first.value}","Definition":""},{"Term":"${ti.second.value}","Definition":""},{"Term":"${ti.third.value}","Definition":""}]"""
 
         val responseBody = json.toByteArray().toResponseBody()
         val response = Response.success(responseBody)
@@ -43,12 +46,7 @@ class ExportRepositoryImplTest {
         coEvery { exportEndpoints.downloadExport(any()) } returns response
 
         // call
-        val data = listOf<SavedWord>(
-            SavedWord(UUID.randomUUID(), "Katt", "Norwegian"),
-            SavedWord(UUID.randomUUID(), "Hund", "Norwegian"),
-            SavedWord(UUID.randomUUID(), "Fugl", "Norwegian")
-        )
-        val csv = exportRepositoryImpl.requestDownloadToDevice(data)
+        val csv = exportRepositoryImpl.requestDownloadToDevice(savedWords)
 
         // test
         assertTrue(csv.isSuccess)
@@ -67,11 +65,7 @@ class ExportRepositoryImplTest {
         coEvery { exportEndpoints.downloadExport(any()) } returns response
 
         // call
-        val data = listOf<SavedWord>(
-            SavedWord(UUID.randomUUID(), "Katt", "Norwegian"),
-            SavedWord(UUID.randomUUID(), "Hund", "Norwegian")
-        )
-        val result = exportRepositoryImpl.requestDownloadToDevice(data)
+        val result = exportRepositoryImpl.requestDownloadToDevice(savedWords)
 
         // test
         assertTrue(result.isFailure)
@@ -92,10 +86,7 @@ class ExportRepositoryImplTest {
         coEvery { exportEndpoints.downloadExport(any()) } throws RuntimeException(exceptionMessage)
 
         // call
-        val data = listOf<SavedWord>(
-            SavedWord(UUID.randomUUID(), "Katt", "Norwegian")
-        )
-        val result = exportRepositoryImpl.requestDownloadToDevice(data)
+        val result = exportRepositoryImpl.requestDownloadToDevice(savedWords)
 
         // test
         assertTrue(result.isFailure)
@@ -116,10 +107,7 @@ class ExportRepositoryImplTest {
         coEvery { exportEndpoints.downloadExport(any()) } throws RuntimeException()
 
         // call
-        val data = listOf<SavedWord>(
-            SavedWord(UUID.randomUUID(), "Katt", "Norwegian")
-        )
-        val result = exportRepositoryImpl.requestDownloadToDevice(data)
+        val result = exportRepositoryImpl.requestDownloadToDevice(savedWords)
 
         // test
         assertTrue(result.isFailure)
