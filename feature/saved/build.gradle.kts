@@ -94,5 +94,6 @@ dependencies {
     implementation(project(":ui"))
     implementation(project(":common"))
     implementation(project(":localData"))
+    implementation(project(":remoteData"))
     implementation(project(":connectivity"))
 }
