@@ -1,11 +1,11 @@
 package eu.project.saved.exportResult.vm
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import eu.project.common.eventBus.EventBus
+import eu.project.common.eventBus.SaveFileEventBusQualifier
 import eu.project.common.eventBus.saveFile.SaveFileEvent
-import eu.project.common.eventBus.saveFile.SaveFileEventBus
 import eu.project.common.model.ExportSettings
 import eu.project.common.model.decodeToExportSettings
 import eu.project.common.remoteData.ExportRepository
@@ -22,7 +22,7 @@ import javax.inject.Inject
 @HiltViewModel
 internal class ExportResultViewModel @Inject constructor(
     val exportRepository: ExportRepository,
-    val saveFileEventBus: SaveFileEventBus
+    @SaveFileEventBusQualifier val saveFileEventBus: EventBus<SaveFileEvent>,
 ): ViewModel() {
 
     private var _exportSettings = MutableSharedFlow<ExportSettings>(replay = 1)
@@ -94,6 +94,19 @@ internal class ExportResultViewModel @Inject constructor(
             catch (e: Exception) {
 
                 _screenState.update { ExportResultScreenState.FailedToLoadFile(error = e) }
+            }
+        }
+    }
+
+    fun saveExportedWords() {
+
+        if (_screenState.value is ExportResultScreenState.ReadyToSaveFile) {
+
+            val csvFile = (_screenState.value as ExportResultScreenState.ReadyToSaveFile).csvFile
+
+            viewModelScope.launch {
+
+                saveFileEventBus.emit(event = SaveFileEvent.SaveFile(csvFile = csvFile))
             }
         }
     }
