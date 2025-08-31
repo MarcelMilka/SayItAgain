@@ -40,6 +40,17 @@
 
 
 
+    <!--   ExportResultScreen   -->
+    <string name="loading_data">Loading data</string>
+    <string name="loading_data_explanation">Your export data is being gathered. Keep the app open - this usually takes just a few seconds.</string>
+    <string name="failed_to_load_data">Failed to load data</string>
+    <string name="try_again_later">Try again later</string>
+    <string name="ready_to_save">Ready to save</string>
+    <string name="ready_to_save_explanation">Tap the button below to choose where to save the exported words on your device.</string>
+    <string name="save_exported_words">Save exported words</string>
+
+
+
     <!--   SelectAudioScreen   -->
     <string name="coming_soon">Coming soon</string>
     <string name="coming_soon_explanation">This feature isn’t ready yet, but it’ll be available in just a few weeks.</string>
@@ -62,6 +73,8 @@
     <string name="illustration_offline_description">Offline</string>
     <string name="illustration_empty_description">Empty</string>
     <string name="illustration_development_description">Development</string>
+    <string name="illustration_download_description">Download</string>
+    <string name="illustration_loading_description">Loading</string>
 
 
     <!--   Content descriptions   -->
