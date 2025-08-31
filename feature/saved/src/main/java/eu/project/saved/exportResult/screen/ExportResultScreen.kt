@@ -11,8 +11,11 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import eu.project.common.TestTags
 import eu.project.saved.exportResult.screen.content.exportResultFailedToLoadFileContent
+import eu.project.saved.exportResult.screen.content.exportResultFileSavedSuccessfullyContent
 import eu.project.saved.exportResult.screen.content.exportResultLoadingContent
 import eu.project.saved.exportResult.screen.content.exportResultReadyToSaveFileContent
+import eu.project.saved.exportResult.screen.content.exportResultSaveFileErrorContent
+import eu.project.saved.exportResult.screen.content.exportResultSavingFileContent
 import eu.project.saved.exportResult.state.ExportResultScreenState
 import eu.project.ui.dimensions.ScreenPadding
 
@@ -20,7 +23,8 @@ import eu.project.ui.dimensions.ScreenPadding
 internal fun exportResultScreen(
     screenState: ExportResultScreenState,
     onClickSaveExportedWords: () -> Unit,
-    onClickTryAgainLater: () -> Unit
+    onClickTryAgainLater: () -> Unit,
+    onClickContinue: () -> Unit
 ) {
 
     Column(
@@ -40,9 +44,12 @@ internal fun exportResultScreen(
                     onClickTryAgainLater = onClickTryAgainLater
                 )
 
-                ExportResultScreenState.SavingFile -> {}
-                ExportResultScreenState.FileSavedSuccessfully -> {}
-                is ExportResultScreenState.SaveFileError -> {}
+                ExportResultScreenState.SavingFile -> exportResultSavingFileContent()
+                ExportResultScreenState.FileSavedSuccessfully -> exportResultFileSavedSuccessfullyContent { onClickContinue() }
+                is ExportResultScreenState.SaveFileError -> exportResultSaveFileErrorContent(
+                    throwable = screenState.error,
+                    onClickTryAgainLater = onClickTryAgainLater
+                )
             }
         }
     )

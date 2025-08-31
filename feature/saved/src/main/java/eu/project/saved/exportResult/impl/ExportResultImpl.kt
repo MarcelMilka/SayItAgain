@@ -22,8 +22,9 @@ fun NavGraphBuilder.exportResultImpl(controller: NavHostController) {
 
         exportResultScreen(
             screenState = screenState,
-            onClickSaveExportedWords = {},
-            onClickTryAgainLater = {}
+            onClickSaveExportedWords = { viewModel.saveExportedWords() },
+            onClickTryAgainLater = { controller.popBackStack() },
+            onClickContinue = { controller.popBackStack() }
         )
 
         val exportSettingsSerialized = remember {

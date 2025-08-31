@@ -48,6 +48,10 @@
     <string name="ready_to_save">Ready to save</string>
     <string name="ready_to_save_explanation">Tap the button below to choose where to save the exported words on your device.</string>
     <string name="save_exported_words">Save exported words</string>
+    <string name="file_saved_successfully">File saved successfully</string>
+    <string name="file_saved_successfully_explanation">Your exported words have been saved to your device.</string>
+    <string name="continue_">Continue</string>
+    <string name="failed_to_save_file">Failed to save file</string>
 
 
 
@@ -75,6 +79,7 @@
     <string name="illustration_development_description">Development</string>
     <string name="illustration_download_description">Download</string>
     <string name="illustration_loading_description">Loading</string>
+    <string name="illustration_confirmation_description">Confirmation</string>
 
 
     <!--   Content descriptions   -->
