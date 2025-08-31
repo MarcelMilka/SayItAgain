@@ -8,7 +8,7 @@ import javax.inject.Inject
 
 class SaveFileEventBus @Inject constructor(): EventBus<SaveFileEvent> {
 
-    private val _events = MutableSharedFlow<SaveFileEvent>(replay = 1)
+    private val _events = MutableSharedFlow<SaveFileEvent>(replay = 0)
     override val events: SharedFlow<SaveFileEvent> = _events.asSharedFlow()
 
     override suspend fun emit(event: SaveFileEvent) {
