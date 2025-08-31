@@ -31,6 +31,7 @@ class ExportResultScreenTest {
 
     private var onClickSaveExportedWordsWasCalled = false
     private var onClickTryAgainLaterWasCalled = false
+    private var onClickContinueWasCalled = false
     private val context: Context = InstrumentationRegistry.getInstrumentation().targetContext
     private val testCsvFile = CsvFile(data = "test,csv,data".toByteArray())
     private val testThrowable = RuntimeException("Test error message")
@@ -42,6 +43,7 @@ class ExportResultScreenTest {
 
         onClickSaveExportedWordsWasCalled = false
         onClickTryAgainLaterWasCalled = false
+        onClickContinueWasCalled = false
 
         composeTestRule.setContent {
 
@@ -50,7 +52,8 @@ class ExportResultScreenTest {
                 exportResultScreen(
                     screenState = screenState.collectAsState().value,
                     onClickSaveExportedWords = { onClickSaveExportedWordsWasCalled = true },
-                    onClickTryAgainLater = { onClickTryAgainLaterWasCalled = true }
+                    onClickTryAgainLater = { onClickTryAgainLaterWasCalled = true },
+                    onClickContinue = { onClickContinueWasCalled = true }
                 )
             }
         }
@@ -219,6 +222,24 @@ class ExportResultScreenTest {
         composeTestRule
             .onNodeWithTag(TestTags.EXPORT_RESULT_SCREEN)
             .assertIsDisplayed()
+
+        // test SavingFile state
+        screenState.value = ExportResultScreenState.SavingFile
+        composeTestRule
+            .onNodeWithTag(TestTags.EXPORT_RESULT_SCREEN)
+            .assertIsDisplayed()
+
+        // test FileSavedSuccessfully state
+        screenState.value = ExportResultScreenState.FileSavedSuccessfully
+        composeTestRule
+            .onNodeWithTag(TestTags.EXPORT_RESULT_SCREEN)
+            .assertIsDisplayed()
+
+        // test SaveFileError state
+        screenState.value = ExportResultScreenState.SaveFileError(error = testThrowable)
+        composeTestRule
+            .onNodeWithTag(TestTags.EXPORT_RESULT_SCREEN)
+            .assertIsDisplayed()
     }
 
 //- State-specific content tests ---------------------------------------------------------------------------------------
@@ -283,6 +304,226 @@ class ExportResultScreenTest {
 
         composeTestRule
             .onNodeWithText(context.getString(R.string.ready_to_save))
+            .assertDoesNotExist()
+
+        composeTestRule
+            .onNodeWithText(context.getString(R.string.file_saved_successfully))
+            .assertDoesNotExist()
+
+        composeTestRule
+            .onNodeWithText(context.getString(R.string.failed_to_save_file))
+            .assertDoesNotExist()
+    }
+
+//- SavingFile state tests ---------------------------------------------------------------------------------------------
+
+    @Test
+    fun exportResultScreen_savingFileState_screenContainerIsDisplayed() {
+
+        // setup
+        screenState.value = ExportResultScreenState.SavingFile
+
+        // test
+        composeTestRule
+            .onNodeWithTag(TestTags.EXPORT_RESULT_SCREEN)
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun exportResultScreen_savingFileState_onlySavingFileContentIsDisplayed() {
+
+        // setup
+        screenState.value = ExportResultScreenState.SavingFile
+
+        // test - verify screen container is displayed (SavingFile content is empty)
+        composeTestRule
+            .onNodeWithTag(TestTags.EXPORT_RESULT_SCREEN)
+            .assertIsDisplayed()
+
+        // verify other state content is not displayed
+        composeTestRule
+            .onNodeWithText(context.getString(R.string.loading_data))
+            .assertDoesNotExist()
+
+        composeTestRule
+            .onNodeWithText(context.getString(R.string.ready_to_save))
+            .assertDoesNotExist()
+
+        composeTestRule
+            .onNodeWithText(context.getString(R.string.failed_to_load_data))
+            .assertDoesNotExist()
+
+        composeTestRule
+            .onNodeWithText(context.getString(R.string.file_saved_successfully))
+            .assertDoesNotExist()
+
+        composeTestRule
+            .onNodeWithText(context.getString(R.string.failed_to_save_file))
+            .assertDoesNotExist()
+    }
+
+//- FileSavedSuccessfully state tests ----------------------------------------------------------------------------------
+
+    @Test
+    fun exportResultScreen_fileSavedSuccessfullyState_displaysFileSavedSuccessfullyContent() {
+
+        // setup
+        screenState.value = ExportResultScreenState.FileSavedSuccessfully
+
+        // test - verify file saved successfully content elements are displayed
+        composeTestRule
+            .onNodeWithContentDescription(context.getString(R.string.illustration_confirmation_description))
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onNodeWithText(context.getString(R.string.file_saved_successfully))
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onNodeWithText(context.getString(R.string.file_saved_successfully_explanation))
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onNodeWithTag(TestTags.EXPORT_RESULT_SCREEN_PRIMARY_BUTTON_CONTINUE)
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun exportResultScreen_fileSavedSuccessfullyState_continueButtonIsEnabled() {
+
+        // setup
+        screenState.value = ExportResultScreenState.FileSavedSuccessfully
+
+        // test
+        composeTestRule
+            .onNodeWithTag(TestTags.EXPORT_RESULT_SCREEN_PRIMARY_BUTTON_CONTINUE)
+            .assertIsEnabled()
+    }
+
+    @Test
+    fun exportResultScreen_fileSavedSuccessfullyState_continueButtonClickCallsCallback() {
+
+        // setup
+        screenState.value = ExportResultScreenState.FileSavedSuccessfully
+
+        // test
+        composeTestRule
+            .onNodeWithTag(TestTags.EXPORT_RESULT_SCREEN_PRIMARY_BUTTON_CONTINUE)
+            .assertIsDisplayed()
+            .performClick()
+
+        // verify
+        assertTrue(onClickContinueWasCalled)
+    }
+
+    @Test
+    fun exportResultScreen_fileSavedSuccessfullyState_onlyFileSavedSuccessfullyContentIsDisplayed() {
+
+        // setup
+        screenState.value = ExportResultScreenState.FileSavedSuccessfully
+
+        // test - verify file saved successfully content is displayed
+        composeTestRule
+            .onNodeWithText(context.getString(R.string.file_saved_successfully))
+            .assertIsDisplayed()
+
+        // verify other state content is not displayed
+        composeTestRule
+            .onNodeWithText(context.getString(R.string.loading_data))
+            .assertDoesNotExist()
+
+        composeTestRule
+            .onNodeWithText(context.getString(R.string.ready_to_save))
+            .assertDoesNotExist()
+
+        composeTestRule
+            .onNodeWithText(context.getString(R.string.failed_to_load_data))
+            .assertDoesNotExist()
+
+        composeTestRule
+            .onNodeWithText(context.getString(R.string.failed_to_save_file))
+            .assertDoesNotExist()
+    }
+
+//- SaveFileError state tests ------------------------------------------------------------------------------------------
+
+    @Test
+    fun exportResultScreen_saveFileErrorState_displaysSaveFileErrorContent() {
+
+        // setup
+        screenState.value = ExportResultScreenState.SaveFileError(error = testThrowable)
+
+        // test - verify save file error content elements are displayed
+        composeTestRule
+            .onNodeWithContentDescription(context.getString(R.string.illustration_error_description))
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onNodeWithText(context.getString(R.string.failed_to_save_file))
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onNodeWithText(testThrowable.message!!)
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onNodeWithTag(TestTags.EXPORT_RESULT_SCREEN_PRIMARY_BUTTON_TRY_AGAIN_LATER)
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun exportResultScreen_saveFileErrorState_tryAgainButtonIsEnabled() {
+
+        // setup
+        screenState.value = ExportResultScreenState.SaveFileError(error = testThrowable)
+
+        // test
+        composeTestRule
+            .onNodeWithTag(TestTags.EXPORT_RESULT_SCREEN_PRIMARY_BUTTON_TRY_AGAIN_LATER)
+            .assertIsEnabled()
+    }
+
+    @Test
+    fun exportResultScreen_saveFileErrorState_tryAgainButtonClickCallsCallback() {
+
+        // setup
+        screenState.value = ExportResultScreenState.SaveFileError(error = testThrowable)
+
+        // test
+        composeTestRule
+            .onNodeWithTag(TestTags.EXPORT_RESULT_SCREEN_PRIMARY_BUTTON_TRY_AGAIN_LATER)
+            .performClick()
+
+        // verify
+        assertTrue(onClickTryAgainLaterWasCalled)
+    }
+
+    @Test
+    fun exportResultScreen_saveFileErrorState_onlySaveFileErrorContentIsDisplayed() {
+
+        // setup
+        screenState.value = ExportResultScreenState.SaveFileError(error = testThrowable)
+
+        // test - verify save file error content is displayed
+        composeTestRule
+            .onNodeWithText(context.getString(R.string.failed_to_save_file))
+            .assertIsDisplayed()
+
+        // verify other state content is not displayed
+        composeTestRule
+            .onNodeWithText(context.getString(R.string.loading_data))
+            .assertDoesNotExist()
+
+        composeTestRule
+            .onNodeWithText(context.getString(R.string.ready_to_save))
+            .assertDoesNotExist()
+
+        composeTestRule
+            .onNodeWithText(context.getString(R.string.failed_to_load_data))
+            .assertDoesNotExist()
+
+        composeTestRule
+            .onNodeWithText(context.getString(R.string.file_saved_successfully))
             .assertDoesNotExist()
     }
 }
