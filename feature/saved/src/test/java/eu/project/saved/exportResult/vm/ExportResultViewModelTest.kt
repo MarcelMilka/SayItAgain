@@ -530,4 +530,34 @@ class ExportResultViewModelTest {
             cancelAndIgnoreRemainingEvents()
         }
     }
+
+
+
+//- saveExportedWords tests ---------------------------------------------------------------------------------------------
+
+    @Test
+    fun `saveExportedWords emits an event when screenState is ReadyToSaveFile`() = runTest {
+
+        // stub
+        coEvery { exportRepository.requestDownloadToDevice(any()) } returns Result.success(testCsvFile)
+
+        // set up
+        viewModel.retrieveExportSettings(exportSettingsSerialized)
+
+        // run
+        viewModel.saveExportedWords()
+
+        // verify
+        coVerify(exactly = 1) { saveFileEventBus.emit(any()) }
+    }
+
+    @Test
+    fun `saveExportedWords does not emit any events when screenState is not ReadyToSaveFile`() = runTest {
+
+        // run
+        viewModel.saveExportedWords()
+
+        // verify
+        coVerify(exactly = 0) { saveFileEventBus.emit(any()) }
+    }
 }
