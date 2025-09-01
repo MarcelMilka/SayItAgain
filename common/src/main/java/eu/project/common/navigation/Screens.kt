@@ -5,6 +5,7 @@ object Screens {
 
     const val SAVED_WORDS = "SavedWordsScreen"
     const val EXPORT_WORDS = "ExportWordsScreen"
+    const val EXPORT_RESULT = "ExportResultScreen"
 
     const val SELECT_AUDIO_SCREEN = "SelectAudioScreen"
     const val SELECT_LANGUAGE_SCREEN = "SelectLanguageScreen"

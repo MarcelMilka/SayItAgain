@@ -92,6 +92,7 @@
 
     <string name="saved_words">Saved words</string>
     <string name="export_words">Export words</string>
+    <string name="export_result">Export result</string>
 
     <string name="select_audio">Select audio</string>
     <string name="select_language">Choose language</string>

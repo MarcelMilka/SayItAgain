@@ -22,6 +22,7 @@ internal class TopBarViewModel @Inject constructor(): ViewModel() {
 
             Screens.SAVED_WORDS -> TopBarViewState(true, true, R.string.saved_words, false)
             Screens.EXPORT_WORDS -> TopBarViewState(true, true, R.string.export_words, false)
+            Screens.EXPORT_RESULT -> TopBarViewState(true, true, R.string.export_result, false)
             Screens.SELECT_AUDIO_SCREEN -> TopBarViewState(true, true, R.string.select_audio, false)
             Screens.SELECT_LANGUAGE_SCREEN -> TopBarViewState(true, true, R.string.select_language, false)
             Screens.TRANSCRIPT -> TopBarViewState(true, true, R.string.transcript, false)
