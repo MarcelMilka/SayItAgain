@@ -35,6 +35,13 @@ object TestTags {
     const val EXPORT_WORDS_SCREEN_LAZY_COLUMN = "ExportWordsScreen - LazyColumn"
 
 
+    // ExportWordsScreen
+    const val EXPORT_RESULT_SCREEN = "ExportResultScreen"
+    const val EXPORT_RESULT_SCREEN_PRIMARY_BUTTON_SAVE_EXPORTED_WORDS = "ExportResultScreen - PrimaryButton - 'Save exported words'"
+    const val EXPORT_RESULT_SCREEN_PRIMARY_BUTTON_TRY_AGAIN_LATER = "ExportResultScreen - PrimaryButton - 'Try again later'"
+    const val EXPORT_RESULT_SCREEN_PRIMARY_BUTTON_CONTINUE = "ExportResultScreen - PrimaryButton - 'Continue'"
+
+
     // SelectAudioScreen
     const val SELECT_AUDIO_SCREEN = "SelectAudioScreen"
 

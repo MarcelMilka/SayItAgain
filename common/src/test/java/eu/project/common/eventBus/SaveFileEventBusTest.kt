@@ -201,7 +201,7 @@ class SaveFileEventBusTest {
     }
 
     @Test
-    fun `new collector receives replay buffer event`() = runTest {
+    fun `new collector does not receive replay buffer event`() = runTest {
 
         // Emit an event first
         eventBus.emit(SaveFileEvent.SaveFile(csvFile))
@@ -209,17 +209,14 @@ class SaveFileEventBusTest {
         // Create a new collector after emission
         eventBus.events.test {
 
-            // New collector should receive the last emitted event due to replay buffer
-            val event = awaitItem()
-            assertEquals(SaveFileEvent.SaveFile(csvFile), event)
-
+            // New collector should not receive any events since replay = 0
             expectNoEvents()
             cancelAndIgnoreRemainingEvents()
         }
     }
 
     @Test
-    fun `replay buffer only keeps last event`() = runTest {
+    fun `replay buffer is disabled`() = runTest {
 
         // Emit multiple events
         eventBus.emit(SaveFileEvent.Idle)
@@ -229,10 +226,7 @@ class SaveFileEventBusTest {
         // Create a new collector
         eventBus.events.test {
 
-            // Should only receive the last event (FileSavedSuccessfully)
-            val event = awaitItem()
-            assertEquals(SaveFileEvent.FileSavedSuccessfully, event)
-
+            // Should not receive any events since replay = 0
             expectNoEvents()
             cancelAndIgnoreRemainingEvents()
         }
@@ -370,8 +364,6 @@ class SaveFileEventBusTest {
             cancelAndIgnoreRemainingEvents()
         }
     }
-
-
 
     @Test
     fun `event bus maintains event order under stress`() = runTest {
