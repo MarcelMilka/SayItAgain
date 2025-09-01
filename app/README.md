@@ -10,6 +10,7 @@ The main application module that serves as the entry point for the application.
 - Configures Hilt dependency injection for the entire app
 - Manages application lifecycle and initialization
 - Provides the main activity that initializes the composable function `applicationScaffold`
+- Handles CSV file export functionality for saved words
 - Defines app permissions and manifest configuration
 
 ---
@@ -18,12 +19,17 @@ The main application module that serves as the entry point for the application.
 
 ### ``ApplicationClass``
 The main application class annotated with `@HiltAndroidApp` that initializes Hilt dependency injection
-for the entire application. Loads users data saved locally onCreate.
+for the entire application. Initializes the SavedWordsRepository on app startup.
 
 ### ``MainActivity``
 The main activity of the application that serves as the entry point for user interaction. It's annotated
 with `@AndroidEntryPoint` for Hilt integration and uses Jetpack Compose to render the UI through the
-`applicationScaffold()` composable. Enables edge-to-edge display.
+`applicationScaffold()` composable. Enables edge-to-edge display and handles CSV file export functionality
+through the SaveFileEventBus.
+
+### ``SaveFileContract``
+An ActivityResultContract that handles the file save dialog for exporting saved words as CSV files.
+Creates the appropriate intent for saving CSV files with the default filename "exported_words.csv".
 
 ---
 
@@ -34,6 +40,11 @@ flowchart TB
     subgraph ":localData"
 
         SavedWordsRepositoryLocalModule["<big>SavedWordsRepositoryLocalModule</big>"]
+    end
+
+    subgraph ":common"
+
+        EventBusModule["<big>EventBusModule</big>"]
     end
 
     subgraph ":scaffold"
@@ -48,6 +59,7 @@ flowchart TB
     end
 
     SavedWordsRepositoryLocalModule -- SavedWordsRepositoryLocalImpl --> ApplicationClass
+    EventBusModule -- EventBus.SaveFileEvent --> MainActivity
     ApplicationScaffold --> MainActivity
     
 ```
