@@ -14,18 +14,18 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
-internal class TopBarTest {
+class TopBarTest {
 
     @get:Rule
     val composeTestRule = createComposeRule()
 
-    private var isBackClicked = false
-    private var isInfoClicked = false
+    private var onNavigateBackWasClicked = false
+    private var onDisplayInfoWasClicked = false
 
     @Before
     fun setUp() {
-        isBackClicked = false
-        isInfoClicked = false
+        onNavigateBackWasClicked = false
+        onDisplayInfoWasClicked = false
     }
 
     private fun setContent(
@@ -43,8 +43,8 @@ internal class TopBarTest {
 
             topBar(
                 topBarViewState = viewState,
-                onNavigateBack = { isBackClicked = true },
-                onDisplayInfo = { isInfoClicked = true }
+                onNavigateBack = { onNavigateBackWasClicked = true },
+                onDisplayInfo = { onDisplayInfoWasClicked = true }
             )
         }
     }
@@ -99,7 +99,7 @@ internal class TopBarTest {
             .onNodeWithTag(TestTags.TOP_BAR_ICON_BUTTON_BACK_ICON)
             .performClick()
 
-        assertTrue(isBackClicked)
+        assertTrue(onNavigateBackWasClicked)
     }
 
 
@@ -142,6 +142,6 @@ internal class TopBarTest {
             .onNodeWithTag(TestTags.TOP_BAR_ICON_BUTTON_INFO_ICON)
             .performClick()
 
-        assertTrue(isInfoClicked)
+        assertTrue(onDisplayInfoWasClicked)
     }
 }

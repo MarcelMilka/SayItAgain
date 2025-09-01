@@ -20,6 +20,7 @@ class TopBarViewModelTest {
 
     @Test
     fun `onRouteChanged updates uiState for each route`() = runTest {
+
         viewModel.uiState.test {
 
             // Home is default state
@@ -64,6 +65,18 @@ class TopBarViewModelTest {
                     displayTopBar = true,
                     showBackIcon = true,
                     screenName = R.string.export_words,
+                    showInfoIcon = false
+                ),
+                awaitItem()
+            )
+
+            // Export Result
+            viewModel.onRouteChanged(Screens.EXPORT_RESULT)
+            assertEquals(
+                TopBarViewState(
+                    displayTopBar = true,
+                    showBackIcon = true,
+                    screenName = R.string.export_result,
                     showInfoIcon = false
                 ),
                 awaitItem()

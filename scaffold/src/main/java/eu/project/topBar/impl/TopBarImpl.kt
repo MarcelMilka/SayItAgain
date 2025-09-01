@@ -17,7 +17,7 @@ internal fun topBarImpl(controller: NavHostController) {
     val topBarViewState by viewModel.uiState.collectAsStateWithLifecycle()
 
     val navBackStackEntry by controller.currentBackStackEntryAsState()
-    val currentRoute = navBackStackEntry?.destination?.route?.substringAfterLast(".")
+    val currentRoute = navBackStackEntry?.destination?.route?.substringAfterLast(".")?.substringBeforeLast("/")
 
     LaunchedEffect(currentRoute) {
 
